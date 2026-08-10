@@ -1,0 +1,33 @@
+<%- include('partials/head', { title: 'Dashboard' }) %>
+
+<h1>Dashboard</h1>
+<p class="muted">Workflow-Grundgerüst v1 – Kennzahlen & Phasen-Übersicht. Das ausführliche Power-BI-Style-Dashboard (Forecast, Baustellen-Monatsausblick) ist der nächste Ausbauschritt.</p>
+
+<div class="kpi-row">
+  <div class="kpi"><div class="label">Kunden gesamt</div><div class="value"><%= totalCustomers %></div></div>
+  <div class="kpi"><div class="label">Offene ToDos</div><div class="value"><%= openTodos %></div></div>
+  <div class="kpi"><div class="label">Fällig für Wiedervorlage</div><div class="value"><%= wiedervorlageFaellig %></div></div>
+  <div class="kpi"><div class="label">Summe Angebote</div><div class="value"><%= sums.angebot.toLocaleString('de-DE') %> €</div></div>
+  <div class="kpi"><div class="label">Summe Beauftragt</div><div class="value"><%= sums.beauftragt.toLocaleString('de-DE') %> €</div></div>
+  <div class="kpi"><div class="label">Summe Rechnungen</div><div class="value"><%= sums.rechnung.toLocaleString('de-DE') %> €</div></div>
+</div>
+
+<h2>Projekte nach Phase</h2>
+<table>
+  <tr><th>Phase</th><th>Anzahl</th><th></th></tr>
+  <% PHASES.forEach(function(phase) { %>
+    <tr>
+      <td><span class="tag" style="background:<%= PHASE_COLORS[phase] %>"><%= phase %></span></td>
+      <td><%= countMap[phase] || 0 %></td>
+      <td><a href="/kunden?phase=<%= encodeURIComponent(phase) %>">ansehen →</a></td>
+    </tr>
+  <% }) %>
+</table>
+
+<h2>Automatik</h2>
+<div class="card">
+  <p class="muted">Täglich um 06:00 Uhr prüft das System automatisch: (1) Projekte in "Kontaktaufnahme" ohne Aktivität seit 14 Tagen → Phase "Wiedervorlage". (2) Bestätigte Elektriker-/Tiefbau-Termine ohne informierten Kunden → ToDo "Kunde informieren".</p>
+  <form method="post" action="/admin/cron-jetzt"><button type="submit">Jetzt manuell prüfen</button></form>
+</div>
+
+<%- include('partials/foot') %>

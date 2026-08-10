@@ -1,0 +1,22 @@
+<%- include('partials/head', { title: 'ToDos' }) %>
+
+<h1>ToDos</h1>
+
+<table>
+  <tr><th>Erledigt</th><th>Firma</th><th>Text</th><th>Fällig</th><th>Mitarbeiter</th></tr>
+  <% rows.forEach(function(t) { %>
+    <tr>
+      <td>
+        <form method="post" action="/todos/<%= t.id %>/erledigt">
+          <button type="submit" class="secondary"><%= t.erledigt ? '✓' : '—' %></button>
+        </form>
+      </td>
+      <td><a href="/kunden/<%= t.customer_id %>"><%= t.firma %></a></td>
+      <td style="<%= t.erledigt ? 'text-decoration:line-through;color:#999;' : '' %>"><%= t.text %></td>
+      <td><%= t.faellig_am ? dayjs(t.faellig_am).format('DD.MM.YYYY') : '' %></td>
+      <td><%= t.mitarbeiter_name || '' %></td>
+    </tr>
+  <% }) %>
+</table>
+
+<%- include('partials/foot') %>

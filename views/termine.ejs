@@ -1,0 +1,66 @@
+<%- include('partials/head', { title: 'Termine' }) %>
+
+<h1>Termine</h1>
+<p class="muted">Terminierung von Elektriker/Tiefbau: Bestätigung Ja/Nein setzen. Sobald bestätigt, erzeugt die tägliche Automatik ein ToDo "Kunde informieren" (falls noch nicht informiert).</p>
+
+<form method="get" action="/termine" class="grid-form" style="margin-bottom:16px;">
+  <div>
+    <label>Typ</label>
+    <select name="typ">
+      <option value="">Alle</option>
+      <option value="Kunde" <%= typ==='Kunde'?'selected':'' %>>Kunde</option>
+      <option value="Elektriker" <%= typ==='Elektriker'?'selected':'' %>>Elektriker</option>
+      <option value="Tiefbau" <%= typ==='Tiefbau'?'selected':'' %>>Tiefbau</option>
+    </select>
+  </div>
+  <div>
+    <label>Bestätigung</label>
+    <select name="bestaetigt">
+      <option value="">Alle</option>
+      <option value="offen" <%= bestaetigt==='offen'?'selected':'' %>>offen</option>
+      <option value="ja" <%= bestaetigt==='ja'?'selected':'' %>>ja</option>
+      <option value="nein" <%= bestaetigt==='nein'?'selected':'' %>>nein</option>
+    </select>
+  </div>
+  <div style="justify-content:flex-end;"><button type="submit">Filtern</button></div>
+</form>
+
+<table>
+  <tr><th>Firma</th><th>Projekt</th><th>Typ</th><th>Mit wem</th><th>Datum</th><th>Uhrzeit</th><th>Ort</th><th>Thema</th><th>Bestätigt</th><th>Kunde informiert</th></tr>
+  <% rows.forEach(function(a) { %>
+    <tr>
+      <td><a href="/kunden/<%= a.customer_id %>"><%= a.firma %></a></td>
+      <td><%= a.projekt || '' %></td>
+      <td><%= a.typ %></td>
+      <td><%= a.mit_wem || '' %></td>
+      <td><%= a.datum ? dayjs(a.datum).format('DD.MM.YYYY') : '' %></td>
+      <td><%= a.uhrzeit || (a.datum ? 'ganztägig' : '') %></td>
+      <td><%= a.ort || '' %></td>
+      <td><%= a.thema || '' %></td>
+      <td>
+        <form method="post" action="/termine/<%= a.id %>/bestaetigen" class="inline">
+          <input type="hidden" name="redirect" value="/termine">
+          <select name="status" onchange="this.form.submit()">
+            <option value="offen" <%= a.bestaetigt==='offen'?'selected':'' %>>offen</option>
+            <option value="ja" <%= a.bestaetigt==='ja'?'selected':'' %>>ja</option>
+            <option value="nein" <%= a.bestaetigt==='nein'?'selected':'' %>>nein</option>
+          </select>
+        </form>
+      </td>
+      <td>
+        <% if (a.kunde_informiert) { %>
+          <span class="badge pill-yes">informiert</span>
+        <% } else if (a.bestaetigt === 'ja') { %>
+          <form method="post" action="/termine/<%= a.id %>/informiert" class="inline">
+            <input type="hidden" name="redirect" value="/termine">
+            <button type="submit" class="secondary">als informiert markieren</button>
+          </form>
+        <% } else { %>
+          <span class="muted">–</span>
+        <% } %>
+      </td>
+    </tr>
+  <% }) %>
+</table>
+
+<%- include('partials/foot') %>

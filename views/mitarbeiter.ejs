@@ -1,0 +1,37 @@
+<%- include('partials/head', { title: 'Mitarbeiter' }) %>
+
+<h1>Mitarbeiter</h1>
+<p class="muted">Rollen sind frei erweiterbar – einfach beim Anlegen einen neuen Rollennamen eintragen (z.B. eigene Subunternehmer-Kategorien).</p>
+
+<table>
+  <tr><th>Name</th><th>Rolle</th><th>E-Mail</th><th>Status</th><th></th></tr>
+  <% rows.forEach(function(e) { %>
+    <tr>
+      <td><%= e.name %></td>
+      <td><%= e.role %></td>
+      <td><%= e.email || '' %></td>
+      <td><%= e.active ? 'aktiv' : 'inaktiv' %></td>
+      <td>
+        <form method="post" action="/mitarbeiter/<%= e.id %>/toggle">
+          <button type="submit" class="secondary"><%= e.active ? 'deaktivieren' : 'aktivieren' %></button>
+        </form>
+      </td>
+    </tr>
+  <% }) %>
+</table>
+
+<h2>Neuer Mitarbeiter</h2>
+<form method="post" action="/mitarbeiter" class="grid-form card">
+  <div><label>Name</label><input name="name" required></div>
+  <div>
+    <label>Rolle</label>
+    <input name="role" list="rollen" value="Vertrieb">
+    <datalist id="rollen">
+      <% DEFAULT_ROLES.forEach(function(r) { %><option value="<%= r %>"><% }) %>
+    </datalist>
+  </div>
+  <div><label>E-Mail</label><input name="email"></div>
+  <div style="justify-content:flex-end;"><button type="submit">Anlegen</button></div>
+</form>
+
+<%- include('partials/foot') %>

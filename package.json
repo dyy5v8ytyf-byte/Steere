@@ -1,0 +1,23 @@
+{
+  "name": "wwtec-crm-app",
+  "version": "1.0.0",
+  "description": "WWtec Salesmanagement – Workflow-Grundgeruest v1 (Kunden, Projekte, Termine, ToDos, Mitarbeiter)",
+  "main": "server.js",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "seed": "node db/seed.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "better-sqlite3": "^13.0.3",
+    "dayjs": "^1.11.21",
+    "ejs": "^6.0.1",
+    "express": "^5.2.1",
+    "node-cron": "^4.6.0"
+  }
+}

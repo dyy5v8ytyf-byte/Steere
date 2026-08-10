@@ -1,0 +1,21 @@
+WWtec Salesmanagement – Starten
+================================
+
+Mac:      Doppelklick auf "start.command"
+Windows:  Doppelklick auf "start.bat"
+
+Beim allerersten Start dauert es 1-2 Minuten (einmalige Einrichtung,
+Internetverbindung nötig). Danach öffnet sich automatisch der Browser
+mit dem Programm. Bei jedem weiteren Start geht es sofort los.
+
+Voraussetzung: Node.js muss installiert sein (falls nicht: node.js.org,
+LTS-Version, dann Rechner ggf. einmal neu starten).
+
+Zum Beenden: das schwarze Terminal-Fenster einfach schließen.
+
+Alle Daten (Kunden, Termine, ToDos, ...) werden lokal in
+db/wwtec.sqlite gespeichert und bleiben zwischen den Starts erhalten.
+Diese Datei nicht löschen, sonst sind die Daten weg
+(regelmäßiges Backup dieser Datei empfohlen).
+
+Mehr Details: siehe README.md

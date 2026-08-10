@@ -1,0 +1,40 @@
+<%- include('partials/head', { title: 'Kunden' }) %>
+
+<div class="flex-between">
+  <h1>Kunden &amp; Projekte</h1>
+  <a href="/kunden/neu"><button>+ Neuer Kunde</button></a>
+</div>
+
+<form method="get" action="/kunden" class="grid-form" style="margin-bottom:16px;">
+  <div>
+    <label>Suche Firma</label>
+    <input type="text" name="q" value="<%= q %>">
+  </div>
+  <div>
+    <label>Phase</label>
+    <select name="phase">
+      <option value="">Alle</option>
+      <% PHASES.forEach(function(p) { %>
+        <option value="<%= p %>" <%= phase === p ? 'selected' : '' %>><%= p %></option>
+      <% }) %>
+    </select>
+  </div>
+  <div style="justify-content:flex-end; flex-direction:row;"><button type="submit">Filtern</button></div>
+</form>
+
+<table>
+  <tr><th>Firma</th><th>Branche</th><th>Projekt</th><th>Phase</th><th>Potential</th><th>Letzte Aktivität</th><th></th></tr>
+  <% rows.forEach(function(r) { %>
+    <tr>
+      <td><%= r.firma %></td>
+      <td><%= r.branche || '' %></td>
+      <td><%= r.bezeichnung || '' %></td>
+      <td><% if (r.phase) { %><span class="tag" style="background:<%= PHASE_COLORS[r.phase] %>"><%= r.phase %></span><% } %></td>
+      <td><%= r.potential || '' %></td>
+      <td><%= r.letzte_aktivitaet_am ? dayjs(r.letzte_aktivitaet_am).format('DD.MM.YYYY') : '' %></td>
+      <td><a href="/kunden/<%= r.customer_id %>">öffnen →</a></td>
+    </tr>
+  <% }) %>
+</table>
+
+<%- include('partials/foot') %>
