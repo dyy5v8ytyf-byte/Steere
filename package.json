@@ -4,7 +4,7 @@
   "description": "WWtec Salesmanagement – Workflow-Grundgeruest v1 (Kunden, Projekte, Termine, ToDos, Mitarbeiter)",
   "main": "server.js",
   "engines": {
-    "node": ">=18"
+    "node": ">=22"
   },
   "scripts": {
     "start": "node server.js",
