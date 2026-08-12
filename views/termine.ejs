@@ -2,6 +2,12 @@
 
 <h1>Termine</h1>
 <p class="muted">Terminierung von Elektriker/Tiefbau: Bestätigung Ja/Nein setzen. Sobald bestätigt, erzeugt die tägliche Automatik ein ToDo "Kunde informieren" (falls noch nicht informiert).</p>
+<p class="muted">
+  <strong>"Kunde informiert"</strong> bedeutet: Der Kunde wurde über den bestätigten Elektriker-/Tiefbau-Termin
+  aktiv in Kenntnis gesetzt – z.&nbsp;B. per Telefon, E-Mail oder persönlich. Bitte beim Setzen den Weg auswählen,
+  auf dem informiert wurde; das wird mit gespeichert.
+</p>
+<p class="muted"><span class="due-dot due-soon"></span> Termin in den nächsten 2 Tagen &nbsp; <span class="due-dot due-overdue"></span> Termin überfällig (Datum vergangen, noch nicht durchgeführt)</p>
 
 <form method="get" action="/termine" class="grid-form" style="margin-bottom:16px;">
   <div>
@@ -22,13 +28,22 @@
       <option value="nein" <%= bestaetigt==='nein'?'selected':'' %>>nein</option>
     </select>
   </div>
+  <div>
+    <label>Status</label>
+    <select name="status">
+      <option value="">Alle</option>
+      <% APPOINTMENT_STATUS.forEach(function(s) { %>
+        <option value="<%= s %>" <%= status===s?'selected':'' %>><%= s %></option>
+      <% }) %>
+    </select>
+  </div>
   <div style="justify-content:flex-end;"><button type="submit">Filtern</button></div>
 </form>
 
 <table>
-  <tr><th>Firma</th><th>Projekt</th><th>Typ</th><th>Mit wem</th><th>Datum</th><th>Uhrzeit</th><th>Ort</th><th>Thema</th><th>Bestätigt</th><th>Kunde informiert</th></tr>
+  <tr><th>Firma</th><th>Projekt</th><th>Typ</th><th>Mit wem</th><th>Datum</th><th>Uhrzeit</th><th>Ort</th><th>Thema</th><th>Status</th><th>Bestätigt</th><th>Kunde informiert</th><th></th></tr>
   <% rows.forEach(function(a) { %>
-    <tr>
+    <tr class="<%= dueClass(a.datum, a.bestaetigt !== 'offen' && a.status !== 'geplant') %>">
       <td><a href="/kunden/<%= a.customer_id %>"><%= a.firma %></a></td>
       <td><%= a.projekt || '' %></td>
       <td><%= a.typ %></td>
@@ -37,6 +52,7 @@
       <td><%= a.uhrzeit || (a.datum ? 'ganztägig' : '') %></td>
       <td><%= a.ort || '' %></td>
       <td><%= a.thema || '' %></td>
+      <td><%= a.status %></td>
       <td>
         <form method="post" action="/termine/<%= a.id %>/bestaetigen" class="inline">
           <input type="hidden" name="redirect" value="/termine">
@@ -49,15 +65,25 @@
       </td>
       <td>
         <% if (a.kunde_informiert) { %>
-          <span class="badge pill-yes">informiert</span>
+          <span class="badge pill-yes">informiert<%= a.kunde_informiert_methode ? ' (' + a.kunde_informiert_methode + ')' : '' %></span>
         <% } else if (a.bestaetigt === 'ja') { %>
           <form method="post" action="/termine/<%= a.id %>/informiert" class="inline">
             <input type="hidden" name="redirect" value="/termine">
-            <button type="submit" class="secondary">als informiert markieren</button>
+            <select name="methode" onchange="if(this.value) this.form.submit()">
+              <option value="">informieren über...</option>
+              <% INFORM_METHODS.forEach(function(m) { %><option value="<%= m %>"><%= m %></option><% }) %>
+            </select>
           </form>
         <% } else { %>
           <span class="muted">–</span>
         <% } %>
+      </td>
+      <td class="row-actions">
+        <a class="btn-link" href="/termine/<%= a.id %>/bearbeiten">bearbeiten</a>
+        <form method="post" action="/termine/<%= a.id %>/loeschen" onsubmit="return confirm('Termin bei ' + <%- JSON.stringify(a.firma) %> + ' wirklich löschen? Bist du sicher?');">
+          <input type="hidden" name="redirect" value="/termine">
+          <button type="submit" class="danger">löschen</button>
+        </form>
       </td>
     </tr>
   <% }) %>

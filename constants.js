@@ -32,4 +32,16 @@ const DEFAULT_ROLES = ['Vertrieb', 'Projektmanager', 'Elektriker', 'Tiefbau', 'A
 
 const BAUSTELLEN_STATUS = ['geplant', 'im_bau', 'beendet'];
 
-module.exports = { PHASES, PHASE_COLORS, DEFAULT_ROLES, BAUSTELLEN_STATUS };
+// Status eines Termins (unabhängig von der Bestätigung ja/nein/offen).
+const APPOINTMENT_STATUS = ['geplant', 'durchgeführt', 'verschoben', 'abgesagt'];
+
+// Wie wurde der Kunde über einen bestätigten Termin informiert?
+const INFORM_METHODS = ['Telefon', 'E-Mail', 'Persönlich', 'Sonstiges'];
+
+// Status eines ToDos (zusätzlich zum reinen erledigt/offen-Haken).
+const TODO_STATUS = ['offen', 'in Arbeit', 'erledigt', 'zurückgestellt'];
+
+module.exports = {
+  PHASES, PHASE_COLORS, DEFAULT_ROLES, BAUSTELLEN_STATUS,
+  APPOINTMENT_STATUS, INFORM_METHODS, TODO_STATUS,
+};

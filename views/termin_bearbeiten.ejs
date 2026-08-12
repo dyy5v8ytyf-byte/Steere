@@ -1,0 +1,57 @@
+<%- include('partials/head', { title: 'Termin bearbeiten – ' + appointment.firma }) %>
+
+<h1>Termin bearbeiten</h1>
+<p class="muted"><%= appointment.firma %></p>
+
+<div class="card">
+  <form method="post" action="/termine/<%= appointment.id %>/bearbeiten" class="grid-form">
+    <input type="hidden" name="customer_id" value="<%= appointment.customer_id %>">
+    <div>
+      <label>Projekt</label>
+      <select name="project_id">
+        <option value="">– kein Projekt –</option>
+        <% projects.forEach(function(p) { %>
+          <option value="<%= p.id %>" <%= appointment.project_id == p.id ? 'selected' : '' %>><%= p.bezeichnung %></option>
+        <% }) %>
+      </select>
+    </div>
+    <div>
+      <label>Typ</label>
+      <select name="typ">
+        <option value="Kunde" <%= appointment.typ === 'Kunde' ? 'selected' : '' %>>Kunde</option>
+        <option value="Elektriker" <%= appointment.typ === 'Elektriker' ? 'selected' : '' %>>Elektriker</option>
+        <option value="Tiefbau" <%= appointment.typ === 'Tiefbau' ? 'selected' : '' %>>Tiefbau</option>
+      </select>
+    </div>
+    <div><label>Mit wem</label><input name="mit_wem" value="<%= appointment.mit_wem || '' %>"></div>
+    <div><label>Datum</label><input type="date" name="datum" value="<%= appointment.datum || '' %>"></div>
+    <div><label>Uhrzeit</label><input type="time" name="uhrzeit" value="<%= appointment.uhrzeit || '' %>"></div>
+    <div><label>Ort</label><input name="ort" value="<%= appointment.ort || '' %>"></div>
+    <div style="grid-column:1/-1;"><label>Thema</label><input name="thema" value="<%= appointment.thema || '' %>" style="width:100%;"></div>
+    <div>
+      <label>Bestätigt</label>
+      <select name="bestaetigt">
+        <option value="offen" <%= appointment.bestaetigt === 'offen' ? 'selected' : '' %>>offen</option>
+        <option value="ja" <%= appointment.bestaetigt === 'ja' ? 'selected' : '' %>>ja</option>
+        <option value="nein" <%= appointment.bestaetigt === 'nein' ? 'selected' : '' %>>nein</option>
+      </select>
+    </div>
+    <div>
+      <label>Status</label>
+      <select name="status">
+        <% APPOINTMENT_STATUS.forEach(function(s) { %>
+          <option value="<%= s %>" <%= appointment.status === s ? 'selected' : '' %>><%= s %></option>
+        <% }) %>
+      </select>
+    </div>
+    <div style="grid-column:1/-1;">
+      <label>Ergebnisstand (was kam beim Termin heraus?)</label>
+      <textarea name="ergebnis" rows="3" style="width:100%;"><%= appointment.ergebnis || '' %></textarea>
+    </div>
+    <div style="justify-content:flex-end;"><button type="submit">Speichern</button></div>
+  </form>
+</div>
+
+<p><a class="btn-link" href="/kunden/<%= appointment.customer_id %>">&larr; zurück zu <%= appointment.firma %></a></p>
+
+<%- include('partials/foot') %>

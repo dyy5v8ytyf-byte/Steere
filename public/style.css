@@ -66,3 +66,15 @@ button.secondary { background: #fff; color: var(--navy); border: 1px solid var(-
 .flex-between { display: flex; justify-content: space-between; align-items: center; }
 .tag { display: inline-block; padding: 1px 8px; border-radius: 10px; font-size: 11px; margin-right: 4px; }
 .footer-note { color: #999; font-size: 11px; margin-top: 40px; text-align: center; }
+tr.due-soon td { background: #fff3cd; }
+tr.due-overdue td { background: #f8d7da; }
+tr.due-soon:hover td { background: #ffe9ac; }
+tr.due-overdue:hover td { background: #f4b6bd; }
+.due-dot { display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:6px; }
+.due-dot.due-overdue { background: var(--red); }
+.due-dot.due-soon { background: var(--amber); }
+button.danger { background: #fff; color: var(--red); border: 1px solid var(--red); }
+button.danger:hover { background: var(--red); color: #fff; }
+.row-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+a.btn-link { display:inline-block; background:#fff; color: var(--navy); border: 1px solid var(--navy); border-radius:5px; padding:6px 12px; font-size:13px; text-decoration:none; }
+a.btn-link:hover { background: var(--navy); color: #fff; }

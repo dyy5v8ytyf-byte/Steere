@@ -12,7 +12,19 @@
       <td><%= e.email || '' %></td>
       <td><%= e.active ? 'aktiv' : 'inaktiv' %></td>
       <td>
-        <form method="post" action="/mitarbeiter/<%= e.id %>/toggle">
+        <details>
+          <summary class="muted">bearbeiten</summary>
+          <form method="post" action="/mitarbeiter/<%= e.id %>/bearbeiten" class="grid-form" style="margin-top:6px;">
+            <div><label>Name</label><input name="name" value="<%= e.name %>" required></div>
+            <div>
+              <label>Rolle</label>
+              <input name="role" list="rollen" value="<%= e.role %>">
+            </div>
+            <div><label>E-Mail</label><input name="email" value="<%= e.email || '' %>"></div>
+            <div style="justify-content:flex-end;"><button type="submit">Speichern</button></div>
+          </form>
+        </details>
+        <form method="post" action="/mitarbeiter/<%= e.id %>/toggle" style="margin-top:4px;">
           <button type="submit" class="secondary"><%= e.active ? 'deaktivieren' : 'aktivieren' %></button>
         </form>
       </td>
@@ -20,15 +32,16 @@
   <% }) %>
 </table>
 
+<datalist id="rollen">
+  <% DEFAULT_ROLES.forEach(function(r) { %><option value="<%= r %>"><% }) %>
+</datalist>
+
 <h2>Neuer Mitarbeiter</h2>
 <form method="post" action="/mitarbeiter" class="grid-form card">
   <div><label>Name</label><input name="name" required></div>
   <div>
     <label>Rolle</label>
     <input name="role" list="rollen" value="Vertrieb">
-    <datalist id="rollen">
-      <% DEFAULT_ROLES.forEach(function(r) { %><option value="<%= r %>"><% }) %>
-    </datalist>
   </div>
   <div><label>E-Mail</label><input name="email"></div>
   <div style="justify-content:flex-end;"><button type="submit">Anlegen</button></div>

@@ -222,38 +222,7 @@
     "branche": "EPC",
     "ap1": "Dr. Robert Lasowski",
     "kontakt1": null,
-    "ap2": null,
-    "kontakt2": null,
-    "kontakt_aufgenommen": "2026-06-15T00:00:00",
-    "rueckmeldung": "ausstehend",
-    "termin_am": null,
-    "termin_um": null,
-    "termin_ort": null,
-    "termin_zsf": null,
-    "potential": null,
-    "todo": "10.08.26 KT: Mail recherchieren",
-    "info_versendet": null,
-    "activities": [
-      [
-        "2026-08-10",
-        "Mail recherchieren"
-      ]
-    ],
-    "letzte_notiz": "Mail recherchieren",
-    "naechster_termin_datum": null,
-    "naechster_termin_zeit": null,
-    "naechster_termin_ort": null,
-    "naechster_termin_thema": null,
-    "naechster_termin_quelle": null,
-    "stage": "Rückmeldung ausstehend"
-  },
-  {
-    "row": 9,
-    "firma": "HeyCharge",
-    "branche": "EPC",
-    "ap1": "Chris Carde",
-    "kontakt1": null,
-    "ap2": null,
+    "ap2": "Chris Carde",
     "kontakt2": null,
     "kontakt_aufgenommen": "2026-06-11T00:00:00",
     "rueckmeldung": "ausstehend",
@@ -716,7 +685,7 @@
   {
     "row": 24,
     "firma": "Amperio",
-    "branche": "Software",
+    "branche": "Hardware",
     "ap1": "Max Dietrich",
     "kontakt1": null,
     "ap2": null,

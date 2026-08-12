@@ -56,7 +56,10 @@ CREATE TABLE IF NOT EXISTS appointments (
   ort TEXT,
   thema TEXT,
   bestaetigt TEXT NOT NULL DEFAULT 'offen', -- offen / ja / nein
-  kunde_informiert INTEGER NOT NULL DEFAULT 0
+  status TEXT NOT NULL DEFAULT 'geplant',   -- geplant / durchgeführt / verschoben / abgesagt
+  ergebnis TEXT,                            -- Ergebnisstand / Notiz nach dem Termin
+  kunde_informiert INTEGER NOT NULL DEFAULT 0,
+  kunde_informiert_methode TEXT             -- Telefon / E-Mail / Persönlich / Sonstiges
 );
 
 CREATE TABLE IF NOT EXISTS todos (
@@ -67,6 +70,8 @@ CREATE TABLE IF NOT EXISTS todos (
   faellig_am TEXT,
   mitarbeiter_id INTEGER REFERENCES employees(id),
   erledigt INTEGER NOT NULL DEFAULT 0,
+  status TEXT NOT NULL DEFAULT 'offen',     -- offen / in Arbeit / erledigt / zurückgestellt
+  notiz TEXT,                               -- Hinweis / Notiz zum ToDo
   erstellt_am TEXT NOT NULL DEFAULT (datetime('now'))
 );
 

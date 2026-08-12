@@ -1,22 +1,83 @@
 <%- include('partials/head', { title: 'ToDos' }) %>
 
 <h1>ToDos</h1>
+<p class="muted"><span class="due-dot due-soon"></span> fällig in den nächsten 2 Tagen &nbsp; <span class="due-dot due-overdue"></span> überfällig</p>
+
+<form method="get" action="/todos" class="grid-form" style="margin-bottom:16px;">
+  <div>
+    <label>Firma</label>
+    <input type="text" name="q" value="<%= q %>" placeholder="Suche...">
+  </div>
+  <div>
+    <label>Mitarbeiter</label>
+    <select name="mitarbeiter_id">
+      <option value="">Alle</option>
+      <% employees.forEach(function(e) { %>
+        <option value="<%= e.id %>" <%= String(mitarbeiter_id) === String(e.id) ? 'selected' : '' %>><%= e.name %></option>
+      <% }) %>
+    </select>
+  </div>
+  <div>
+    <label>Status</label>
+    <select name="status">
+      <option value="">Alle</option>
+      <% TODO_STATUS.forEach(function(s) { %>
+        <option value="<%= s %>" <%= status===s?'selected':'' %>><%= s %></option>
+      <% }) %>
+    </select>
+  </div>
+  <div style="justify-content:flex-end;"><button type="submit">Filtern</button></div>
+</form>
 
 <table>
-  <tr><th>Erledigt</th><th>Firma</th><th>Text</th><th>Fällig</th><th>Mitarbeiter</th></tr>
+  <tr><th>Erledigt</th><th>Firma</th><th>Text</th><th>Notiz</th><th>Fällig</th><th>Status</th><th>Mitarbeiter</th><th></th></tr>
   <% rows.forEach(function(t) { %>
-    <tr>
+    <tr class="<%= dueClass(t.faellig_am, t.erledigt) %>">
       <td>
         <form method="post" action="/todos/<%= t.id %>/erledigt">
+          <input type="hidden" name="redirect" value="/todos">
           <button type="submit" class="secondary"><%= t.erledigt ? '✓' : '—' %></button>
         </form>
       </td>
       <td><a href="/kunden/<%= t.customer_id %>"><%= t.firma %></a></td>
       <td style="<%= t.erledigt ? 'text-decoration:line-through;color:#999;' : '' %>"><%= t.text %></td>
+      <td class="muted"><%= t.notiz || '' %></td>
       <td><%= t.faellig_am ? dayjs(t.faellig_am).format('DD.MM.YYYY') : '' %></td>
+      <td><%= t.status %></td>
       <td><%= t.mitarbeiter_name || '' %></td>
+      <td class="row-actions">
+        <a class="btn-link" href="/todos/<%= t.id %>/bearbeiten">bearbeiten</a>
+        <form method="post" action="/todos/<%= t.id %>/loeschen" onsubmit="return confirm('ToDo bei ' + <%- JSON.stringify(t.firma) %> + ' wirklich löschen? Bist du sicher?');">
+          <input type="hidden" name="redirect" value="/todos">
+          <button type="submit" class="danger">löschen</button>
+        </form>
+      </td>
     </tr>
   <% }) %>
 </table>
+
+<h2>Neues ToDo</h2>
+<div class="card">
+  <form method="post" action="/todos" class="grid-form">
+    <div>
+      <label>Kunde</label>
+      <select name="customer_id" required>
+        <option value="">– wählen –</option>
+        <% customers.forEach(function(c) { %><option value="<%= c.id %>"><%= c.firma %></option><% }) %>
+      </select>
+    </div>
+    <div style="grid-column:2/4;"><label>Text</label><input name="text" required style="width:100%;"></div>
+    <div><label>Fällig am</label><input type="date" name="faellig_am"></div>
+    <div>
+      <label>Mitarbeiter</label>
+      <select name="mitarbeiter_id">
+        <option value="">– offen –</option>
+        <% employees.forEach(function(e) { %><option value="<%= e.id %>"><%= e.name %></option><% }) %>
+      </select>
+    </div>
+    <div style="grid-column:1/-1;"><label>Hinweis / Notiz</label><input name="notiz" style="width:100%;"></div>
+    <div><button type="submit">+ ToDo</button></div>
+  </form>
+</div>
 
 <%- include('partials/foot') %>

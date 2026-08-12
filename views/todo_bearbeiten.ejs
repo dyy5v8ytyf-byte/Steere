@@ -1,0 +1,35 @@
+<%- include('partials/head', { title: 'ToDo bearbeiten – ' + todo.firma }) %>
+
+<h1>ToDo bearbeiten</h1>
+<p class="muted"><%= todo.firma %></p>
+
+<div class="card">
+  <form method="post" action="/todos/<%= todo.id %>/bearbeiten" class="grid-form">
+    <input type="hidden" name="customer_id" value="<%= todo.customer_id %>">
+    <div style="grid-column:1/-1;"><label>Text</label><input name="text" value="<%= todo.text %>" required style="width:100%;"></div>
+    <div><label>Fällig am</label><input type="date" name="faellig_am" value="<%= todo.faellig_am || '' %>"></div>
+    <div>
+      <label>Mitarbeiter</label>
+      <select name="mitarbeiter_id">
+        <option value="">– offen –</option>
+        <% employees.forEach(function(e) { %>
+          <option value="<%= e.id %>" <%= todo.mitarbeiter_id == e.id ? 'selected' : '' %>><%= e.name %></option>
+        <% }) %>
+      </select>
+    </div>
+    <div>
+      <label>Status</label>
+      <select name="status">
+        <% TODO_STATUS.forEach(function(s) { %>
+          <option value="<%= s %>" <%= todo.status === s ? 'selected' : '' %>><%= s %></option>
+        <% }) %>
+      </select>
+    </div>
+    <div style="grid-column:1/-1;"><label>Hinweis / Notiz</label><textarea name="notiz" rows="3" style="width:100%;"><%= todo.notiz || '' %></textarea></div>
+    <div style="justify-content:flex-end;"><button type="submit">Speichern</button></div>
+  </form>
+</div>
+
+<p><a class="btn-link" href="/kunden/<%= todo.customer_id %>">&larr; zurück zu <%= todo.firma %></a></p>
+
+<%- include('partials/foot') %>

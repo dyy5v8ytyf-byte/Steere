@@ -1,14 +1,54 @@
 <%- include('partials/head', { title: customer.firma }) %>
 
-<h1><%= customer.firma %></h1>
-<p class="muted"><%= customer.branche || '' %> <% if (customer.adresse) { %>· <%= customer.adresse %><% } %></p>
+<div class="flex-between">
+  <div>
+    <h1><%= customer.firma %></h1>
+    <p class="muted"><%= customer.branche || '' %> <% if (customer.adresse) { %>· <%= customer.adresse %><% } %></p>
+  </div>
+  <form method="post" action="/kunden/<%= customer.id %>/loeschen" onsubmit="return confirm('Kunde \'<%= customer.firma %>\' inkl. aller Projekte, Termine, ToDos und Notizen wirklich unwiderruflich löschen? Bist du sicher?');">
+    <button type="submit" class="danger">Kunde löschen</button>
+  </form>
+</div>
+
+<details>
+  <summary class="muted">Kundendaten bearbeiten (Firma, Branche, Adresse, Website, Quelle)</summary>
+  <form method="post" action="/kunden/<%= customer.id %>/bearbeiten" class="grid-form card" style="margin-top:8px;">
+    <div><label>Firma</label><input name="firma" value="<%= customer.firma %>" required></div>
+    <div><label>Branche</label><input name="branche" value="<%= customer.branche || '' %>"></div>
+    <div><label>Adresse</label><input name="adresse" value="<%= customer.adresse || '' %>"></div>
+    <div><label>Website</label><input name="website" value="<%= customer.website || '' %>"></div>
+    <div><label>Lead-Quelle</label><input name="quelle" value="<%= customer.quelle || '' %>"></div>
+    <div style="justify-content:flex-end;"><button type="submit">Speichern</button></div>
+  </form>
+</details>
 
 <h2>Ansprechpartner</h2>
 <div class="card">
   <table>
-    <tr><th>Name</th><th>Telefon</th><th>E-Mail</th><th>Rolle</th></tr>
+    <tr><th>Name</th><th>Telefon</th><th>E-Mail</th><th>Rolle</th><th></th></tr>
     <% contacts.forEach(function(c) { %>
-      <tr><td><%= c.name || '' %></td><td><%= c.telefon || '' %></td><td><%= c.email || '' %></td><td><%= c.rolle || '' %></td></tr>
+      <tr>
+        <td><%= c.name || '' %></td><td><%= c.telefon || '' %></td><td><%= c.email || '' %></td><td><%= c.rolle || '' %></td>
+        <td>
+          <details>
+            <summary class="muted">bearbeiten</summary>
+            <form method="post" action="/kontakte/<%= c.id %>/bearbeiten" class="grid-form" style="margin-top:6px;">
+              <input type="hidden" name="customer_id" value="<%= customer.id %>">
+              <div><label>Name</label><input name="name" value="<%= c.name || '' %>" required></div>
+              <div><label>Telefon</label><input name="telefon" value="<%= c.telefon || '' %>"></div>
+              <div><label>E-Mail</label><input name="email" value="<%= c.email || '' %>"></div>
+              <div><label>Rolle</label><input name="rolle" value="<%= c.rolle || '' %>"></div>
+              <div class="row-actions" style="justify-content:flex-end;">
+                <button type="submit">Speichern</button>
+              </div>
+            </form>
+            <form method="post" action="/kontakte/<%= c.id %>/loeschen" onsubmit="return confirm('Ansprechpartner \'<%= c.name || '' %>\' wirklich löschen? Bist du sicher?');" style="margin-top:6px;">
+              <input type="hidden" name="customer_id" value="<%= customer.id %>">
+              <button type="submit" class="danger">löschen</button>
+            </form>
+          </details>
+        </td>
+      </tr>
     <% }) %>
   </table>
   <form method="post" action="/kunden/<%= customer.id %>/kontakte" class="grid-form" style="margin-top:10px;">
@@ -27,6 +67,7 @@
       <div>
         <strong><%= p.bezeichnung %></strong>
         <span class="tag" style="background:<%= PHASE_COLORS[p.phase] %>"><%= p.phase %></span>
+        <% if (p.potential) { %><span class="tag" style="background:#e2e8f0;">Potential <%= p.potential %></span><% } %>
       </div>
       <span class="muted">letzte Aktivität: <%= dayjs(p.letzte_aktivitaet_am).format('DD.MM.YYYY') %></span>
     </div>
@@ -52,12 +93,21 @@
     </form>
 
     <details style="margin-top:10px;">
-      <summary class="muted">Finanzen / Baustelle bearbeiten</summary>
+      <summary class="muted">Finanzen / Potential / Baustelle bearbeiten</summary>
       <form method="post" action="/projekte/<%= p.id %>/finanzen" class="grid-form" style="margin-top:8px;">
         <input type="hidden" name="customer_id" value="<%= customer.id %>">
         <div><label>Angebotssumme (€)</label><input type="number" step="0.01" name="angebotssumme" value="<%= p.angebotssumme || '' %>"></div>
         <div><label>Beauftragte Summe (€)</label><input type="number" step="0.01" name="beauftragtesumme" value="<%= p.beauftragtesumme || '' %>"></div>
         <div><label>Rechnungsbetrag (€)</label><input type="number" step="0.01" name="rechnungsbetrag" value="<%= p.rechnungsbetrag || '' %>"></div>
+        <div>
+          <label>Potential</label>
+          <select name="potential">
+            <option value="">–</option>
+            <option value="1" <%= p.potential == 1 ? 'selected' : '' %>>1 (niedrig)</option>
+            <option value="2" <%= p.potential == 2 ? 'selected' : '' %>>2 (mittel)</option>
+            <option value="3" <%= p.potential == 3 ? 'selected' : '' %>>3 (hoch)</option>
+          </select>
+        </div>
         <div>
           <label>Baustellen-Status</label>
           <select name="baustellen_status">
@@ -75,6 +125,10 @@
           </select>
         </div>
         <div style="justify-content:flex-end;"><button type="submit">Speichern</button></div>
+      </form>
+      <form method="post" action="/projekte/<%= p.id %>/loeschen" onsubmit="return confirm('Projekt \'<%= p.bezeichnung %>\' inkl. zugehöriger Termine/ToDos wirklich löschen? Bist du sicher?');" style="margin-top:8px;">
+        <input type="hidden" name="customer_id" value="<%= customer.id %>">
+        <button type="submit" class="danger">Projekt löschen</button>
       </form>
     </details>
   </div>
@@ -99,17 +153,26 @@
 <h2>Termine</h2>
 <div class="card">
   <table>
-    <tr><th>Datum</th><th>Uhrzeit</th><th>Typ</th><th>Mit wem</th><th>Ort</th><th>Thema</th><th>Bestätigt</th></tr>
+    <tr><th>Datum</th><th>Uhrzeit</th><th>Typ</th><th>Mit wem</th><th>Ort</th><th>Thema</th><th>Status</th><th>Bestätigt</th><th>Ergebnis</th><th></th></tr>
     <% appointments.forEach(function(a) { %>
-      <tr>
+      <tr class="<%= dueClass(a.datum, a.bestaetigt !== 'offen' && a.status !== 'geplant') %>">
         <td><%= a.datum ? dayjs(a.datum).format('DD.MM.YYYY') : '' %></td>
         <td><%= a.uhrzeit || 'ganztägig' %></td>
         <td><%= a.typ %></td>
         <td><%= a.mit_wem || '' %></td>
         <td><%= a.ort || '' %></td>
         <td><%= a.thema || '' %></td>
+        <td><%= a.status %></td>
         <td>
           <span class="badge <%= a.bestaetigt === 'ja' ? 'pill-yes' : (a.bestaetigt === 'nein' ? 'pill-no' : 'pill-open') %>"><%= a.bestaetigt %></span>
+        </td>
+        <td><%= a.ergebnis || '' %></td>
+        <td class="row-actions">
+          <a class="btn-link" href="/termine/<%= a.id %>/bearbeiten">bearbeiten</a>
+          <form method="post" action="/termine/<%= a.id %>/loeschen" onsubmit="return confirm('Termin wirklich löschen? Bist du sicher?');">
+            <input type="hidden" name="customer_id" value="<%= customer.id %>">
+            <button type="submit" class="danger">löschen</button>
+          </form>
         </td>
       </tr>
     <% }) %>
@@ -136,23 +199,33 @@
     <div style="grid-column:1/-1;"><label>Thema</label><input name="thema" style="width:100%;"></div>
     <div><button type="submit">+ Termin</button></div>
   </form>
-  <p class="muted">Bestätigung / "Kunde informiert" bitte über die <a href="/termine">Termine-Übersicht</a> setzen.</p>
+  <p class="muted">Bestätigung / "Kunde informiert" bitte über die <a href="/termine">Termine-Übersicht</a> setzen. Weitere Details (Status, Ergebnis) über "bearbeiten" in der Tabelle oben.</p>
 </div>
 
 <h2>ToDos</h2>
 <div class="card">
   <table>
-    <tr><th>Erledigt</th><th>Text</th><th>Fällig</th><th>Mitarbeiter</th></tr>
+    <tr><th>Erledigt</th><th>Text</th><th>Notiz</th><th>Fällig</th><th>Status</th><th>Mitarbeiter</th><th></th></tr>
     <% todos.forEach(function(t) { %>
-      <tr>
+      <tr class="<%= dueClass(t.faellig_am, t.erledigt) %>">
         <td>
           <form method="post" action="/todos/<%= t.id %>/erledigt">
+            <input type="hidden" name="redirect" value="/kunden/<%= customer.id %>">
             <button type="submit" class="secondary"><%= t.erledigt ? '✓' : '—' %></button>
           </form>
         </td>
         <td style="<%= t.erledigt ? 'text-decoration:line-through;color:#999;' : '' %>"><%= t.text %></td>
+        <td class="muted"><%= t.notiz || '' %></td>
         <td><%= t.faellig_am ? dayjs(t.faellig_am).format('DD.MM.YYYY') : '' %></td>
+        <td><%= t.status %></td>
         <td><%= t.mitarbeiter_name || '' %></td>
+        <td class="row-actions">
+          <a class="btn-link" href="/todos/<%= t.id %>/bearbeiten">bearbeiten</a>
+          <form method="post" action="/todos/<%= t.id %>/loeschen" onsubmit="return confirm('ToDo wirklich löschen? Bist du sicher?');">
+            <input type="hidden" name="redirect" value="/kunden/<%= customer.id %>">
+            <button type="submit" class="danger">löschen</button>
+          </form>
+        </td>
       </tr>
     <% }) %>
   </table>
@@ -166,6 +239,7 @@
         <% employees.forEach(function(e) { %><option value="<%= e.id %>"><%= e.name %></option><% }) %>
       </select>
     </div>
+    <div style="grid-column:1/-1;"><label>Hinweis / Notiz</label><input name="notiz" style="width:100%;"></div>
     <div><button type="submit">+ ToDo</button></div>
   </form>
 </div>
