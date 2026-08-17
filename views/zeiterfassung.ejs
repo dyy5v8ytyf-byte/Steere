@@ -1,0 +1,66 @@
+<%- include('partials/kopf') %>
+<div class="seitenkopf">
+  <div><h1>Zeiterfassung</h1><div class="unter">Grundlage für Monatsnachweis und Abrechnung</div></div>
+  <form method="get" class="reihe">
+    <input type="month" name="monat" value="<%= monat %>" style="max-width:180px">
+    <button class="knopf leer mini" type="submit">Monat anzeigen</button>
+  </form>
+</div>
+
+<div class="spalten s4">
+  <div class="kz"><div class="n"><%= zahl(summe.stunden) %> h</div><div class="t">erfasst gesamt</div></div>
+  <div class="kz"><div class="n akz"><%= zahl(summe.imRetainer) %> h</div><div class="t">im Retainer</div></div>
+  <div class="kz"><div class="n"><%= zahl(summe.extra) %> h</div><div class="t">außerhalb, berechenbar</div></div>
+  <div class="kz"><div class="n"><%= zahl(summe.km) %> km</div><div class="t">gefahren</div></div>
+</div>
+
+<div class="karte" style="margin-top:18px">
+  <h2>Zeit erfassen</h2><div class="marke-strich"></div>
+  <form method="post" action="/kalkulator/zeiten">
+    <div class="felder3">
+      <div class="feld"><label>Datum</label><input type="date" name="datum" value="<%= new Date().toISOString().slice(0,10) %>"></div>
+      <div class="feld"><label>von</label><input type="time" name="von"></div>
+      <div class="feld"><label>bis</label><input type="time" name="bis"></div>
+    </div>
+    <div class="felder3">
+      <div class="feld"><label>Pause Minuten</label><input type="text" name="pause_min" value="0"></div>
+      <div class="feld"><label>oder Stunden direkt</label><input type="text" name="stunden" placeholder="7,5"></div>
+      <div class="feld"><label>Kilometer</label><input type="text" name="km" value="0"></div>
+    </div>
+    <div class="feld"><label>Tätigkeit *</label><input type="text" name="taetigkeit" required placeholder="Projekt Heitmann: Besprechung und Sichtung Unterlagen"></div>
+    <div class="felder3">
+      <div class="feld"><label>Retainer</label><select name="retainer_id"><option value="">—</option>
+        <% retainer.forEach(function(r){ %><option value="<%= r.id %>"><%= r.org %> · <%= r.bezeichnung %></option><% }) %></select></div>
+      <div class="feld"><label>Projekt</label><select name="projekt_id"><option value="">—</option>
+        <% projekte.forEach(function(p){ %><option value="<%= p.id %>"><%= p.firma %> — <%= p.bezeichnung %></option><% }) %></select></div>
+      <div class="feld"><label>Im Kontingent?</label><select name="im_retainer"><option value="ja">ja — zählt gegen den Retainer</option><option value="nein">nein — gesondert berechenbar</option></select></div>
+    </div>
+    <div class="feld"><label>Reiseanschrift</label><input type="text" name="reiseanschrift"></div>
+    <button class="knopf" type="submit">Erfassen</button>
+  </form>
+</div>
+
+<div class="karte">
+  <% if (!zeiten.length) { %><div class="leer-hinweis">Für <%= monat %> ist nichts erfasst.</div><% } else { %>
+  <div class="tab-scroll"><table>
+    <thead><tr><th>Datum</th><th>Wer</th><th>Tätigkeit</th><th>Zuordnung</th><th class="z">Stunden</th><th class="z">km</th><th>Kontingent</th><th></th></tr></thead>
+    <tbody><% zeiten.forEach(function(z){ %>
+      <tr>
+        <td><%= datum(z.datum) %><% if (z.von) { %><br><span style="font-size:11.5px;color:var(--ink3)"><%= z.von %>–<%= z.bis %></span><% } %></td>
+        <td><%= z.wer || '—' %></td>
+        <td><%= z.taetigkeit %><% if (z.reiseanschrift) { %><br><span style="font-size:11.5px;color:var(--ink3)"><%= z.reiseanschrift %></span><% } %></td>
+        <td><%= z.org || z.projekt || '—' %></td>
+        <td class="z"><b><%= zahl(z.stunden) %></b></td>
+        <td class="z"><%= Number(z.km) ? zahl(z.km) : '—' %></td>
+        <td><span class="pille <%= z.im_retainer?'ok':'akz' %>"><%= z.im_retainer?'im Retainer':'extra' %></span></td>
+        <td class="z"><% if (!z.abgerechnet) { %>
+          <form method="post" action="/kalkulator/zeiten/<%= z.id %>/loeschen"><button class="knopf gefahr mini" type="submit">×</button></form>
+        <% } else { %><span class="pille">abgerechnet</span><% } %></td>
+      </tr>
+    <% }) %>
+    <tr class="summe"><td colspan="4"><b>Summe</b></td><td class="z"><b><%= zahl(summe.stunden) %></b></td>
+      <td class="z"><b><%= zahl(summe.km) %></b></td><td colspan="2"></td></tr>
+    </tbody></table></div>
+  <% } %>
+</div>
+<%- include('partials/fuss') %>

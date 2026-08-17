@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="de"><head><meta charset="UTF-8"><title><%= rechnung.art==='storno'?'Storno':'Rechnung' %> <%= rechnung.nummer %></title>
+<style>
+  @page{size:A4;margin:18mm 16mm 20mm}
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  body{font-family:Arial,Helvetica,sans-serif;color:#111;font-size:10.5pt;line-height:1.45;background:#fff}
+  .blatt{max-width:186mm;margin:0 auto;padding:14px}
+  .kopfzeile{font-size:7.5pt;color:#555;border-bottom:1.6pt solid #C89B4A;padding-bottom:5px;margin-bottom:24px}
+  .marke{font-family:Georgia,serif;font-size:15pt;font-weight:bold;color:#0A1628}.marke i{font-style:normal;color:#C89B4A}
+  .oben{display:flex;justify-content:space-between;gap:30px;margin-bottom:24px}
+  .empf{white-space:pre-line;min-height:30mm}
+  .meta{font-size:9pt;text-align:right;min-width:60mm}
+  .meta div{margin-bottom:2px}
+  h1{font-family:Georgia,serif;font-size:15pt;margin-bottom:5px;color:#0A1628}
+  .betreff{font-size:10pt;color:#333;margin-bottom:16px}
+  table{width:100%;border-collapse:collapse;margin:12px 0;font-size:9.5pt}
+  th{text-align:left;font-size:7.5pt;letter-spacing:.8px;text-transform:uppercase;color:#555;border-bottom:1pt solid #888;padding:0 6px 5px 0;font-weight:bold}
+  td{padding:7px 6px 7px 0;border-bottom:.5pt solid #ddd;vertical-align:top}
+  td.z,th.z{text-align:right;white-space:nowrap}
+  tr.titel td{font-weight:bold;background:#f4f1ea;color:#0A1628;border-bottom:none;padding-top:11px}
+  .lang{font-size:8.5pt;color:#444;margin-top:3px}
+  .summen{margin-left:auto;width:78mm;margin-top:12px}
+  .summen div{display:flex;justify-content:space-between;padding:5px 0;border-bottom:.5pt solid #ddd}
+  .summen div.gesamt{border-bottom:none;border-top:1.2pt solid #0A1628;font-weight:bold;font-size:11.5pt;padding-top:8px;color:#0A1628}
+  .zahlung{margin-top:20px;border:1px solid #ddd;border-left:2.5pt solid #C89B4A;padding:10px 13px;font-size:9pt}
+  .zahlung b{color:#0A1628}
+  .hinw{margin-top:16px;font-size:8.7pt;color:#333;white-space:pre-line;line-height:1.5}
+  .fuss{margin-top:26px;padding-top:8px;border-top:.5pt solid #ccc;font-size:7.5pt;color:#666;line-height:1.5}
+  .entwurf{background:#fbf0e6;border:1px solid #C89B4A;color:#8A5E15;padding:8px 12px;margin-bottom:14px;font-size:9pt;font-weight:bold}
+  .drucken{margin-bottom:14px}
+  @media print{.drucken{display:none}.blatt{padding:0}}
+</style></head><body><div class="blatt">
+  <div class="drucken"><button onclick="window.print()" style="padding:9px 18px;border:1px solid #C89B4A;background:#C89B4A;color:#0A1628;font-weight:bold;cursor:pointer;border-radius:3px">Drucken / als PDF sichern</button></div>
+
+  <% if (!rechnung.festgeschrieben) { %>
+    <div class="entwurf">ENTWURF — noch nicht festgeschrieben. Diese Fassung darf nicht versendet werden.</div>
+  <% } %>
+
+  <div class="kopfzeile"><%= e.firma_name %> (wwtec) · <%= e.firma_adresse %> · <%= e.firma_kontakt %></div>
+
+  <div class="oben">
+    <div>
+      <div class="marke">STEER<i>.</i>E</div>
+      <div style="font-size:7.5pt;letter-spacing:1.6px;text-transform:uppercase;color:#777;margin:3px 0 18px">PMaaS für Ladeinfrastruktur</div>
+      <div class="empf"><%= rechnung.empfaenger || rechnung.firma %></div>
+    </div>
+    <div class="meta">
+      <div><b><%= rechnung.art==='storno' ? 'Stornorechnung' : 'Rechnung' %> Nr. <%= rechnung.nummer %></b></div>
+      <div>Datum: <%= new Date(rechnung.datum).toLocaleDateString('de-DE') %></div>
+      <% if (rechnung.leistungszeitraum) { %><div>Leistungszeitraum: <%= rechnung.leistungszeitraum %></div><% } %>
+      <% if (rechnung.faellig_am) { %><div>Fällig am: <%= new Date(rechnung.faellig_am).toLocaleDateString('de-DE') %></div><% } %>
+      <div style="margin-top:8px">Ahrensburg, den <%= new Date(rechnung.datum).toLocaleDateString('de-DE') %></div>
+    </div>
+  </div>
+
+  <h1><%= rechnung.art==='storno' ? 'Stornorechnung' : 'Rechnung' %> Nr. <%= rechnung.nummer %></h1>
+  <% if (rechnung.betreff) { %><div class="betreff"><%= rechnung.betreff %></div><% } %>
+  <% if (rechnung.original_nummer) { %><div class="betreff">Storno zur Rechnung <b><%= rechnung.original_nummer %></b></div><% } %>
+
+  <% if (rechnung.anrede) { %><p style="margin-bottom:9px"><%= rechnung.anrede %>,</p><% } %>
+  <% if (rechnung.einleitung) { %><p style="margin-bottom:5px"><%= rechnung.einleitung %></p><% } %>
+
+  <table>
+    <thead><tr><th style="width:9mm">Pos.</th><th style="width:17mm" class="z">Menge</th><th style="width:13mm">ME</th><th>Leistung</th><th style="width:23mm" class="z">EP netto</th><th style="width:25mm" class="z">GP netto</th></tr></thead>
+    <tbody>
+    <% var n=0; positionen.forEach(function(p){ %>
+      <% if (p.ist_titel) { %>
+        <tr class="titel"><td colspan="6"><%= p.text %></td></tr>
+      <% } else { n++; %>
+        <tr>
+          <td><%= String(n).padStart(2,'0') %></td>
+          <td class="z"><%= Number(p.menge).toLocaleString('de-DE',{minimumFractionDigits:2,maximumFractionDigits:2}) %></td>
+          <td><%= p.einheit || '' %></td>
+          <td><b><%= p.text %></b><% if (p.langtext) { %><div class="lang"><%= p.langtext %></div><% } %></td>
+          <td class="z"><%= Number(p.einzelpreis).toLocaleString('de-DE',{minimumFractionDigits:2,maximumFractionDigits:2}) %> €</td>
+          <td class="z"><%= Number(p.gesamtpreis).toLocaleString('de-DE',{minimumFractionDigits:2,maximumFractionDigits:2}) %> €</td>
+        </tr>
+      <% } %>
+    <% }) %>
+    </tbody>
+  </table>
+
+  <div class="summen">
+    <div><span>Nettobetrag</span><span><%= Number(rechnung.netto).toLocaleString('de-DE',{minimumFractionDigits:2,maximumFractionDigits:2}) %> €</span></div>
+    <div><span>zzgl. <%= rechnung.mwst_satz %> % Umsatzsteuer</span><span><%= Number(rechnung.mwst).toLocaleString('de-DE',{minimumFractionDigits:2,maximumFractionDigits:2}) %> €</span></div>
+    <div class="gesamt"><span><%= rechnung.art==='storno' ? 'Gutschriftbetrag' : 'Rechnungsbetrag' %></span><span><%= Number(rechnung.brutto).toLocaleString('de-DE',{minimumFractionDigits:2,maximumFractionDigits:2}) %> €</span></div>
+  </div>
+
+  <% if (rechnung.art !== 'storno') { %>
+  <div class="zahlung">
+    <b>Zahlung:</b> <%= rechnung.zahlungsziel_tage %> Tage netto<% if (rechnung.faellig_am) { %>, fällig am <%= new Date(rechnung.faellig_am).toLocaleDateString('de-DE') %><% } %>.<br>
+    Bitte geben Sie bei der Überweisung die Rechnungsnummer <b><%= rechnung.nummer %></b> an.
+  </div>
+  <% } %>
+
+  <% if (rechnung.hinweise) { %><div class="hinw"><%= rechnung.hinweise %></div><% } %>
+
+  <p style="margin-top:20px">Mit freundlichen Grüßen</p>
+  <p style="margin-top:16px"><b>STEER.E — <%= e.firma_name %></b></p>
+
+  <div class="fuss">
+    <%= e.firma_name %> · <%= e.firma_adresse %> · <%= e.firma_kontakt %><br><%= e.firma_register %>
+  </div>
+</div></body></html>

@@ -1,92 +1,43 @@
-<%- include('partials/head', { title: 'Termine' }) %>
-
-<h1>Termine</h1>
-<p class="muted">Terminierung von Elektriker/Tiefbau: Bestätigung Ja/Nein setzen. Sobald bestätigt, erzeugt die tägliche Automatik ein ToDo "Kunde informieren" (falls noch nicht informiert).</p>
-<p class="muted">
-  <strong>"Kunde informiert"</strong> bedeutet: Der Kunde wurde über den bestätigten Elektriker-/Tiefbau-Termin
-  aktiv in Kenntnis gesetzt – z.&nbsp;B. per Telefon, E-Mail oder persönlich. Bitte beim Setzen den Weg auswählen,
-  auf dem informiert wurde; das wird mit gespeichert.
-</p>
-<p class="muted"><span class="due-dot due-soon"></span> Termin in den nächsten 2 Tagen &nbsp; <span class="due-dot due-overdue"></span> Termin überfällig (Datum vergangen, noch nicht durchgeführt)</p>
-
-<form method="get" action="/termine" class="grid-form" style="margin-bottom:16px;">
-  <div>
-    <label>Typ</label>
-    <select name="typ">
-      <option value="">Alle</option>
-      <option value="Kunde" <%= typ==='Kunde'?'selected':'' %>>Kunde</option>
-      <option value="Elektriker" <%= typ==='Elektriker'?'selected':'' %>>Elektriker</option>
-      <option value="Tiefbau" <%= typ==='Tiefbau'?'selected':'' %>>Tiefbau</option>
-    </select>
-  </div>
-  <div>
-    <label>Bestätigung</label>
-    <select name="bestaetigt">
-      <option value="">Alle</option>
-      <option value="offen" <%= bestaetigt==='offen'?'selected':'' %>>offen</option>
-      <option value="ja" <%= bestaetigt==='ja'?'selected':'' %>>ja</option>
-      <option value="nein" <%= bestaetigt==='nein'?'selected':'' %>>nein</option>
-    </select>
-  </div>
-  <div>
-    <label>Status</label>
-    <select name="status">
-      <option value="">Alle</option>
-      <% APPOINTMENT_STATUS.forEach(function(s) { %>
-        <option value="<%= s %>" <%= status===s?'selected':'' %>><%= s %></option>
-      <% }) %>
-    </select>
-  </div>
-  <div style="justify-content:flex-end;"><button type="submit">Filtern</button></div>
-</form>
-
-<table>
-  <tr><th>Firma</th><th>Projekt</th><th>Typ</th><th>Mit wem</th><th>Datum</th><th>Uhrzeit</th><th>Ort</th><th>Thema</th><th>Status</th><th>Bestätigt</th><th>Kunde informiert</th><th></th></tr>
-  <% rows.forEach(function(a) { %>
-    <tr class="<%= dueClass(a.datum, a.bestaetigt !== 'offen' && a.status !== 'geplant') %>">
-      <td><a href="/kunden/<%= a.customer_id %>"><%= a.firma %></a></td>
-      <td><%= a.projekt || '' %></td>
-      <td><%= a.typ %></td>
-      <td><%= a.mit_wem || '' %></td>
-      <td><%= a.datum ? dayjs(a.datum).format('DD.MM.YYYY') : '' %></td>
-      <td><%= a.uhrzeit || (a.datum ? 'ganztägig' : '') %></td>
-      <td><%= a.ort || '' %></td>
-      <td><%= a.thema || '' %></td>
-      <td><%= a.status %></td>
-      <td>
-        <form method="post" action="/termine/<%= a.id %>/bestaetigen" class="inline">
-          <input type="hidden" name="redirect" value="/termine">
-          <select name="status" onchange="this.form.submit()">
-            <option value="offen" <%= a.bestaetigt==='offen'?'selected':'' %>>offen</option>
-            <option value="ja" <%= a.bestaetigt==='ja'?'selected':'' %>>ja</option>
-            <option value="nein" <%= a.bestaetigt==='nein'?'selected':'' %>>nein</option>
-          </select>
-        </form>
-      </td>
-      <td>
-        <% if (a.kunde_informiert) { %>
-          <span class="badge pill-yes">informiert<%= a.kunde_informiert_methode ? ' (' + a.kunde_informiert_methode + ')' : '' %></span>
-        <% } else if (a.bestaetigt === 'ja') { %>
-          <form method="post" action="/termine/<%= a.id %>/informiert" class="inline">
-            <input type="hidden" name="redirect" value="/termine">
-            <select name="methode" onchange="if(this.value) this.form.submit()">
-              <option value="">informieren über...</option>
-              <% INFORM_METHODS.forEach(function(m) { %><option value="<%= m %>"><%= m %></option><% }) %>
-            </select>
-          </form>
-        <% } else { %>
-          <span class="muted">–</span>
-        <% } %>
-      </td>
-      <td class="row-actions">
-        <a class="btn-link" href="/termine/<%= a.id %>/bearbeiten">bearbeiten</a>
-        <form method="post" action="/termine/<%= a.id %>/loeschen" onsubmit="return confirm('Termin bei ' + <%- JSON.stringify(a.firma) %> + ' wirklich löschen? Bist du sicher?');">
-          <input type="hidden" name="redirect" value="/termine">
-          <button type="submit" class="danger">löschen</button>
-        </form>
-      </td>
-    </tr>
-  <% }) %>
-</table>
-
-<%- include('partials/foot') %>
+<%- include('partials/kopf') %>
+<div class="seitenkopf"><div><h1>Termine</h1><div class="unter"><%= termine.length %> Termin(e)</div></div></div>
+<div class="karte">
+  <% if (!termine.length) { %><div class="leer-hinweis">Keine Termine erfasst.</div><% } else { %>
+  <div class="tab-scroll"><table>
+    <thead><tr><th>Datum</th><th>Kunde</th><th>Projekt</th><th>Typ</th><th>Mit wem</th><th>Thema</th><th>Bestätigt</th><th>Status</th><th>Info an Kunden</th><th></th></tr></thead>
+    <tbody><% termine.forEach(function(t){ %>
+      <tr>
+        <td><%= datum(t.datum) %><% if (t.uhrzeit) { %><br><span style="font-size:12px;color:var(--ink3)"><%= t.uhrzeit %></span><% } %></td>
+        <td><a href="/kunden/<%= t.kunde_id %>"><%= t.firma %></a></td>
+        <td><%= t.bezeichnung || '—' %></td>
+        <td><span class="pille"><%= t.typ %></span></td>
+        <td><%= t.mit_wem || '—' %></td>
+        <td><%= t.thema || '—' %><% if (t.ergebnis) { %><br><span style="font-size:12px;color:var(--ink3)"><%= t.ergebnis %></span><% } %></td>
+        <td><span class="pille <%= t.bestaetigt === 'ja' ? 'ok' : t.bestaetigt === 'nein' ? 'rot' : '' %>"><%= t.bestaetigt %></span></td>
+        <td><%= t.status %></td>
+        <td><%= t.kunde_informiert ? 'ja' : (t.typ !== 'Kunde' && t.bestaetigt === 'ja' ? 'offen' : '—') %></td>
+        <td class="z">
+          <details class="block" style="margin:0;border:none;background:none">
+            <summary style="padding:4px 0">bearbeiten</summary>
+            <div class="inhalt" style="padding:10px 0 0;min-width:240px">
+              <form method="post" action="/termine/<%= t.id %>">
+                <div class="feld"><label>Status</label><select name="status"><% ['geplant','durchgeführt','verschoben','abgesagt'].forEach(function(s){ %><option <%= t.status === s ? 'selected' : '' %>><%= s %></option><% }) %></select></div>
+                <div class="feld"><label>Bestätigt</label><select name="bestaetigt"><% ['offen','ja','nein'].forEach(function(s){ %><option <%= t.bestaetigt === s ? 'selected' : '' %>><%= s %></option><% }) %></select></div>
+                <div class="feld"><label>Ergebnis</label><textarea name="ergebnis" style="min-height:60px"><%= t.ergebnis || '' %></textarea></div>
+                <div class="haken"><input type="checkbox" id="ki<%= t.id %>" name="kunde_informiert" <%= t.kunde_informiert ? 'checked' : '' %>><label for="ki<%= t.id %>">Kunde informiert</label></div>
+                <div class="feld"><label>Wie informiert</label><select name="kunde_informiert_methode"><option value="">—</option><% ['Telefon','E-Mail','Persönlich','Sonstiges'].forEach(function(s){ %><option <%= t.kunde_informiert_methode === s ? 'selected' : '' %>><%= s %></option><% }) %></select></div>
+                <input type="hidden" name="typ" value="<%= t.typ %>">
+                <input type="hidden" name="mit_wem" value="<%= t.mit_wem || '' %>">
+                <input type="hidden" name="datum" value="<%= fuerFeld(t.datum) %>">
+                <input type="hidden" name="uhrzeit" value="<%= t.uhrzeit || '' %>">
+                <input type="hidden" name="ort" value="<%= t.ort || '' %>">
+                <input type="hidden" name="thema" value="<%= t.thema || '' %>">
+                <button class="knopf mini" type="submit">Speichern</button>
+              </form>
+            </div>
+          </details>
+        </td>
+      </tr>
+    <% }) %></tbody></table></div>
+  <% } %>
+</div>
+<%- include('partials/fuss') %>

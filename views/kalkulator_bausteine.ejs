@@ -1,0 +1,59 @@
+<%- include('partials/kopf') %>
+<div class="seitenkopf">
+  <div><h1><%= ret.bezeichnung %></h1><div class="unter"><%= ret.org %> · <%= zahl(ret.stunden_monat) %> h/Monat · <%= eur(ret.entgelt_netto) %> · impliziter Satz <%= eur(erg.implizit) %></div></div>
+  <a class="knopf leer" href="/kalkulator">Zurück</a>
+</div>
+
+<div class="spalten s3">
+  <div class="kz"><div class="n"><%= zahl(summe) %> h</div><div class="t">geplante Stunden gesamt</div></div>
+  <div class="kz"><div class="n"><%= zahl(erg.jahresstunden) %> h</div><div class="t">Kontingent über <%= erg.laufzeit %> Monate</div></div>
+  <div class="kz"><div class="n <%= summe > erg.jahresstunden ? 'akz' : '' %>"><%= zahl(erg.jahresstunden - summe) %> h</div>
+    <div class="t"><%= summe > erg.jahresstunden ? 'Überplanung' : 'freier Puffer' %></div></div>
+</div>
+
+<% if (summe > erg.jahresstunden) { %>
+  <div class="melde warn"><b>Die Bausteine sind überplant.</b> Geplant sind <%= zahl(summe) %> Stunden, das Kontingent gibt über die Laufzeit <%= zahl(erg.jahresstunden) %> her.
+  Entweder Stunden kürzen, Laufzeit verlängern oder das Kontingent erhöhen — sonst entsteht genau die unbezahlte Mehrleistung, die ihr aktuell schon habt.</div>
+<% } %>
+
+<div class="karte" style="margin-top:18px">
+  <h2>Bausteine</h2>
+  <% if (!bausteine.length) { %>
+    <div class="leer-hinweis">Noch keine Bausteine.
+      <form method="post" action="/kalkulator/<%= ret.id %>/bausteine" style="margin-top:12px">
+        <input type="hidden" name="vorlage" value="1">
+        <button class="knopf" type="submit">Vorlage mit 16 Bausteinen einfügen</button>
+      </form>
+    </div>
+  <% } %>
+  <% bausteine.forEach(function(b){ %>
+    <form method="post" action="/kalkulator/<%= ret.id %>/bausteine/<%= b.id %>"
+          style="display:grid;grid-template-columns:96px 1fr 62px 62px 78px 74px auto;gap:7px;align-items:center;padding:7px 0;border-bottom:1px solid var(--linie2)">
+      <input type="text" name="baustein" value="<%= b.baustein %>">
+      <input type="text" name="inhalt" value="<%= b.inhalt %>">
+      <input type="text" name="von_monat" value="<%= b.von_monat || '' %>" title="von Monat">
+      <input type="text" name="bis_monat" value="<%= b.bis_monat || '' %>" title="bis Monat">
+      <input type="text" name="stunden_plan" value="<%= b.stunden_plan %>" title="Plan-Stunden">
+      <label style="margin:0;display:flex;gap:5px;align-items:center;text-transform:none;letter-spacing:0;font-size:12.5px">
+        <input type="checkbox" name="erledigt" <%= b.erledigt?'checked':'' %> style="width:15px;height:15px;accent-color:var(--brass)"> fertig</label>
+      <div style="display:flex;gap:5px"><button class="knopf leer mini" type="submit">✓</button>
+        <button class="knopf gefahr mini" type="submit" name="loeschen" value="1">×</button></div>
+    </form>
+  <% }) %>
+
+  <details class="block"><summary>Baustein ergänzen</summary><div class="inhalt">
+    <form method="post" action="/kalkulator/<%= ret.id %>/bausteine">
+      <div class="felder2">
+        <div class="feld"><label>Baustein</label><input type="text" name="baustein" placeholder="Baustein 7"></div>
+        <div class="feld"><label>Plan-Stunden</label><input type="text" name="stunden_plan" value="0"></div>
+      </div>
+      <div class="feld"><label>Inhalt *</label><input type="text" name="inhalt" required></div>
+      <div class="felder2">
+        <div class="feld"><label>von Monat</label><input type="text" name="von_monat"></div>
+        <div class="feld"><label>bis Monat</label><input type="text" name="bis_monat"></div>
+      </div>
+      <button class="knopf mini" type="submit">Hinzufügen</button>
+    </form>
+  </div></details>
+</div>
+<%- include('partials/fuss') %>

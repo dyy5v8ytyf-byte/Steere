@@ -1,0 +1,47 @@
+<%- include('partials/kopf') %>
+<div class="seitenkopf"><div><h1>Verwaltung</h1>
+  <div class="unter">Änderungen am laufenden System — ohne dass Daten verloren gehen</div></div>
+  <a class="knopf" href="/verwaltung/sicherung">Sicherung herunterladen</a>
+</div>
+
+<div class="kasten" style="margin-bottom:18px">
+  <b>Wie hier mit Daten umgegangen wird.</b> Alles, was in diesem Bereich geändert wird, ist ein Datensatz — keine Änderung an der Datenbankstruktur.
+  Es gibt in diesem Programm keine Funktion, die Kunden, Projekte, Angebote oder Protokolleinträge löscht; nicht mehr benötigte Einträge werden deaktiviert und bleiben erhalten.
+  Strukturänderungen laufen ausschließlich über nummerierte Migrationsdateien, die einmalig und in einer Transaktion angewendet werden. Ziehen Sie vor größeren Änderungen trotzdem eine Sicherung — sie kostet einen Klick.
+</div>
+
+<div class="spalten s3">
+  <div class="kz"><div class="n"><%= zahlen.kunden %></div><div class="t">Kunden</div></div>
+  <div class="kz"><div class="n"><%= zahlen.projekte %></div><div class="t">Projekte</div></div>
+  <div class="kz"><div class="n"><%= zahlen.angebote %></div><div class="t">Angebote</div></div>
+  <div class="kz"><div class="n"><%= zahlen.preise.toLocaleString('de-DE') %></div><div class="t">Preispositionen</div></div>
+  <div class="kz"><div class="n"><%= zahlen.benutzer %></div><div class="t">aktive Benutzer</div></div>
+  <div class="kz"><div class="n"><%= zahlen.protokoll.toLocaleString('de-DE') %></div><div class="t">Protokolleinträge</div></div>
+</div>
+
+<div class="spalten s2" style="margin-top:18px">
+  <div class="karte">
+    <h2>Bereiche</h2><div class="marke-strich"></div>
+    <div style="display:grid;gap:9px">
+      <a class="knopf leer" href="/verwaltung/einstellungen">Einstellungen — Phasen, Margen, Firmenangaben</a>
+      <a class="knopf leer" href="/verwaltung/benutzer">Benutzer und Rollen</a>
+      <a class="knopf leer" href="/verwaltung/organisationen">Organisationen und Retainer</a>
+      <a class="knopf leer" href="/verwaltung/felder">Eigene Felder</a>
+      <a class="knopf leer" href="/verwaltung/regeln">Regeln — Rückfragen und Stückliste</a>
+      <a class="knopf leer" href="/verwaltung/erfahrungen">Erfahrungswerte</a>
+      <a class="knopf leer" href="/vorlagen">Angebotsvorlagen und Textbausteine</a>
+      <a class="knopf leer" href="/verwaltung/assistent">Projektassistent</a>
+      <a class="knopf leer" href="/verwaltung/altdaten">Altdaten übernehmen</a>
+      <a class="knopf leer" href="/verwaltung/protokoll">Änderungsprotokoll</a>
+      <a class="knopf leer" href="/mitarbeiter">Mitarbeiter</a>
+    </div>
+  </div>
+  <div class="karte">
+    <h2>Datenbankstand</h2><div class="marke-strich"></div>
+    <div class="tab-scroll"><table>
+      <thead><tr><th>Migration</th><th>Angewendet am</th></tr></thead>
+      <tbody><% stand.forEach(function(s){ %><tr><td class="mono" style="font-size:12px"><%= s.version %></td><td><%= datumZeit(s.applied_at) %></td></tr><% }) %></tbody>
+    </table></div>
+  </div>
+</div>
+<%- include('partials/fuss') %>

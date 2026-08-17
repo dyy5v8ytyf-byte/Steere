@@ -1,0 +1,105 @@
+<%- include('partials/kopf') %>
+<div class="seitenkopf">
+  <div><h1>Preiskatalog</h1>
+    <div class="unter"><%= gesamt.toLocaleString('de-DE') %> Treffer<%= angebotId ? ' · Auswahl wird in das Angebot übernommen' : '' %></div></div>
+  <% if (angebotId) { %><a class="knopf leer" href="/angebote/<%= angebotId %>">Zurück zum Angebot</a><% } %>
+</div>
+
+<div class="melde warn">
+  <b>Herkunft beachten.</b> Die eingelesenen Standard-LVs und Marktpreise stammen aus Unterlagen der Service4Charger GmbH.
+  Sie sind als <b>nur intern</b> gekennzeichnet und lassen sich nicht in ein Kundenangebot ziehen — die Datenbank verweigert das.
+  Wer eine solche Position braucht, übernimmt sie als eigene Position und trägt einen selbst kalkulierten Preis ein.
+</div>
+
+<div class="karte">
+  <form method="get" action="/preise" class="felder3">
+    <% if (angebotId) { %><input type="hidden" name="angebot" value="<%= angebotId %>"><% } %>
+    <div class="feld"><label>Suche</label><input type="text" name="q" value="<%= q %>" placeholder="Kabelgraben, Wallbox, Abgangskasten ..."></div>
+    <div class="feld"><label>Gewerk</label><select name="gewerk"><option value="">alle</option>
+      <% ['Tiefbau','Elektro','Sonstiges'].forEach(function(g){ %><option <%= gewerk === g ? 'selected' : '' %>><%= g %></option><% }) %></select></div>
+    <div class="feld"><label>Herkunft</label><select name="herkunft"><option value="">alle</option>
+      <% [['eigen','eigene Positionen (verwendbar)'],['standard_tiefbau','Standard-LV Tiefbau (nur intern)'],['standard_elektro','Standard-LV Elektro (nur intern)'],['markt','Marktpreise (nur intern)']].forEach(function(x){ %>
+        <option value="<%= x[0] %>" <%= herkunft === x[0] ? 'selected' : '' %>><%= x[1] %></option><% }) %></select></div>
+    <div class="feld" style="grid-column:1/-1"><button class="knopf leer" type="submit">Suchen</button>
+      <a class="knopf leer" href="/preise<%= angebotId ? '?angebot=' + angebotId : '' %>">Zurücksetzen</a></div>
+  </form>
+  <div class="hinweis-klein" style="margin-top:6px">
+    Bestand: <% statistik.forEach(function(s, i){ %><%= i ? ' · ' : '' %><%= s.herkunft %>/<%= s.gewerk %>: <%= s.n.toLocaleString('de-DE') %><% }) %>
+  </div>
+</div>
+
+<form method="post" action="<%= angebotId ? '/angebote/' + angebotId + '/positionen' : '#' %>">
+<input type="hidden" name="aus_katalog" value="1">
+<div class="karte">
+  <% if (angebotId) { %>
+    <div class="reihe" style="margin-bottom:12px"><button class="knopf" type="submit">Ausgewählte Positionen ins Angebot übernehmen</button></div>
+  <% } %>
+  <% if (!positionen.length) { %><div class="leer-hinweis">Keine Treffer.</div><% } else { %>
+  <div class="tab-scroll"><table>
+    <thead><tr><% if (angebotId) { %><th style="width:34px"></th><% } %><th>Pos.</th><th>Leistung</th><th>ME</th><th>Gewerk</th><th class="z">Ziel-VK</th><th class="z">Markt (Median)</th><th></th></tr></thead>
+    <tbody><% positionen.forEach(function(p){ %>
+      <tr>
+        <% if (angebotId) { %><td><input type="checkbox" name="katalog_id" value="<%= p.id %>" style="width:16px;height:16px;accent-color:var(--brass)"></td><% } %>
+        <td class="mono" style="font-size:12px"><%= p.pos || '—' %></td>
+        <td><%= p.text %><% if (p.quelle) { %><br><span style="font-size:11px;color:var(--ink3)"><%= p.quelle.length > 70 ? p.quelle.slice(0,70) + '…' : p.quelle %></span><% } %></td>
+        <td><%= p.einheit || '—' %></td>
+        <td><span class="pille"><%= p.gewerk %></span>
+          <% if (p.nur_intern) { %><br><span class="pille rot" style="margin-top:3px">nur intern</span><% } %></td>
+        <td class="z"><%= p.vk_ziel != null ? eur(p.vk_ziel) : (p.vk_aktuell != null ? eur(p.vk_aktuell) : '—') %></td>
+        <td class="z"><%= p.markt_median != null ? eur(p.markt_median) : '—' %><% if (p.belege) { %><br><span style="font-size:11px;color:var(--ink3)"><%= p.belege %> Beleg(e)</span><% } %></td>
+        <td class="z">
+          <details class="block" style="margin:0;border:none;background:none"><summary style="padding:3px 0">ändern</summary>
+            <div class="inhalt" style="padding:8px 0 0;min-width:230px">
+              <% if (p.nur_intern) { %>
+                <form method="post" action="/preise/<%= p.id %>/uebernehmen">
+                  <div class="kasten" style="margin-bottom:10px">Struktur und Einheit werden übernommen, <b>der Preis nicht</b>.</div>
+                  <div class="feld"><label>Eigener Verkaufspreis netto</label><input type="text" name="vk_ziel" placeholder="selbst kalkulieren"></div>
+                  <button class="knopf mini" type="submit">Als eigene Position übernehmen</button>
+                </form>
+                <hr class="marke-strich" style="margin:12px 0">
+              <% } %>
+              <form method="post" action="/preise/<%= p.id %>">
+                <div class="feld"><label>Text</label><input type="text" name="text" value="<%= p.text %>"></div>
+                <div class="felder2">
+                  <div class="feld"><label>Einheit</label><input type="text" name="einheit" value="<%= p.einheit || '' %>"></div>
+                  <div class="feld"><label>Ziel-VK</label><input type="text" name="vk_ziel" value="<%= p.vk_ziel || '' %>"></div>
+                </div>
+                <input type="hidden" name="vk_aktuell" value="<%= p.vk_aktuell || '' %>">
+                <div class="reihe"><button class="knopf leer mini" type="submit">Speichern</button>
+                  <button class="knopf gefahr mini" type="submit" name="deaktivieren" value="1">Deaktivieren</button></div>
+              </form>
+            </div>
+          </details>
+        </td>
+      </tr>
+    <% }) %></tbody></table></div>
+  <% } %>
+
+  <% if (seiten > 1) { %>
+    <div class="reihe" style="margin-top:16px;justify-content:center">
+      <% if (seite > 1) { %><a class="knopf leer mini" href="?q=<%= encodeURIComponent(q) %>&gewerk=<%= gewerk %>&herkunft=<%= herkunft %>&seite=<%= seite-1 %><%= angebotId ? '&angebot=' + angebotId : '' %>">← zurück</a><% } %>
+      <span style="font-size:13px;color:var(--ink3)">Seite <%= seite %> von <%= seiten %></span>
+      <% if (seite < seiten) { %><a class="knopf leer mini" href="?q=<%= encodeURIComponent(q) %>&gewerk=<%= gewerk %>&herkunft=<%= herkunft %>&seite=<%= seite+1 %><%= angebotId ? '&angebot=' + angebotId : '' %>">weiter →</a><% } %>
+    </div>
+  <% } %>
+</div>
+</form>
+
+<div class="karte">
+  <details class="block" style="border:none;background:none;margin:0">
+    <summary>Eigene Position anlegen</summary>
+    <div class="inhalt">
+      <form method="post" action="/preise/neu">
+        <div class="felder3">
+          <div class="feld"><label>Gewerk</label><select name="gewerk"><option>Tiefbau</option><option>Elektro</option><option>Sonstiges</option></select></div>
+          <div class="feld"><label>LV-Position</label><input type="text" name="pos"></div>
+          <div class="feld"><label>Einheit</label><input type="text" name="einheit"></div>
+        </div>
+        <div class="feld"><label>Leistungstext *</label><input type="text" name="text" required></div>
+        <div class="feld"><label>Ziel-Verkaufspreis netto</label><input type="text" name="vk_ziel"></div>
+        <button class="knopf mini" type="submit">Anlegen</button>
+      </form>
+    </div>
+  </details>
+</div>
+<%- include('partials/fuss') %>

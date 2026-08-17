@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="de"><head><meta charset="UTF-8"><title>Begehungsbericht <%= begehung.nummer %></title>
+<style>
+  @page{size:A4;margin:15mm}
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  body{font-family:Arial,Helvetica,sans-serif;color:#111;font-size:9.5pt;line-height:1.45;background:#fff}
+  .blatt{max-width:186mm;margin:0 auto;padding:12px}
+  .kopf{background:#0A1628;color:#F2EEE6;padding:14px 16px;margin-bottom:16px}
+  .marke{font-family:Georgia,serif;font-size:14pt;font-weight:bold}.marke i{font-style:normal;color:#C89B4A}
+  .kopf .t{font-size:7.5pt;letter-spacing:1.8px;text-transform:uppercase;color:#A9BACE;margin-top:2px}
+  .kopf h1{font-family:Georgia,serif;font-size:13pt;margin-top:10px}
+  .meta{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:#ddd;border:1px solid #ddd;margin-bottom:14px}
+  .meta>div{background:#fff;padding:8px 10px}
+  .meta dt{font-size:7pt;letter-spacing:.9px;text-transform:uppercase;color:#666;margin-bottom:2px}
+  .meta dd{font-weight:bold;font-size:9.5pt;color:#0A1628}
+  h2{font-family:Georgia,serif;font-size:11pt;margin:16px 0 7px;color:#0A1628;border-bottom:1.2pt solid #C89B4A;padding-bottom:3px}
+  table{width:100%;border-collapse:collapse;font-size:8.6pt;margin-bottom:10px}
+  th{text-align:left;font-size:7pt;letter-spacing:.8px;text-transform:uppercase;color:#555;border-bottom:1pt solid #888;padding:0 5px 4px 0;font-weight:bold}
+  td{padding:5px 5px 5px 0;border-bottom:.5pt solid #ddd;vertical-align:top}
+  td.z,th.z{text-align:right;white-space:nowrap}
+  .zwei{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .kasten{border:1px solid #ddd;border-left:2.5pt solid #C89B4A;padding:8px 11px;font-size:8.6pt;margin-bottom:10px}
+  .kasten b{color:#0A1628}
+  .bilder{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;page-break-inside:avoid}
+  .bilder figure{border:1px solid #ddd}
+  .bilder img{width:100%;height:52mm;object-fit:cover;display:block}
+  .bilder figcaption{font-size:7.4pt;padding:4px 6px;color:#333}
+  .fuss{margin-top:16px;padding-top:6px;border-top:.5pt solid #ccc;font-size:7pt;color:#666;line-height:1.5}
+  .drucken{margin-bottom:12px}
+  @media print{.drucken{display:none}.blatt{padding:0}}
+</style></head><body><div class="blatt">
+  <div class="drucken"><button onclick="window.print()" style="padding:9px 18px;border:1px solid #C89B4A;background:#C89B4A;color:#0A1628;font-weight:bold;cursor:pointer;border-radius:3px">Drucken / als PDF sichern</button></div>
+
+  <div class="kopf">
+    <div class="marke">STEER<i>.</i>E</div><div class="t">PMaaS · Ladeinfrastruktur</div>
+    <h1>Begehungsbericht <%= begehung.nummer %></h1>
+  </div>
+
+  <div class="meta">
+    <div><dt>Objekt</dt><dd><%= begehung.objekt %></dd></div>
+    <div><dt>Art</dt><dd><%= begehung.art %></dd></div>
+    <div><dt>Begehung am</dt><dd><%= begehung.durchgefuehrt_am ? new Date(begehung.durchgefuehrt_am).toLocaleDateString('de-DE') : (begehung.termin_am ? new Date(begehung.termin_am).toLocaleDateString('de-DE') : '—') %></dd></div>
+    <div><dt>Aufgenommen von</dt><dd><%= begehung.begeher || '—' %></dd></div>
+  </div>
+
+  <div class="zwei">
+    <div class="kasten"><b>Auftraggeber</b><br><%= begehung.firma || '—' %><br>
+      <%= begehung.adresse || '' %><br><%= [begehung.plz, begehung.ort].filter(Boolean).join(' ') %></div>
+    <div class="kasten"><b>Vor Ort</b><br><%= begehung.begleitung || '—' %><br>
+      Nutzung: <%= begehung.nutzung || '—' %></div>
+  </div>
+
+  <h2>Netzanschluss</h2>
+  <table><tbody>
+    <tr><td style="width:44%">Netzbetreiber</td><td><b><%= begehung.netz_vnb || '—' %></b></td></tr>
+    <tr><td>Art des Anschlusses</td><td><b><%= begehung.netz_art || '—' %></b></td></tr>
+    <tr><td>Anschlussleistung</td><td><b><%= begehung.netz_leistung_kw ? begehung.netz_leistung_kw + ' kW' : '—' %></b></td></tr>
+    <tr><td>Freie Reserve</td><td><b><%= begehung.netz_reserve_kw ? begehung.netz_reserve_kw + ' kW' : '—' %></b></td></tr>
+    <tr><td>Zähler / Messkonzept</td><td><%= begehung.netz_zaehler || '—' %></td></tr>
+    <tr><td>Lage des Anschlusses</td><td><%= begehung.netz_ort || '—' %></td></tr>
+    <% if (begehung.netz_bemerkung) { %><tr><td>Bemerkung</td><td><%= begehung.netz_bemerkung %></td></tr><% } %>
+  </tbody></table>
+
+  <h2>Strompfad — vom Anschluss bis zum Ladepunkt</h2>
+  <table>
+    <thead><tr><th style="width:8mm">Nr.</th><th>Abschnitt</th><th>von → nach</th><th class="z">Länge</th><th>Verlegung</th><th>Untergrund</th><th>Bestand</th></tr></thead>
+    <tbody><% abschnitte.forEach(function(a){ %>
+      <tr><td><%= a.lfd %></td><td><b><%= a.typ %></b><% if (a.hindernisse) { %><br><span style="font-size:7.8pt;color:#666">Hindernis: <%= a.hindernisse %></span><% } %></td>
+        <td><%= [a.von_ort, a.nach_ort].filter(Boolean).join(' → ') || '—' %></td>
+        <td class="z"><%= a.laenge_m ? a.laenge_m + ' m' : '—' %></td>
+        <td><%= a.verlegeart || '—' %></td><td><%= a.untergrund || '—' %></td>
+        <td><%= a.bestand ? 'vorhanden' : 'neu' %></td></tr>
+    <% }) %></tbody>
+  </table>
+
+  <h2>Ausbauziel</h2>
+  <div class="zwei">
+    <table><tbody>
+      <tr><td>Stellplätze gesamt</td><td class="z"><b><%= begehung.stellplaetze_gesamt ?? '—' %></b></td></tr>
+      <tr><td>davon im Ausbau</td><td class="z"><b><%= begehung.stellplaetze_ausbau ?? '—' %></b></td></tr>
+      <tr><td>Ladepunkte AC</td><td class="z"><b><%= begehung.ladepunkte_ac ?? '—' %></b></td></tr>
+    </tbody></table>
+    <table><tbody>
+      <tr><td>Ladepunkte DC</td><td class="z"><b><%= begehung.ladepunkte_dc ?? '—' %></b></td></tr>
+      <tr><td>Leistung je Ladepunkt</td><td class="z"><b><%= begehung.leistung_je_lp_kw ? begehung.leistung_je_lp_kw + ' kW' : '—' %></b></td></tr>
+      <tr><td>Lastmanagement</td><td class="z"><b><%= begehung.lastmanagement || '—' %></b></td></tr>
+    </tbody></table>
+  </div>
+
+  <% if (positionen.length) { %>
+  <h2>Festgestellte Mengen</h2>
+  <table>
+    <thead><tr><th style="width:8mm">Nr.</th><th style="width:22mm">Gewerk</th><th>Leistung</th><th style="width:14mm">ME</th><th class="z" style="width:18mm">Menge</th></tr></thead>
+    <tbody><% positionen.forEach(function(p,i){ %>
+      <tr><td><%= String(i+1).padStart(2,'0') %></td><td><%= p.gewerk || '—' %></td>
+        <td><%= p.text %><% if (p.bemerkung) { %><br><span style="font-size:7.8pt;color:#666"><%= p.bemerkung %></span><% } %></td>
+        <td><%= p.einheit || '—' %></td>
+        <td class="z"><%= Number(p.menge).toLocaleString('de-DE',{maximumFractionDigits:2}) %></td></tr>
+    <% }) %></tbody>
+  </table>
+  <% } %>
+
+  <h2>Bewertung</h2>
+  <div class="kasten"><b>Empfehlung:</b> <%= begehung.variante_empfehlung || 'noch offen' %><br>
+    <%= begehung.variante_begruendung || '' %></div>
+  <div class="kasten"><b>Förderfähigkeit:</b> <%= begehung.foerderung_moeglich || 'zu prüfen' %><br>
+    <%= begehung.foerderung_hinweis || '' %></div>
+  <% if (begehung.risiken) { %><div class="kasten"><b>Risiken:</b><br><%= begehung.risiken %></div><% } %>
+  <% if (begehung.fazit) { %><div class="kasten"><b>Fazit:</b><br><%= begehung.fazit %></div><% } %>
+
+  <% if (medien.length) { %>
+  <h2>Dokumentation</h2>
+  <div class="bilder">
+    <% medien.forEach(function(m){ %>
+      <figure><img src="<%= m.url %>" alt=""><figcaption><%= m.titel || m.dateiname || '' %></figcaption></figure>
+    <% }) %>
+  </div>
+  <% } %>
+
+  <div class="fuss">
+    <%= e.firma_name %> · <%= e.firma_adresse %> · <%= e.firma_kontakt %><br><%= e.firma_register %><br>
+    Dieser Bericht gibt den Zustand zum Zeitpunkt der Begehung wieder. Angaben zu Netzanschluss und Reserve beruhen auf den vor Ort verfügbaren Auskünften und ersetzen keine verbindliche Auskunft des Netzbetreibers.
+  </div>
+</div></body></html>

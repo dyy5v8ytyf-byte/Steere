@@ -1,0 +1,32 @@
+<%- include('partials/kopf') %>
+<div class="seitenkopf">
+  <div><h1>Begehungen</h1><div class="unter"><%= liste.length %> Begehung(en) · Aufnahme immer vom Netzanschluss bis zum Ladepunkt</div></div>
+  <a class="knopf" href="/begehungen/neu">Begehung planen</a>
+</div>
+<div class="karte">
+  <form method="get" class="reihe" style="margin-bottom:4px">
+    <select name="status" style="max-width:200px"><option value="">alle Status</option>
+      <% STATUS.forEach(function(s){ %><option <%= status===s?'selected':'' %>><%= s %></option><% }) %></select>
+    <button class="knopf leer mini" type="submit">Filtern</button>
+  </form>
+</div>
+<div class="karte">
+  <% if (!liste.length) { %><div class="leer-hinweis">Noch keine Begehung geplant.</div><% } else { %>
+  <div class="tab-scroll"><table>
+    <thead><tr><th>Nummer</th><th>Objekt</th><th>Kunde</th><th>Termin</th><th>Art</th><th>Status</th><th class="z">Abschnitte</th><th class="z">Aufnahmen</th><th class="z">Mengen</th></tr></thead>
+    <tbody><% liste.forEach(function(b){ %>
+      <tr>
+        <td><a href="/begehungen/<%= b.id %>"><b><%= b.nummer %></b></a></td>
+        <td><%= b.objekt %><% if (b.ort) { %><br><span style="font-size:12px;color:var(--ink3)"><%= [b.plz,b.ort].filter(Boolean).join(' ') %></span><% } %></td>
+        <td><% if (b.kunde_id) { %><a href="/kunden/<%= b.kunde_id %>"><%= b.firma %></a><% } else { %>—<% } %></td>
+        <td><%= datumZeit(b.termin_am) %></td>
+        <td><span class="pille"><%= b.art %></span></td>
+        <td><span class="pille <%= b.status==='freigegeben'?'ok':b.status==='in Angebot'?'voll':b.status==='erfasst'?'akz':'' %>"><%= b.status %></span></td>
+        <td class="z"><%= b.abschnitte %></td>
+        <td class="z"><%= b.medien %></td>
+        <td class="z"><%= b.positionen %></td>
+      </tr>
+    <% }) %></tbody></table></div>
+  <% } %>
+</div>
+<%- include('partials/fuss') %>

@@ -1,0 +1,458 @@
+<%- include('partials/kopf') %>
+<div class="seitenkopf">
+  <div><h1>Begehung <%= begehung.nummer %></h1>
+    <div class="unter"><%= begehung.objekt %><%= begehung.ort ? ' · ' + [begehung.plz,begehung.ort].filter(Boolean).join(' ') : '' %>
+      · <span class="pille <%= begehung.status==='freigegeben'?'ok':begehung.status==='in Angebot'?'voll':'' %>"><%= begehung.status %></span></div></div>
+  <div class="reihe">
+    <a class="knopf leer" href="/begehungen/<%= begehung.id %>/stueckliste">Stückliste</a>
+    <a class="knopf leer" href="/begehungen/<%= begehung.id %>/bericht" target="_blank">Bericht</a>
+    <% if (begehung.status !== 'freigegeben' && begehung.status !== 'in Angebot') { %>
+      <form method="post" action="/begehungen/<%= begehung.id %>/freigeben"><button class="knopf leer" type="submit">Freigeben</button></form>
+    <% } %>
+    <% if (begehung.status === 'freigegeben') { %>
+      <form method="post" action="/begehungen/<%= begehung.id %>/zu-angebot" class="reihe" style="gap:6px">
+        <select name="vorlage_id" style="min-width:210px">
+          <% vorlagenListe.forEach(function(v){ %>
+            <option value="<%= v.id %>" <%= (v.art === begehung.art) ? 'selected' : '' %>><%= v.name %></option>
+          <% }) %>
+        </select>
+        <button class="knopf" type="submit">In Angebot überführen</button>
+      </form>
+    <% } %>
+  </div>
+</div>
+
+
+<!-- ================= RÜCKFRAGEN ================= -->
+<div class="karte" id="fragen">
+  <h2>Rückfragen<% if (fragen.offen.length) { %> · <%= fragen.offen.length %> offen<% } %></h2>
+  <div class="hinweis-klein">
+    Jede dieser Fragen steht hier, weil ihre Antwort später im Angebot gebraucht wird.
+    Die rot markierten müssen beantwortet oder gefüllt sein, bevor freigegeben werden kann.
+    Rein intern — im Bericht und im Angebot taucht davon nichts auf.
+  </div>
+
+  <% if (!fragen.offen.length) { %>
+    <div class="leer-hinweis">Nichts offen. Die Begehung ist vollständig im Sinne der hinterlegten Regeln.</div>
+  <% } %>
+
+  <% fragen.offen.forEach(function(f){ %>
+    <div class="frage <%= f.streng ? 'streng' : '' %>">
+      <div class="was"><%= f.frage %></div>
+      <% if (f.warum) { %><div class="warum"><%= f.warum %></div><% } %>
+      <div class="quelle"><%= f.streng ? 'Freigabebedingung' : 'Hinweis' %> · Regel „<%= f.name %>"</div>
+      <details class="block" style="margin-top:8px;background:none;border:none">
+        <summary style="padding:4px 0">Gilt hier nicht — begründen</summary>
+        <div class="inhalt" style="padding:6px 0 0">
+          <form method="post" action="/begehungen/<%= begehung.id %>/fragen/<%= f.id %>" class="reihe" style="align-items:flex-end">
+            <div class="feld" style="margin:0;flex:1;min-width:240px"><label>Begründung</label>
+              <input type="text" name="antwort" placeholder="z. B. Bestandsanlage, Angabe liegt schriftlich vom VNB vor"></div>
+            <button class="knopf leer mini" type="submit">Festhalten</button>
+          </form>
+        </div>
+      </details>
+    </div>
+  <% }) %>
+
+  <% if (fragen.beantwortet.length) { %>
+    <details class="block" style="margin-top:14px">
+      <summary>Bereits beantwortet (<%= fragen.beantwortet.length %>)</summary>
+      <div class="inhalt">
+        <% fragen.beantwortet.forEach(function(a){ %>
+          <div style="padding:8px 0;border-bottom:1px solid var(--linie2)">
+            <div style="font-size:13px"><%= a.regel ? a.regel.frage : 'Regel entfernt' %></div>
+            <div style="font-size:12.5px;color:var(--ink2);margin-top:3px">→ <%= a.antwort %></div>
+            <form method="post" action="/begehungen/<%= begehung.id %>/fragen/<%= a.regel_id %>/zurueck" style="margin-top:5px">
+              <button class="knopf leer mini" type="submit">wieder öffnen</button>
+            </form>
+          </div>
+        <% }) %>
+      </div>
+    </details>
+  <% } %>
+
+  <% if (rat && rat.length) { %>
+    <div style="margin-top:18px;padding-top:14px;border-top:1px solid var(--linie)">
+      <h2 style="font-size:15px">Erfahrung aus vergleichbaren Objekten</h2>
+      <div class="hinweis-klein" style="margin-bottom:10px">
+        Gezählt aus den eigenen beauftragten Angeboten. Keine Empfehlung von außen — eine Häufigkeit, die ihr selbst erzeugt habt.
+      </div>
+      <% rat.forEach(function(v){ %>
+        <form method="post" action="/begehungen/<%= begehung.id %>/positionen" class="frage" style="margin-bottom:8px">
+          <input type="hidden" name="text" value="<%= v.text %>">
+          <input type="hidden" name="einheit" value="<%= v.einheit || '' %>">
+          <input type="hidden" name="bemerkung" value="Erfahrungswert: <%= v.treffer %> von <%= v.gesamt %>">
+          <div class="was"><%= v.text %><%= v.einheit ? ' · ' + v.einheit : '' %></div>
+          <div class="warum"><%= v.begruendung %></div>
+          <div class="reihe" style="margin-top:7px;align-items:flex-end">
+            <div class="feld" style="margin:0;max-width:110px"><label>Menge</label><input type="text" name="menge" value="1"></div>
+            <div class="feld" style="margin:0;max-width:130px"><label>Gewerk</label>
+              <select name="gewerk"><option>Elektro</option><option>Tiefbau</option><option>Sonstiges</option></select></div>
+            <button class="knopf leer mini" type="submit">Als Feststellung übernehmen</button>
+          </div>
+        </form>
+      <% }) %>
+    </div>
+  <% } %>
+</div>
+
+<!-- ================= STROMPFAD ================= -->
+<div class="karte" id="pfad">
+  <h2>Strompfad</h2>
+  <div class="hinweis-klein">Lückenlos von der Stelle, an der der Strom ankommt, bis zum letzten Abnehmer. Reihenfolge über die erste Spalte.</div>
+  <% if (!abschnitte.length) { %><div class="leer-hinweis">Keine Abschnitte.</div><% } %>
+  <% abschnitte.forEach(function(a){ %>
+    <form method="post" action="/begehungen/<%= begehung.id %>/abschnitte/<%= a.id %>"
+          style="display:grid;grid-template-columns:44px 168px 1fr 1fr 74px 116px 116px auto;gap:7px;align-items:start;padding:8px 0;border-bottom:1px solid var(--linie2)">
+      <label class="mfeld"><span>Reihenfolge im Strompfad</span>
+        <input type="text" name="lfd" value="<%= a.lfd %>" title="Reihenfolge"></label>
+      <select name="typ"><% typen.forEach(function(t){ %><option <%= a.typ===t?'selected':'' %>><%= t %></option><% }) %></select>
+      <input type="text" name="von_ort" value="<%= a.von_ort || '' %>" placeholder="von">
+      <input type="text" name="nach_ort" value="<%= a.nach_ort || '' %>" placeholder="nach">
+      <label class="mfeld"><span>Länge in Meter</span>
+        <input type="text" name="laenge_m" value="<%= a.laenge_m || '' %>" placeholder="m" title="Länge in Meter"></label>
+      <select name="verlegeart"><option value="">Verlegeart</option>
+        <% ['Erdreich','Wand','Trasse','Kabelrinne','Bohrung','Bestand'].forEach(function(v){ %><option <%= a.verlegeart===v?'selected':'' %>><%= v %></option><% }) %></select>
+      <select name="untergrund"><option value="">Untergrund</option>
+        <% ['Asphalt','Pflaster','Beton','Erde','Rasen'].forEach(function(v){ %><option <%= a.untergrund===v?'selected':'' %>><%= v %></option><% }) %></select>
+      <div style="display:flex;gap:5px">
+        <button class="knopf leer mini" type="submit">✓</button>
+        <button class="knopf gefahr mini" type="submit" name="loeschen" value="1">×</button>
+      </div>
+      <div style="grid-column:2/-1;display:grid;grid-template-columns:1fr 1fr auto;gap:7px">
+        <input type="text" name="hindernisse" value="<%= a.hindernisse || '' %>" placeholder="Hindernisse, Engstellen, Brandabschnitte">
+        <input type="text" name="bemerkung" value="<%= a.bemerkung || '' %>" placeholder="Bemerkung">
+        <label style="margin:0;display:flex;gap:6px;align-items:center;text-transform:none;letter-spacing:0;font-size:12.5px;white-space:nowrap">
+          <input type="checkbox" name="bestand" <%= a.bestand?'checked':'' %> style="width:15px;height:15px;accent-color:var(--brass)"> Bestand</label>
+      </div>
+      <input type="hidden" name="bezeichnung" value="<%= a.bezeichnung || '' %>">
+      <input type="hidden" name="querschnitt" value="<%= a.querschnitt || '' %>">
+    </form>
+  <% }) %>
+  <details class="block"><summary>Abschnitt ergänzen</summary><div class="inhalt">
+    <form method="post" action="/begehungen/<%= begehung.id %>/abschnitte">
+      <div class="felder3">
+        <div class="feld"><label>Typ</label><select name="typ"><% typen.forEach(function(t){ %><option><%= t %></option><% }) %></select></div>
+        <div class="feld"><label>von</label><input type="text" name="von_ort"></div>
+        <div class="feld"><label>nach</label><input type="text" name="nach_ort"></div>
+      </div>
+      <div class="felder3">
+        <div class="feld"><label>Länge in Meter</label><input type="text" name="laenge_m"></div>
+        <div class="feld"><label>Verlegeart</label><select name="verlegeart"><option value=""></option><% ['Erdreich','Wand','Trasse','Kabelrinne','Bohrung','Bestand'].forEach(function(v){ %><option><%= v %></option><% }) %></select></div>
+        <div class="feld"><label>Untergrund</label><select name="untergrund"><option value=""></option><% ['Asphalt','Pflaster','Beton','Erde','Rasen'].forEach(function(v){ %><option><%= v %></option><% }) %></select></div>
+      </div>
+      <div class="feld"><label>Hindernisse</label><input type="text" name="hindernisse"></div>
+      <button class="knopf mini" type="submit">Hinzufügen</button>
+    </form>
+  </div></details>
+</div>
+
+<!-- ================= AUFNAHMEN ================= -->
+<div class="karte" id="medien">
+  <h2>Aufnahmen</h2>
+  <div class="hinweis-klein">
+    Ablage: <b><%= speicherArt === 'r2' ? 'Object Storage' : 'lokal auf dem Server' %></b> ·
+    Foto bis <%= maxMB.foto %> MB · 360°-Bild bis <%= maxMB.panorama360 %> MB · Video bis <%= maxMB.video %> MB · 360°-Video bis <%= maxMB.video360 %> MB
+  </div>
+
+  <div class="kasten" style="margin-bottom:14px">
+    <b>Pflichtaufnahmen.</b> <%= pflicht.join(' · ') %><br>
+    Der Titel muss exakt einem dieser Begriffe entsprechen, damit die Prüfung greift — wähle ihn unten aus der Liste.
+  </div>
+
+  <div id="hochladen" style="border:1px dashed var(--feld-linie);border-radius:var(--radius);padding:16px;margin-bottom:16px">
+    <div class="felder3">
+      <div class="feld"><label>Was ist zu sehen</label>
+        <select id="m_titel">
+          <% pflicht.forEach(function(p){ %><option><%= p %></option><% }) %>
+          <option value="">— freier Titel —</option>
+        </select>
+        <input type="text" id="m_titel_frei" placeholder="eigener Titel" style="margin-top:6px;display:none">
+      </div>
+      <div class="feld"><label>Art</label>
+        <select id="m_art">
+          <option value="foto">Foto</option>
+          <option value="panorama360">360°-Bild</option>
+          <option value="video">Video</option>
+          <option value="video360">360°-Video</option>
+          <option value="dokument">Dokument (PDF)</option>
+        </select></div>
+      <div class="feld"><label>Abschnitt</label>
+        <select id="m_abschnitt"><option value="">— ohne —</option>
+          <% abschnitte.forEach(function(a){ %><option value="<%= a.id %>"><%= a.lfd %> · <%= a.typ %></option><% }) %></select></div>
+    </div>
+    <div class="feld"><label>Datei</label><input type="file" id="m_datei" accept="image/*,video/*,application/pdf" capture="environment"></div>
+    <div class="reihe">
+      <button class="knopf" type="button" id="m_start">Hochladen</button>
+      <span id="m_status" style="font-size:13px;color:var(--ink3)"></span>
+    </div>
+    <div id="m_balken" style="height:5px;background:var(--bg3);border-radius:3px;margin-top:10px;display:none;overflow:hidden">
+      <div id="m_fortschritt" style="height:100%;background:var(--brass);width:0%"></div>
+    </div>
+    <p class="hinweis-klein" style="margin-top:10px;margin-bottom:0">Am Telefon öffnet die Auswahl direkt die Kamera. 360°-Aufnahmen bitte fertig zusammengesetzt hochladen (equirectangular), dann lassen sie sich hier schwenken.</p>
+  </div>
+
+  <% if (!medien.length) { %><div class="leer-hinweis">Noch keine Aufnahme.</div><% } else { %>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px">
+    <% medien.forEach(function(m){ %>
+      <div style="border:1px solid var(--linie);border-radius:var(--radius);overflow:hidden;background:var(--bg2)">
+        <% if (m.art === 'foto') { %>
+          <a href="<%= m.url %>" target="_blank"><img src="<%= m.url %>" alt="<%= m.titel || '' %>" style="width:100%;height:130px;object-fit:cover;display:block"></a>
+        <% } else if (m.art === 'panorama360') { %>
+          <div class="pano" data-url="<%= m.url %>" style="height:130px;background:#000;cursor:grab;overflow:hidden;position:relative">
+            <img src="<%= m.url %>" style="height:130px;position:absolute;left:0;top:0;max-width:none">
+            <span style="position:absolute;right:6px;top:6px;font-size:9px;letter-spacing:1px;background:var(--brass);color:#0A1628;padding:2px 6px;border-radius:2px">360°</span>
+          </div>
+        <% } else if (m.art === 'video' || m.art === 'video360') { %>
+          <video src="<%= m.url %>" controls style="width:100%;height:130px;background:#000;display:block"></video>
+        <% } else { %>
+          <a href="<%= m.url %>" target="_blank" style="display:block;height:130px;display:grid;place-items:center;background:var(--bg3);text-decoration:none">PDF öffnen</a>
+        <% } %>
+        <div style="padding:9px 11px">
+          <div style="font-size:12.5px;color:var(--ink)"><%= m.titel || m.dateiname || '—' %></div>
+          <div style="font-size:11px;color:var(--ink3);margin-top:2px">
+            <%= m.art %><%= m.abschnitt_typ ? ' · ' + m.abschnitt_typ : '' %><%= m.groesse ? ' · ' + Math.round(m.groesse/1024/1024*10)/10 + ' MB' : '' %>
+          </div>
+          <form method="post" action="/begehungen/<%= begehung.id %>/medien/<%= m.id %>/loeschen" style="margin-top:7px">
+            <button class="knopf gefahr mini" type="submit">Entfernen</button>
+          </form>
+        </div>
+      </div>
+    <% }) %>
+  </div>
+  <% } %>
+</div>
+
+<!-- ================= AUFNAHME DER ANLAGE ================= -->
+<form method="post" action="/begehungen/<%= begehung.id %>">
+<div class="spalten s2">
+  <div class="karte">
+    <h2>Netzanschluss — Beginn des Pfades</h2><div class="marke-strich"></div>
+    <div class="felder2">
+      <div class="feld"><label>Netzbetreiber</label><input type="text" name="netz_vnb" value="<%= begehung.netz_vnb || '' %>"></div>
+      <div class="feld"><label>Art *</label><select name="netz_art"><option value="">—</option>
+        <% ['Hausanschluss','Trafostation','Übergabestation','Neuanschluss'].forEach(function(v){ %><option <%= begehung.netz_art===v?'selected':'' %>><%= v %></option><% }) %></select></div>
+    </div>
+    <div class="felder2">
+      <div class="feld"><label>Anschlussleistung kW *</label><input type="text" name="netz_leistung_kw" value="<%= begehung.netz_leistung_kw || '' %>"></div>
+      <div class="feld"><label>freie Reserve kW</label><input type="text" name="netz_reserve_kw" value="<%= begehung.netz_reserve_kw || '' %>"></div>
+    </div>
+    <div class="feld"><label>Zähler / Messkonzept</label><input type="text" name="netz_zaehler" value="<%= begehung.netz_zaehler || '' %>"></div>
+    <div class="feld"><label>Wo sitzt der Anschluss</label><input type="text" name="netz_ort" value="<%= begehung.netz_ort || '' %>"></div>
+    <div class="feld"><label>Bemerkung</label><textarea name="netz_bemerkung"><%= begehung.netz_bemerkung || '' %></textarea></div>
+  </div>
+
+  <div class="karte">
+    <h2>Ziel — Ende des Pfades</h2><div class="marke-strich"></div>
+    <div class="felder2">
+      <div class="feld"><label>Stellplätze gesamt</label><input type="text" name="stellplaetze_gesamt" value="<%= begehung.stellplaetze_gesamt || '' %>"></div>
+      <div class="feld"><label>davon Ausbau</label><input type="text" name="stellplaetze_ausbau" value="<%= begehung.stellplaetze_ausbau || '' %>"></div>
+    </div>
+    <div class="felder3">
+      <div class="feld"><label>Ladepunkte AC</label><input type="text" name="ladepunkte_ac" value="<%= begehung.ladepunkte_ac || '' %>"></div>
+      <div class="feld"><label>Ladepunkte DC</label><input type="text" name="ladepunkte_dc" value="<%= begehung.ladepunkte_dc || '' %>"></div>
+      <div class="feld"><label>kW je Ladepunkt</label><input type="text" name="leistung_je_lp_kw" value="<%= begehung.leistung_je_lp_kw || '' %>"></div>
+    </div>
+    <div class="feld"><label>Lastmanagement</label><input type="text" name="lastmanagement" value="<%= begehung.lastmanagement || '' %>"></div>
+    <div class="felder2">
+      <div class="feld"><label>Empfehlung</label><select name="variante_empfehlung"><option value="">offen</option>
+        <% ['Stromschiene','Einzelverkabelung'].forEach(function(v){ %><option <%= begehung.variante_empfehlung===v?'selected':'' %>><%= v %></option><% }) %></select></div>
+      <div class="feld"><label>Förderung</label><select name="foerderung_moeglich"><option value="">zu prüfen</option>
+        <% ['ja','nein'].forEach(function(v){ %><option <%= begehung.foerderung_moeglich===v?'selected':'' %>><%= v %></option><% }) %></select></div>
+    </div>
+    <div class="feld"><label>Begründung der Empfehlung</label><textarea name="variante_begruendung"><%= begehung.variante_begruendung || '' %></textarea></div>
+  </div>
+</div>
+
+<div class="spalten s2" style="margin-top:16px">
+  <div class="karte">
+    <h2>Rahmendaten</h2><div class="marke-strich"></div>
+    <div class="feld"><label>Objekt</label><input type="text" name="objekt" value="<%= begehung.objekt %>"></div>
+    <div class="feld"><label>Adresse</label><input type="text" name="adresse" value="<%= begehung.adresse || '' %>"></div>
+    <div class="felder2">
+      <div class="feld"><label>PLZ</label><input type="text" name="plz" value="<%= begehung.plz || '' %>"></div>
+      <div class="feld"><label>Ort</label><input type="text" name="ort" value="<%= begehung.ort || '' %>"></div>
+    </div>
+    <div class="feld"><label>Kunde</label><select name="kunde_id"><option value="">—</option>
+      <% kunden.forEach(function(k){ %><option value="<%= k.id %>" <%= begehung.kunde_id===k.id?'selected':'' %>><%= k.firma %></option><% }) %></select></div>
+    <div class="felder3">
+      <div class="feld"><label>Art</label><select name="art"><% ['AC','DC','AC+DC'].forEach(function(v){ %><option <%= begehung.art===v?'selected':'' %>><%= v %></option><% }) %></select></div>
+      <div class="feld"><label>Nutzung</label><select name="nutzung"><option value="">—</option><% ['Wohnen','Gewerbe','Parkraum','Logistik','Sonstiges'].forEach(function(v){ %><option <%= begehung.nutzung===v?'selected':'' %>><%= v %></option><% }) %></select></div>
+      <div class="feld"><label>Status</label><select name="status"><% STATUS.forEach(function(v){ %><option <%= begehung.status===v?'selected':'' %>><%= v %></option><% }) %></select></div>
+    </div>
+    <div class="felder2">
+      <div class="feld"><label>Termin</label><input type="datetime-local" name="termin_am" value="<%= begehung.termin_am ? new Date(begehung.termin_am).toISOString().slice(0,16) : '' %>"></div>
+      <div class="feld"><label>Durchgeführt</label><input type="datetime-local" name="durchgefuehrt_am" value="<%= begehung.durchgefuehrt_am ? new Date(begehung.durchgefuehrt_am).toISOString().slice(0,16) : '' %>"></div>
+    </div>
+    <div class="feld"><label>Ansprechpartner vor Ort</label><input type="text" name="begleitung" value="<%= begehung.begleitung || '' %>"></div>
+    <div class="felder2">
+      <div class="feld"><label>Breitengrad</label><input type="text" name="geo_lat" value="<%= begehung.geo_lat || '' %>"></div>
+      <div class="feld"><label>Längengrad</label><input type="text" name="geo_lon" value="<%= begehung.geo_lon || '' %>"></div>
+    </div>
+    <button class="knopf leer mini" type="button" id="geo">Standort vom Gerät übernehmen</button>
+  </div>
+  <div class="karte">
+    <h2>Bewertung</h2><div class="marke-strich"></div>
+    <div class="feld"><label>Förderhinweis</label><textarea name="foerderung_hinweis"><%= begehung.foerderung_hinweis || '' %></textarea></div>
+    <div class="feld"><label>Risiken <span data-baustein="risiko" data-ziel="b_risiken"></span></label>
+      <textarea name="risiken" id="b_risiken" placeholder="Was kann teuer werden oder scheitern?"><%= begehung.risiken || '' %></textarea></div>
+    <div class="feld"><label>Fazit <span data-baustein="fazit" data-ziel="b_fazit"></span></label>
+      <textarea name="fazit" id="b_fazit" style="min-height:120px"><%= begehung.fazit || '' %></textarea></div>
+    <button class="knopf" type="submit">Begehung speichern</button>
+  </div>
+</div>
+</form>
+
+<!-- ================= MENGEN ================= -->
+<div class="karte" id="mengen">
+  <h2>Feststellungen und Mengen</h2>
+  <div class="hinweis-klein">Daraus entsteht beim Überführen das Angebot. Preise werden dort bewusst leer gelassen und müssen gesetzt werden.</div>
+  <% if (!positionen.length) { %><div class="leer-hinweis">Noch nichts erfasst.</div><% } %>
+  <% positionen.forEach(function(p){ %>
+    <form method="post" action="/begehungen/<%= begehung.id %>/positionen/<%= p.id %>"
+          style="display:grid;grid-template-columns:110px 1fr 80px 90px 1fr auto;gap:7px;align-items:center;padding:7px 0;border-bottom:1px solid var(--linie2)">
+      <select name="gewerk"><% ['Tiefbau','Elektro','Sonstiges'].forEach(function(g){ %><option <%= p.gewerk===g?'selected':'' %>><%= g %></option><% }) %></select>
+      <input type="text" name="text" value="<%= p.text %>" placeholder="Leistung">
+      <input type="text" name="einheit" value="<%= p.einheit || '' %>" placeholder="ME">
+      <label class="mfeld"><span>Menge</span><input type="text" name="menge" value="<%= p.menge %>"></label>
+      <input type="text" name="bemerkung" value="<%= p.bemerkung || '' %>" placeholder="Bemerkung">
+      <div style="display:flex;gap:5px"><button class="knopf leer mini" type="submit">✓</button>
+        <button class="knopf gefahr mini" type="submit" name="loeschen" value="1">×</button></div>
+    </form>
+  <% }) %>
+  <details class="block"><summary>Feststellung erfassen</summary><div class="inhalt">
+    <form method="post" action="/begehungen/<%= begehung.id %>/positionen">
+      <div class="felder3">
+        <div class="feld"><label>Gewerk</label><select name="gewerk"><option>Elektro</option><option>Tiefbau</option><option>Sonstiges</option></select></div>
+        <div class="feld"><label>Einheit</label><input type="text" name="einheit" placeholder="m, Stk., psch"></div>
+        <div class="feld"><label>Menge</label><input type="text" name="menge" value="1"></div>
+      </div>
+      <div class="feld"><label>Leistung * <span data-baustein="feststellung" data-ziel="b_fest"></span></label>
+        <input type="text" name="text" id="b_fest" required placeholder="Kabelgraben B=60 T=80 im Außenbereich"></div>
+      <div class="feld"><label>Abschnitt</label><select name="abschnitt_id"><option value="">—</option>
+        <% abschnitte.forEach(function(a){ %><option value="<%= a.id %>"><%= a.lfd %> · <%= a.typ %></option><% }) %></select></div>
+      <div class="feld"><label>Bemerkung</label><input type="text" name="bemerkung"></div>
+      <button class="knopf mini" type="submit">Erfassen</button>
+    </form>
+  </div></details>
+</div>
+
+<script>
+// Textbausteine: was einmal getippt wurde, steht wieder zur Auswahl.
+(function () {
+  var vorrat = <%- JSON.stringify(bausteine) %>;
+  document.querySelectorAll('[data-baustein]').forEach(function (halter) {
+    var liste = vorrat[halter.getAttribute('data-baustein')] || [];
+    if (!liste.length) return;
+    var s = document.createElement('select');
+    s.className = 'baustein-wahl';
+    s.innerHTML = '<option value="">Baustein übernehmen …</option>' + liste.map(function (b, i) {
+      var k = b.text.length > 60 ? b.text.slice(0, 60) + '…' : b.text;
+      return '<option value="' + i + '">' + k.replace(/[<>&]/g, '') + '</option>';
+    }).join('');
+    s.addEventListener('change', function () {
+      if (s.value === '') return;
+      var ziel = document.getElementById(halter.getAttribute('data-ziel'));
+      if (ziel) {
+        var t = liste[Number(s.value)].text;
+        if (ziel.tagName === 'TEXTAREA') {
+          ziel.value = ziel.value.trim() ? ziel.value.replace(/\s*$/, '') + '\n' + t : t;
+        } else { ziel.value = t; }
+        ziel.focus();
+      }
+      s.value = '';
+    });
+    halter.appendChild(s);
+  });
+})();
+(function () {
+  var BEG = <%= begehung.id %>;
+  var titel = document.getElementById('m_titel');
+  var frei = document.getElementById('m_titel_frei');
+  titel.addEventListener('change', function () {
+    frei.style.display = titel.value === '' ? 'block' : 'none';
+  });
+
+  var geo = document.getElementById('geo');
+  if (geo && navigator.geolocation) {
+    geo.addEventListener('click', function () {
+      geo.textContent = 'Standort wird ermittelt ...';
+      navigator.geolocation.getCurrentPosition(function (p) {
+        document.querySelector('[name=geo_lat]').value = p.coords.latitude.toFixed(6);
+        document.querySelector('[name=geo_lon]').value = p.coords.longitude.toFixed(6);
+        geo.textContent = 'Standort übernommen';
+      }, function () { geo.textContent = 'Standort nicht verfügbar'; });
+    });
+  }
+
+  var start = document.getElementById('m_start');
+  var status = document.getElementById('m_status');
+  var balken = document.getElementById('m_balken');
+  var fortschritt = document.getElementById('m_fortschritt');
+
+  start.addEventListener('click', async function () {
+    var f = document.getElementById('m_datei').files[0];
+    if (!f) { status.textContent = 'Bitte zuerst eine Datei auswählen.'; return; }
+    var art = document.getElementById('m_art').value;
+    var t = titel.value === '' ? frei.value : titel.value;
+
+    start.disabled = true;
+    status.style.color = 'var(--ink3)';
+    status.textContent = 'Wird angemeldet ...';
+
+    try {
+      var an = await fetch('/begehungen/' + BEG + '/medien/anmelden', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ dateiname: f.name, mime: f.type, art: art, groesse: f.size })
+      });
+      var ziel = await an.json();
+      if (!an.ok) throw new Error(ziel.fehler || 'Anmeldung abgelehnt');
+
+      balken.style.display = 'block';
+      await new Promise(function (erfolg, fehler) {
+        var x = new XMLHttpRequest();
+        x.open(ziel.methode, ziel.url, true);
+        if (f.type) x.setRequestHeader('Content-Type', f.type);
+        x.upload.onprogress = function (e) {
+          if (e.lengthComputable) fortschritt.style.width = Math.round(e.loaded / e.total * 100) + '%';
+        };
+        x.onload = function () { (x.status >= 200 && x.status < 300) ? erfolg() : fehler(new Error('Upload fehlgeschlagen (' + x.status + ')')); };
+        x.onerror = function () { fehler(new Error('Verbindung unterbrochen')); };
+        x.send(f);
+      });
+
+      status.textContent = 'Wird eingetragen ...';
+      await fetch('/begehungen/' + BEG + '/medien/eintragen', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          schluessel: ziel.schluessel, art: art, dateiname: f.name, mime: f.type,
+          groesse: f.size, titel: t, aufgenommen_am: new Date(f.lastModified).toISOString()
+        })
+      });
+      status.style.color = 'var(--ok-hell)';
+      status.textContent = 'Fertig.';
+      location.reload();
+    } catch (e) {
+      status.style.color = 'var(--rot)';
+      status.textContent = e.message;
+      start.disabled = false;
+      balken.style.display = 'none';
+    }
+  });
+
+  // 360-Grad-Bilder: durch Ziehen schwenken.
+  document.querySelectorAll('.pano').forEach(function (box) {
+    var bild = box.querySelector('img');
+    var x = 0, ziehen = false, startX = 0, startVersatz = 0;
+    function setzen() {
+      var max = Math.max(0, bild.offsetWidth - box.offsetWidth);
+      if (x > 0) x = 0; if (x < -max) x = -max;
+      bild.style.transform = 'translateX(' + x + 'px)';
+    }
+    box.addEventListener('pointerdown', function (e) { ziehen = true; startX = e.clientX; startVersatz = x; box.setPointerCapture(e.pointerId); box.style.cursor = 'grabbing'; });
+    box.addEventListener('pointermove', function (e) { if (!ziehen) return; x = startVersatz + (e.clientX - startX); setzen(); });
+    box.addEventListener('pointerup', function () { ziehen = false; box.style.cursor = 'grab'; });
+  });
+})();
+</script>
+<%- include('partials/fuss') %>

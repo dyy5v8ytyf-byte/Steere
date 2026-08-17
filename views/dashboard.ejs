@@ -1,33 +1,100 @@
-<%- include('partials/head', { title: 'Dashboard' }) %>
-
-<h1>Dashboard</h1>
-<p class="muted">Workflow-Grundgerüst v1 – Kennzahlen & Phasen-Übersicht. Das ausführliche Power-BI-Style-Dashboard (Forecast, Baustellen-Monatsausblick) ist der nächste Ausbauschritt.</p>
-
-<div class="kpi-row">
-  <div class="kpi"><div class="label">Kunden gesamt</div><div class="value"><%= totalCustomers %></div></div>
-  <div class="kpi"><div class="label">Offene ToDos</div><div class="value"><%= openTodos %></div></div>
-  <div class="kpi"><div class="label">Fällig für Wiedervorlage</div><div class="value"><%= wiedervorlageFaellig %></div></div>
-  <div class="kpi"><div class="label">Summe Angebote</div><div class="value"><%= sums.angebot.toLocaleString('de-DE') %> €</div></div>
-  <div class="kpi"><div class="label">Summe Beauftragt</div><div class="value"><%= sums.beauftragt.toLocaleString('de-DE') %> €</div></div>
-  <div class="kpi"><div class="label">Summe Rechnungen</div><div class="value"><%= sums.rechnung.toLocaleString('de-DE') %> €</div></div>
+<%- include('partials/kopf') %>
+<div class="seitenkopf">
+  <div>
+    <h1>Übersicht</h1>
+    <div class="unter">Stand <%= datumZeit(new Date()) %> · Automatik läuft täglich um 06:00 Uhr</div>
+  </div>
+  <div class="reihe">
+    <form method="post" action="/automatik"><button class="knopf leer mini" type="submit">Automatik jetzt laufen lassen</button></form>
+    <a class="knopf leer" href="/begehungen/neu">Begehung planen</a>
+    <a class="knopf leer" href="/finanzen">Finanzen</a>
+    <a class="knopf" href="/kunden/neu">Neuer Kunde</a>
+  </div>
 </div>
 
-<h2>Projekte nach Phase</h2>
-<table>
-  <tr><th>Phase</th><th>Anzahl</th><th></th></tr>
-  <% PHASES.forEach(function(phase) { %>
-    <tr>
-      <td><span class="tag" style="background:<%= PHASE_COLORS[phase] %>"><%= phase %></span></td>
-      <td><%= countMap[phase] || 0 %></td>
-      <td><a href="/kunden?phase=<%= encodeURIComponent(phase) %>">ansehen →</a></td>
-    </tr>
-  <% }) %>
-</table>
-
-<h2>Automatik</h2>
-<div class="card">
-  <p class="muted">Täglich um 06:00 Uhr prüft das System automatisch: (1) Projekte in "Kontaktaufnahme" ohne Aktivität seit 14 Tagen → Phase "Wiedervorlage". (2) Bestätigte Elektriker-/Tiefbau-Termine ohne informierten Kunden → ToDo "Kunde informieren".</p>
-  <form method="post" action="/admin/cron-jetzt"><button type="submit">Jetzt manuell prüfen</button></form>
+<div class="spalten s4">
+  <div class="kz"><div class="n"><%= kennzahlen.kunden %></div><div class="t">Kunden im Bestand</div></div>
+  <div class="kz"><div class="n"><%= kennzahlen.projekte_offen %></div><div class="t">Projekte in Bearbeitung</div></div>
+  <div class="kz"><div class="n <%= kennzahlen.aufgaben_ueberfaellig > 0 ? 'akz' : '' %>"><%= kennzahlen.aufgaben_offen %></div>
+    <div class="t">offene Aufgaben<%= kennzahlen.aufgaben_ueberfaellig > 0 ? ', davon ' + kennzahlen.aufgaben_ueberfaellig + ' überfällig' : '' %></div></div>
+  <div class="kz"><div class="n"><%= kennzahlen.termine_kommend %></div><div class="t">kommende Termine</div></div>
 </div>
 
-<%- include('partials/foot') %>
+<div class="spalten s3" style="margin-top:18px">
+  <div class="kz"><div class="n akz"><%= eur(kennzahlen.summe_angebot) %></div><div class="t">in Angeboten</div></div>
+  <div class="kz"><div class="n akz"><%= eur(kennzahlen.summe_beauftragt) %></div><div class="t">beauftragt, in Umsetzung</div></div>
+  <div class="kz"><div class="n"><%= eur(kennzahlen.summe_abgerechnet) %></div><div class="t">abgeschlossen und abgerechnet</div></div>
+</div>
+
+<div class="spalten s21" style="margin-top:18px">
+  <div>
+    <div class="karte">
+      <h2>Trichter</h2>
+      <div class="hinweis-klein">Alle Projekte nach Phase. Die Summe zeigt die hinterlegte Angebotssumme.</div>
+      <div class="tab-scroll"><table>
+        <thead><tr><th>Phase</th><th class="z">Projekte</th><th class="z">Angebotssumme</th></tr></thead>
+        <tbody>
+        <% phasen.forEach(function(ph){ var t = trichter.find(function(x){return x.phase === ph}); %>
+          <tr>
+            <td><a href="/kunden?phase=<%= encodeURIComponent(ph) %>"><%= ph %></a></td>
+            <td class="z"><%= t ? t.anzahl : 0 %></td>
+            <td class="z"><%= t && Number(t.summe) > 0 ? eur(t.summe) : '—' %></td>
+          </tr>
+        <% }) %>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="karte">
+      <h2>Offene Aufgaben</h2>
+      <% if (!offeneAufgaben.length) { %><div class="leer-hinweis">Nichts offen.</div><% } else { %>
+      <div class="tab-scroll"><table>
+        <thead><tr><th>Aufgabe</th><th>Kunde</th><th>Zuständig</th><th>Fällig</th><th></th></tr></thead>
+        <tbody>
+        <% offeneAufgaben.forEach(function(a){ %>
+          <tr>
+            <td><b><%= a.text %></b><% if (a.notiz) { %><br><span style="font-size:12px;color:var(--ink3)"><%= a.notiz %></span><% } %></td>
+            <td><% if (a.kunde_id) { %><a href="/kunden/<%= a.kunde_id %>"><%= a.firma %></a><% } else { %>—<% } %></td>
+            <td><%= a.mitarbeiter || '—' %></td>
+            <td class="<%= faellig(a.faellig_am, a.erledigt) %>"><%= datum(a.faellig_am) %></td>
+            <td class="z"><form method="post" action="/aufgaben/<%= a.id %>"><input type="hidden" name="umschalten" value="1"><button class="knopf leer mini" type="submit">erledigt</button></form></td>
+          </tr>
+        <% }) %>
+        </tbody>
+      </table></div>
+      <% } %>
+    </div>
+  </div>
+
+  <div>
+    <div class="karte">
+      <h2>Nächste Termine</h2>
+      <% if (!naechsteTermine.length) { %><div class="leer-hinweis">Keine Termine geplant.</div><% } else { %>
+        <% naechsteTermine.forEach(function(t){ %>
+          <div style="padding:11px 0;border-bottom:1px solid var(--linie2)">
+            <div style="display:flex;justify-content:space-between;gap:10px;align-items:baseline">
+              <b style="color:var(--ink)"><%= datum(t.datum) %><%= t.uhrzeit ? ' · ' + t.uhrzeit : '' %></b>
+              <span class="pille <%= t.bestaetigt === 'ja' ? 'ok' : t.bestaetigt === 'nein' ? 'rot' : '' %>"><%= t.typ %></span>
+            </div>
+            <div style="font-size:13.5px;margin-top:3px"><a href="/kunden/<%= t.kunde_id %>"><%= t.firma %></a><%= t.thema ? ' — ' + t.thema : '' %></div>
+            <% if (t.ort) { %><div style="font-size:12px;color:var(--ink3)"><%= t.ort %></div><% } %>
+          </div>
+        <% }) %>
+      <% } %>
+    </div>
+
+    <div class="karte">
+      <h2>Zuletzt passiert</h2>
+      <% if (!letzteAktivitaeten.length) { %><div class="leer-hinweis">Noch nichts protokolliert.</div><% } else { %>
+        <% letzteAktivitaeten.forEach(function(a){ %>
+          <div style="padding:9px 0;border-bottom:1px solid var(--linie2);font-size:13px">
+            <div style="color:var(--ink3);font-size:11.5px"><%= datumZeit(a.datum) %><%= a.automatisch ? ' · automatisch' : '' %></div>
+            <div style="margin-top:2px"><%= a.text %></div>
+            <% if (a.kunde_id) { %><div style="font-size:12px"><a href="/kunden/<%= a.kunde_id %>"><%= a.firma %></a></div><% } %>
+          </div>
+        <% }) %>
+      <% } %>
+    </div>
+  </div>
+</div>
+<%- include('partials/fuss') %>

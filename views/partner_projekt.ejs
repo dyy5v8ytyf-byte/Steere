@@ -1,0 +1,33 @@
+<%- include('partials/kopf') %>
+<div class="seitenkopf">
+  <div><h1><%= projekt.bezeichnung %></h1><div class="unter">Auftraggeber: <%= projekt.firma %> · Phase <%= projekt.phase %></div></div>
+  <a class="knopf leer" href="/partner">Zurück</a>
+</div>
+<div class="spalten s21">
+  <div class="karte">
+    <h2>Projekt</h2><div class="marke-strich"></div>
+    <p style="color:var(--ink2);white-space:pre-line"><%= projekt.beschreibung || 'Keine Beschreibung hinterlegt.' %></p>
+    <div class="spalten s3" style="margin-top:18px">
+      <div class="kz"><div class="n" style="font-size:19px"><%= projekt.phase %></div><div class="t">Phase</div></div>
+      <div class="kz"><div class="n" style="font-size:19px"><%= projekt.gewerk || '—' %></div><div class="t">Gewerk</div></div>
+      <div class="kz"><div class="n" style="font-size:19px"><%= projekt.baustellen_status || '—' %></div><div class="t">Baustelle</div></div>
+    </div>
+  </div>
+  <div class="karte">
+    <h2>Ihre Termine</h2>
+    <div class="hinweis-klein">Nur Termine der Gewerke Tiefbau und Elektro.</div>
+    <% if (!termine.length) { %><div class="leer-hinweis">Keine Termine.</div><% } else { %>
+      <% termine.forEach(function(t){ %>
+        <div style="padding:10px 0;border-bottom:1px solid var(--linie2)">
+          <div style="display:flex;justify-content:space-between;gap:8px">
+            <b style="color:var(--ink)"><%= datum(t.datum) %><%= t.uhrzeit ? ' · ' + t.uhrzeit : '' %></b>
+            <span class="pille <%= t.bestaetigt === 'ja' ? 'ok' : '' %>"><%= t.typ %></span>
+          </div>
+          <div style="font-size:13px;color:var(--ink2)"><%= t.thema || '—' %></div>
+          <% if (t.ort) { %><div style="font-size:12px;color:var(--ink3)"><%= t.ort %></div><% } %>
+        </div>
+      <% }) %>
+    <% } %>
+  </div>
+</div>
+<%- include('partials/fuss') %>

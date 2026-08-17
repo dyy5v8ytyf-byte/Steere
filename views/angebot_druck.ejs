@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8"><title>Angebot <%= angebot.nummer %></title>
+<style>
+  @page{size:A4;margin:18mm 16mm 20mm}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:Arial,Helvetica,sans-serif;color:#111;font-size:10.5pt;line-height:1.45;background:#fff}
+  .blatt{max-width:186mm;margin:0 auto;padding:14px}
+  .kopfzeile{font-size:7.5pt;color:#555;border-bottom:1.6pt solid #C89B4A;padding-bottom:5px;margin-bottom:26px;letter-spacing:.2px}
+  .marke{font-family:Georgia,serif;font-size:15pt;font-weight:bold;letter-spacing:.5px;color:#0A1628}
+  .marke i{font-style:normal;color:#C89B4A}
+  .oben{display:flex;justify-content:space-between;gap:30px;margin-bottom:26px}
+  .empf{white-space:pre-line;font-size:10.5pt;min-height:32mm}
+  .meta{font-size:9pt;color:#333;text-align:right;min-width:58mm}
+  .meta div{margin-bottom:2px}
+  h1{font-family:Georgia,serif;font-size:15pt;margin-bottom:6px;color:#0A1628}
+  .bv{font-size:9.5pt;color:#333;margin-bottom:20px;line-height:1.5}
+  .bv b{color:#0A1628}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:9.5pt}
+  th{text-align:left;font-size:7.5pt;letter-spacing:.8px;text-transform:uppercase;color:#555;border-bottom:1pt solid #888;padding:0 6px 5px 0;font-weight:bold}
+  td{padding:7px 6px 7px 0;border-bottom:.5pt solid #ddd;vertical-align:top}
+  td.z,th.z{text-align:right;white-space:nowrap}
+  tr.titel td{font-weight:bold;background:#f4f1ea;color:#0A1628;border-bottom:none;padding-top:12px}
+  .lang{font-size:8.5pt;color:#444;margin-top:3px;line-height:1.4}
+  .summen{margin-left:auto;width:76mm;margin-top:12px}
+  .summen div{display:flex;justify-content:space-between;padding:5px 0;border-bottom:.5pt solid #ddd}
+  .summen div.gesamt{border-bottom:none;border-top:1.2pt solid #0A1628;font-weight:bold;font-size:11pt;padding-top:8px;color:#0A1628}
+  .vorbem{margin:12px 0 4px;font-size:9.3pt;color:#333;white-space:pre-line;line-height:1.55;
+    border-left:2pt solid #C89B4A;padding-left:10px}
+  .hinw{margin-top:26px;font-size:8.7pt;color:#333;white-space:pre-line;line-height:1.55}
+  .hinw h2{font-size:10pt;margin-bottom:8px;font-family:Georgia,serif;color:#0A1628}
+  .gruss{margin-top:26px;font-size:10pt}
+  .fuss{margin-top:30px;padding-top:8px;border-top:.5pt solid #ccc;font-size:7.5pt;color:#666;line-height:1.5}
+  .drucken{margin-bottom:16px}
+  @media print{.drucken{display:none}.blatt{padding:0}}
+</style>
+</head>
+<body>
+<div class="blatt">
+  <div class="drucken">
+    <button onclick="window.print()" style="padding:9px 18px;border:1px solid #C89B4A;background:#C89B4A;color:#0A1628;font-weight:bold;cursor:pointer;border-radius:3px">Drucken / als PDF sichern</button>
+    <span style="font-size:9pt;color:#666;margin-left:10px">Im Druckdialog „Als PDF sichern" wählen.</span>
+  </div>
+
+  <div class="kopfzeile"><%= e.firma_name %> (wwtec) · <%= e.firma_adresse %> · <%= e.firma_kontakt %></div>
+
+  <div class="oben">
+    <div>
+      <div class="marke">STEER<i>.</i>E</div>
+      <div style="font-size:7.5pt;letter-spacing:1.6px;text-transform:uppercase;color:#777;margin:3px 0 20px">PMaaS für Ladeinfrastruktur</div>
+      <div class="empf"><%= angebot.empfaenger || angebot.firma %></div>
+    </div>
+    <div class="meta">
+      <div><b>Angebot Nr. <%= angebot.nummer %></b></div>
+      <div>Datum: <%= angebot.datum ? new Date(angebot.datum).toLocaleDateString('de-DE') : '' %></div>
+      <% if (angebot.gueltig_bis) { %><div>Gültig bis: <%= new Date(angebot.gueltig_bis).toLocaleDateString('de-DE') %></div><% } %>
+      <div style="margin-top:8px">Ahrensburg, den <%= new Date().toLocaleDateString('de-DE') %></div>
+    </div>
+  </div>
+
+  <h1>Angebot Nr. <%= angebot.nummer %></h1>
+  <div class="bv">
+    <% if (angebot.bauvorhaben) { %><b>Bauvorhaben / Standort:</b> <%= angebot.bauvorhaben %><br><% } %>
+    <% if (angebot.gewerk) { %><b>Gewerk:</b> <%= angebot.gewerk %><% } %>
+  </div>
+
+  <% if (angebot.anrede) { %><p style="margin-bottom:10px"><%= angebot.anrede %>,</p><% } %>
+  <% if (angebot.einleitung) { %><p style="margin-bottom:6px"><%= angebot.einleitung %></p><% } %>
+  <% if (angebot.vorbemerkungen) { %><div class="vorbem"><%= angebot.vorbemerkungen %></div><% } %>
+
+  <table>
+    <thead><tr><th style="width:9mm">Pos.</th><th style="width:16mm" class="z">Menge</th><th style="width:13mm">ME</th><th>Leistung</th><th style="width:22mm" class="z">EP netto</th><th style="width:24mm" class="z">GP netto</th></tr></thead>
+    <tbody>
+    <% positionen.forEach(function(p, i){ %>
+      <% if (p.ist_titel) { %>
+        <tr class="titel"><td colspan="6"><%= p.text %></td></tr>
+      <% } else { %>
+        <tr>
+          <td><%= String(i + 1).padStart(2, '0') %></td>
+          <td class="z"><%= Number(p.menge).toLocaleString('de-DE', {minimumFractionDigits:2, maximumFractionDigits:2}) %></td>
+          <td><%= p.einheit || '' %></td>
+          <td><b><%= p.text %></b><% if (p.langtext) { %><div class="lang"><%= p.langtext %></div><% } %><% if (p.pos) { %><div class="lang">LV-Pos. <%= p.pos %></div><% } %></td>
+          <td class="z"><%= Number(p.einzelpreis).toLocaleString('de-DE', {minimumFractionDigits:2, maximumFractionDigits:2}) %> €</td>
+          <td class="z"><%= Number(p.gesamtpreis).toLocaleString('de-DE', {minimumFractionDigits:2, maximumFractionDigits:2}) %> €</td>
+        </tr>
+      <% } %>
+    <% }) %>
+    </tbody>
+  </table>
+
+  <div class="summen">
+    <div><span>Nettosumme</span><span><%= Number(angebot.netto).toLocaleString('de-DE',{minimumFractionDigits:2,maximumFractionDigits:2}) %> €</span></div>
+    <div><span>zzgl. <%= angebot.mwst_satz %> % MwSt.</span><span><%= Number(angebot.mwst).toLocaleString('de-DE',{minimumFractionDigits:2,maximumFractionDigits:2}) %> €</span></div>
+    <div class="gesamt"><span>Angebotssumme (brutto)</span><span><%= Number(angebot.brutto).toLocaleString('de-DE',{minimumFractionDigits:2,maximumFractionDigits:2}) %> €</span></div>
+  </div>
+
+  <% if (angebot.hinweise) { %>
+  <div class="hinw"><h2>Konditionen und Hinweise</h2><%= angebot.hinweise %></div>
+  <% } %>
+
+  <div class="gruss">
+    <p><%= angebot.schlusstext || 'Wir freuen uns auf Ihren Auftrag.' %></p>
+    <p style="margin-top:16px">Mit freundlichen Grüßen</p>
+    <p style="margin-top:22px"><b>STEER.E — <%= e.firma_name %></b></p>
+  </div>
+
+  <div class="fuss"><%= e.firma_name %> · <%= e.firma_adresse %> · <%= e.firma_kontakt %><br><%= e.firma_register %></div>
+</div>
+</body>
+</html>

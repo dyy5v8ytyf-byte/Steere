@@ -1,0 +1,119 @@
+<%- include('partials/kopf') %>
+<div class="seitenkopf">
+  <div><h1><%= org ? org.name : 'Partnerbereich' %></h1>
+    <div class="unter">Freigegebene Projekte und Leistungsnachweis</div></div>
+  <div class="reihe">
+    <% if (organisationen.length) { %>
+      <form method="get" class="reihe">
+        <select name="org" onchange="this.form.submit()" style="max-width:230px">
+          <% organisationen.forEach(function(o){ %><option value="<%= o.id %>" <%= org && org.id === o.id ? 'selected' : '' %>><%= o.name %></option><% }) %>
+        </select>
+      </form>
+    <% } %>
+    <% if (retainer) { %><a class="knopf leer" href="/partner/nachweis?monat=<%= monat %><%= org ? '&org=' + org.id : '' %>" target="_blank">Monatsnachweis</a><% } %>
+  </div>
+</div>
+
+<% if (!org) { %>
+  <div class="karte"><div class="leer-hinweis">Es ist noch keine Partnerorganisation angelegt. Das geht in der Verwaltung.</div></div>
+<% } else { %>
+
+<div class="spalten s21">
+  <div class="karte">
+    <h2>Freigegebene Projekte</h2>
+    <div class="hinweis-klein">Nur Projekte, die ausdrücklich für diese Organisation freigegeben wurden.</div>
+    <% if (!projekte.length) { %><div class="leer-hinweis">Noch kein Projekt freigegeben.</div><% } else { %>
+    <div class="tab-scroll"><table>
+      <thead><tr><th>Projekt</th><th>Auftraggeber</th><th>Rolle</th><th>Phase</th><th>Gewerk</th><th>Baustelle</th><th>Letzte Änderung</th></tr></thead>
+      <tbody><% projekte.forEach(function(p){ %>
+        <tr>
+          <td><a href="/partner/projekt/<%= p.id %>"><b><%= p.bezeichnung %></b></a></td>
+          <td><%= p.firma %></td>
+          <td><span class="pille"><%= p.partnerrolle %></span></td>
+          <td><%= p.phase %></td>
+          <td><%= p.gewerk || '—' %></td>
+          <td><%= p.baustellen_status || '—' %></td>
+          <td><%= datum(p.letzte_aktivitaet) %></td>
+        </tr>
+      <% }) %></tbody></table></div>
+    <% } %>
+  </div>
+
+  <div class="karte">
+    <h2>Retainer</h2><div class="marke-strich"></div>
+    <% if (!retainer) { %>
+      <div class="leer-hinweis">Für diese Organisation ist kein aktiver Retainer hinterlegt.</div>
+    <% } else { %>
+      <div style="font-size:13.5px;color:var(--ink2);line-height:1.7">
+        <div><b style="color:var(--ink)"><%= retainer.bezeichnung %></b></div>
+        <div>Kontingent: <b style="color:var(--ink)"><%= zahl(retainer.stunden_monat) %> h/Monat</b></div>
+        <div>Entgelt netto: <b style="color:var(--ink)"><%= eur(retainer.entgelt_netto) %></b></div>
+      </div>
+      <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--linie)">
+        <form method="get" class="reihe" style="margin-bottom:12px">
+          <% if (org) { %><input type="hidden" name="org" value="<%= org.id %>"><% } %>
+          <input type="month" name="monat" value="<%= monat %>" style="max-width:180px">
+          <button class="knopf leer mini" type="submit">Monat anzeigen</button>
+        </form>
+        <div style="display:flex;justify-content:space-between;font-size:14px">
+          <span style="color:var(--ink3)">Erfasst im <%= monat %></span>
+          <b style="color:<%= summe >= Number(retainer.stunden_monat) ? 'var(--akzent)' : 'var(--ink)' %>"><%= zahl(summe) %> h</b>
+        </div>
+        <div style="height:6px;background:var(--bg3);border-radius:3px;margin-top:8px;overflow:hidden">
+          <div style="height:100%;background:var(--brass);width:<%= Math.min(100, (summe / Math.max(1, Number(retainer.stunden_monat))) * 100) %>%"></div>
+        </div>
+        <div style="font-size:12px;color:var(--ink3);margin-top:6px">
+          <% if (summe > Number(retainer.stunden_monat)) { %>
+            Mehrleistung: <%= zahl(summe - Number(retainer.stunden_monat)) %> h — nicht gesondert berechenbar.
+          <% } else { %>
+            Noch <%= zahl(Number(retainer.stunden_monat) - summe) %> h bis zum Kontingent.
+          <% } %>
+        </div>
+      </div>
+    <% } %>
+  </div>
+</div>
+
+<% if (retainer) { %>
+<div class="karte">
+  <h2>Leistungen <%= monat %></h2>
+  <% if (!leistungen.length) { %><div class="leer-hinweis">Für diesen Monat ist noch nichts erfasst.</div><% } else { %>
+  <div class="tab-scroll"><table>
+    <thead><tr><th>Datum</th><th>Leistung</th><th>Status</th><th>Erfasst von</th><th class="z">Stunden</th><th></th></tr></thead>
+    <tbody><% leistungen.forEach(function(l){ %>
+      <tr>
+        <td><%= datum(l.datum) %></td>
+        <td><b><%= l.titel %></b><% if (l.beschreibung) { %><br><span style="font-size:12px;color:var(--ink3)"><%= l.beschreibung %></span><% } %></td>
+        <td><span class="pille"><%= l.status %></span></td>
+        <td><%= l.erfasst_von || '—' %></td>
+        <td class="z"><b><%= zahl(l.stunden) %></b></td>
+        <td class="z"><form method="post" action="/partner/leistungen/<%= l.id %>/loeschen"><button class="knopf gefahr mini" type="submit">×</button></form></td>
+      </tr>
+    <% }) %>
+    <tr><td colspan="4"><b>Summe</b></td><td class="z"><b style="color:var(--akzent)"><%= zahl(summe) %> h</b></td><td></td></tr>
+    </tbody></table></div>
+  <% } %>
+
+  <details class="block">
+    <summary>Leistung erfassen</summary>
+    <div class="inhalt">
+      <form method="post" action="/partner/leistungen">
+        <input type="hidden" name="retainer_id" value="<%= retainer.id %>">
+        <input type="hidden" name="monat" value="<%= monat %>">
+        <div class="felder3">
+          <div class="feld"><label>Datum</label><input type="date" name="datum"></div>
+          <div class="feld"><label>Stunden</label><input type="text" name="stunden" placeholder="7,5"></div>
+          <div class="feld"><label>Status</label><select name="status"><option>laufend</option><option>erstellt</option><option>in Prüfung</option><option>abgeschlossen</option><option>Antwort ausstehend</option></select></div>
+        </div>
+        <div class="feld"><label>Leistung *</label><input type="text" name="titel" required placeholder="z. B. Terminierung &amp; Kontaktaufnahme"></div>
+        <div class="feld"><label>Beschreibung</label><textarea name="beschreibung"></textarea></div>
+        <div class="feld"><label>Projekt</label><select name="projekt_id"><option value="">— ohne Projektbezug —</option>
+          <% projekte.forEach(function(p){ %><option value="<%= p.id %>"><%= p.bezeichnung %></option><% }) %></select></div>
+        <button class="knopf mini" type="submit">Erfassen</button>
+      </form>
+    </div>
+  </details>
+</div>
+<% } %>
+<% } %>
+<%- include('partials/fuss') %>

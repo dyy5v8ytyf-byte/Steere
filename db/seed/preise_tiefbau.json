@@ -1,0 +1,762 @@
+[
+{
+"gewerk": "Tiefbau",
+"pos": "7.01.01",
+"text": "Spartenklärung",
+"einheit": "Stk.",
+"vk_aktuell": 337.5,
+"vk_ziel": 325.0
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.01.02",
+"text": "Sicherung der Baustelle",
+"einheit": "Stk.",
+"vk_aktuell": 675.0,
+"vk_ziel": 650.0
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.01.03",
+"text": "Dokumentation der Leitungstrassen",
+"einheit": "Stk.",
+"vk_aktuell": 337.5,
+"vk_ziel": 325.0
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.02.01",
+"text": "Oberboden, ggf. mit Vegetationsdecke, abtragen und seitlich lagern oder einer geeigneten Deponie zuf",
+"einheit": "m²",
+"vk_aktuell": 18.9,
+"vk_ziel": 18.2
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.02.02",
+"text": "Zulage Oberboden laden und innerhalb des Grundstücks in Mieten aufsetzen Entfernung bis max. 100m",
+"einheit": "m³",
+"vk_aktuell": 16.88,
+"vk_ziel": 16.25
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.02.03",
+"text": "Strauch- und Buschbestand sowie sonstiger Aufwuchs bis",
+"einheit": "m²",
+"vk_aktuell": 56.7,
+"vk_ziel": 54.6
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.02.04",
+"text": "Bäume D>10cm bis 30cm roden",
+"einheit": "Stk.",
+"vk_aktuell": 378.0,
+"vk_ziel": 364.0
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.02.05",
+"text": "Kabelgraben Aushub und Wiedereinbau B=40 T=60",
+"einheit": "m",
+"vk_aktuell": 60.75,
+"vk_ziel": 58.5
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.02.06",
+"text": "Kabelgraben Aushub und Wiedereinbau B=60 T=80",
+"einheit": "m",
+"vk_aktuell": 64.8,
+"vk_ziel": 62.4
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.02.07",
+"text": "Kabelgraben Aushub und Wiedereinbau B=60 T=100",
+"einheit": "m",
+"vk_aktuell": 70.2,
+"vk_ziel": 67.6
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.02.08",
+"text": "Kabelgraben Aushub und Wiedereinbau B=60 T=120",
+"einheit": "m",
+"vk_aktuell": 75.6,
+"vk_ziel": 72.8
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.02.09",
+"text": "Kabelgraben Aushub und Wiedereinbau B=80 T=80",
+"einheit": "m",
+"vk_aktuell": 74.25,
+"vk_ziel": 71.5
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.02.10",
+"text": "Kabelgraben Aushub und Wiedereinbau B=80 T=100",
+"einheit": "m",
+"vk_aktuell": 76.95,
+"vk_ziel": 74.1
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.02.11",
+"text": "Kabelgraben Aushub und Wiedereinbau B=80 T=120",
+"einheit": "m",
+"vk_aktuell": 79.65,
+"vk_ziel": 76.7
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.02.12",
+"text": "Zulage Handschachtung",
+"einheit": "Std.",
+"vk_aktuell": 87.75,
+"vk_ziel": 84.5
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.02.13",
+"text": "Bodenaustausch/Auffüllmaterial nach Bodenaustausch liefern, wenn der Aushub nicht mehr zur Verfüllun",
+"einheit": "to",
+"vk_aktuell": 64.8,
+"vk_ziel": 62.4
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.02.14",
+"text": "Sand oder Splitt als Rohrumhüllung der Kabel/Kabelschutzrohren liefern, unter- und oberhalb je 10cm",
+"einheit": "to",
+"vk_aktuell": 37.8,
+"vk_ziel": 36.4
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.02.15",
+"text": "Leerrohr Verlegung bis DN125",
+"einheit": "m",
+"vk_aktuell": 5.27,
+"vk_ziel": 5.07
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.02.16",
+"text": "Kabel einziehen",
+"einheit": "m",
+"vk_aktuell": 5.4,
+"vk_ziel": 5.2
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.03.01",
+"text": "Pflasterfläche inkl. Tragschicht aufnehmen.",
+"einheit": "m²",
+"vk_aktuell": 22.95,
+"vk_ziel": 22.1
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.03.02",
+"text": "Wiederherstellung der zuvor ausgebauten Pflasterfläche",
+"einheit": "m²",
+"vk_aktuell": 51.3,
+"vk_ziel": 49.4
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.03.03",
+"text": "Pflaster für das Verlegen an allen Kanten oder Einfassungen maschinell zuarbeiten bzw. schneiden ink",
+"einheit": "m",
+"vk_aktuell": 20.25,
+"vk_ziel": 19.5
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.03.04",
+"text": "Bordsteine aufnehmen.",
+"einheit": "m",
+"vk_aktuell": 33.75,
+"vk_ziel": 32.5
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.03.05",
+"text": "Bordsteine setzen nach Unterlagen des AG einschl. Fundament und Rückenstütze",
+"einheit": "m",
+"vk_aktuell": 45.9,
+"vk_ziel": 44.2
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.03.06",
+"text": "Asphaltfläche aufschneiden mit geeignetem Werkzeug",
+"einheit": "m",
+"vk_aktuell": 31.05,
+"vk_ziel": 29.9
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.03.07",
+"text": "Asphaltfläche aufnehmen",
+"einheit": "m²",
+"vk_aktuell": 20.25,
+"vk_ziel": 19.5
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.03.08",
+"text": "Asphalt inkl. frostsicheren Unterbau und Feinplanie herstellen",
+"einheit": "m²",
+"vk_aktuell": 128.25,
+"vk_ziel": 123.5
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.03.09",
+"text": "Beton schneiden mit geeignetem Werkzeug",
+"einheit": "m",
+"vk_aktuell": 33.08,
+"vk_ziel": 31.85
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.03.10",
+"text": "Sämtliche Betonoberbauschichten aufnehmen, einschließlich abstemmen oder schneiden.",
+"einheit": "m²",
+"vk_aktuell": 44.55,
+"vk_ziel": 42.9
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.03.11",
+"text": "Herstellen einer Betonfläche einschl. aller Anschlussfugen und sonstiger Nebenarbeiten nach Vorgaben",
+"einheit": "m²",
+"vk_aktuell": 70.2,
+"vk_ziel": 67.6
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.03.12",
+"text": "Alternativ Ausführung als Faserbeton",
+"einheit": "m²",
+"vk_aktuell": 135.0,
+"vk_ziel": 130.0
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.03.13",
+"text": "Betonplatten, Betonwerksteine und Betonpflaster bestehen aus Zement und natürlichen Gesteinskörnunge",
+"einheit": "m²",
+"vk_aktuell": 74.25,
+"vk_ziel": 71.5
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.03.14",
+"text": "Natursteinpflaster liefern und verlegen Format: Granit-Großpflaster 14/16 cm",
+"einheit": "m²",
+"vk_aktuell": 101.25,
+"vk_ziel": 97.5
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.03.15",
+"text": "Natursteinpflaster liefern und verlegen Format: Granit-Kleinpflaster 9/11 cm",
+"einheit": "m²",
+"vk_aktuell": 101.25,
+"vk_ziel": 97.5
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.03.16",
+"text": "Gehwegplatten bis 40 cm x 40 cm liefern und verlegen",
+"einheit": "m²",
+"vk_aktuell": 76.95,
+"vk_ziel": 74.1
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.03.17",
+"text": "Rasengitterstein aus Beton bis 61 cm x 41 cm x 8 cm liefern und verlegen",
+"einheit": "m²",
+"vk_aktuell": 67.5,
+"vk_ziel": 65.0
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.03.18",
+"text": "Tiefbordstein aus Beton bis 100 cm x 25 cm x 8 cm liefern und verlegen",
+"einheit": "m",
+"vk_aktuell": 60.75,
+"vk_ziel": 58.5
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.03.19",
+"text": "Hochbordstein aus Beton bis 100 cm x 30 cm x 15 cm liefern und verlegen",
+"einheit": "m",
+"vk_aktuell": 70.2,
+"vk_ziel": 67.6
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.03.20",
+"text": "Frostschutzschicht liefern und einbauen",
+"einheit": "m²",
+"vk_aktuell": 8.78,
+"vk_ziel": 8.45
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.04.01",
+"text": "Fundamente für DC-Ladestationen herstellen aus Ortbeton in Baugrube herstellen.",
+"einheit": "Stk.",
+"vk_aktuell": 391.5,
+"vk_ziel": 377.0
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.04.02",
+"text": "Baugrube für Fertigteilfundament Ladesäule herstellen.",
+"einheit": "Stk.",
+"vk_aktuell": 195.75,
+"vk_ziel": 188.5
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.04.03",
+"text": "Fertigteilfundament der Ladesäule in zuvor hergestellte Baugrube setzen.Fundamentgewicht bis 250 kg.",
+"einheit": "Stk.",
+"vk_aktuell": 195.75,
+"vk_ziel": 188.5
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.04.04",
+"text": "Fertigteilfundament der Ladesäule in zuvor hergestellte Baugrube setzen.Fundamentgewicht bis 500 kg.",
+"einheit": "Stk.",
+"vk_aktuell": 249.75,
+"vk_ziel": 240.5
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.04.05",
+"text": "Fertigteilfundament der Ladesäule in zuvor hergestellte Baugrube setzen.Fundamentgewicht bis 1000 kg",
+"einheit": "Stk.",
+"vk_aktuell": 337.5,
+"vk_ziel": 325.0
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.05.01",
+"text": "Fundamente für DC Power-Station herstellen",
+"einheit": "Stk.",
+"vk_aktuell": 405.0,
+"vk_ziel": 390.0
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.05.02",
+"text": "Streifenfundamente für Sockel UV oder Wandlerschrank herstellen",
+"einheit": "Stk.",
+"vk_aktuell": 607.5,
+"vk_ziel": 585.0
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.05.03",
+"text": "Baugrube für Sockel UV, Wandlerschrank oder DC Power-Station herstellen",
+"einheit": "Stk.",
+"vk_aktuell": 513.0,
+"vk_ziel": 494.0
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.05.04",
+"text": "Sockel UV, Wandlerschrank oder DC Power-Station auf Planum setzen, bis 500kG.",
+"einheit": "Stk.",
+"vk_aktuell": 445.5,
+"vk_ziel": 429.0
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.05.05",
+"text": "Sockel UV, Wandlerschrank oder DC Power-Station auf Planum setzen, >500kG.",
+"einheit": "Stk.",
+"vk_aktuell": 472.5,
+"vk_ziel": 455.0
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.06.01",
+"text": "Baugrube herstellen für Trafostation.",
+"einheit": "m²",
+"vk_aktuell": 243.0,
+"vk_ziel": 234.0
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.06.02",
+"text": "Herstellen der Trag- und Ausgleichsschicht in der Trafogrube herstellen. Planum für das Setzen der T",
+"einheit": "m²",
+"vk_aktuell": 74.25,
+"vk_ziel": 71.5
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.07.01",
+"text": "Baustelleneinrichtung Vortrieb",
+"einheit": "pschl",
+"vk_aktuell": 540.0,
+"vk_ziel": 520.0
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.07.02",
+"text": "Start- und Zielgrube herstellen",
+"einheit": "pschl.",
+"vk_aktuell": 270.0,
+"vk_ziel": 260.0
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.07.03",
+"text": "Verlegung im Bodenverdrängungsverfahren (Erdrakete)",
+"einheit": "m",
+"vk_aktuell": 114.75,
+"vk_ziel": 110.5
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.07.04",
+"text": "Kabel einziehen",
+"einheit": "m",
+"vk_aktuell": 8.1,
+"vk_ziel": 7.8
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.08.01",
+"text": "Baustelleneinrichtung Rohrpressarbeiten Entfernung bis 350 km",
+"einheit": "pschl.",
+"vk_aktuell": 1957.5,
+"vk_ziel": 1885.0
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.08.02",
+"text": "Start- und Zielgrube herstellen",
+"einheit": "pschl.",
+"vk_aktuell": 472.5,
+"vk_ziel": 455.0
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.08.03",
+"text": "Rohrpressung",
+"einheit": "m",
+"vk_aktuell": 1282.5,
+"vk_ziel": 1235.0
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.08.04",
+"text": "Stillstand",
+"einheit": "d",
+"vk_aktuell": 1282.5,
+"vk_ziel": 1235.0
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.09.01",
+"text": "Dynamische Druckplattenversuche ausführen, dokumentieren und den AG übergeben",
+"einheit": "Stk.",
+"vk_aktuell": 337.5,
+"vk_ziel": 325.0
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.09.02",
+"text": "Schadstoffanalyse Bodenaushub/Bauschutt/Beton",
+"einheit": "Stk.",
+"vk_aktuell": 1147.5,
+"vk_ziel": 1105.0
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.09.03",
+"text": "Schilderfundament/Leuchtmastfundament setzten",
+"einheit": "Stk.",
+"vk_aktuell": 249.75,
+"vk_ziel": 240.5
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.09.04",
+"text": "Pfosten für Beschilderung liefern und montieren",
+"einheit": "Stk.",
+"vk_aktuell": 182.25,
+"vk_ziel": 175.5
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.09.05",
+"text": "Schild Elektrische Fahrzeuge 1010-66 liefern und montieren",
+"einheit": "Stk.",
+"vk_aktuell": 182.25,
+"vk_ziel": 175.5
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.09.06",
+"text": "Schild Parken mit Parkscheibe in gekennzeichneten Flächen 2 Stunden Nr. 1040-33 liefern und montiere",
+"einheit": "Stk.",
+"vk_aktuell": 182.25,
+"vk_ziel": 175.5
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.09.07",
+"text": "Schild Durchfahrt Verboten Nr. 250 liefern und montieren",
+"einheit": "Stk.",
+"vk_aktuell": 182.25,
+"vk_ziel": 175.5
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.09.08",
+"text": "Schild Vorfahrt gewähren Nr. 205 liefern und montieren",
+"einheit": "Stk.",
+"vk_aktuell": 182.25,
+"vk_ziel": 175.5
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.09.09",
+"text": "Schild Parkplatz 314-10/20 liefern und montieren",
+"einheit": "Stk.",
+"vk_aktuell": 182.25,
+"vk_ziel": 175.5
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.09.10",
+"text": "Schild elektrische Fahrzeuge frei Nr. 1024-20 liefern und montieren",
+"einheit": "Stk.",
+"vk_aktuell": 182.25,
+"vk_ziel": 175.5
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.09.11",
+"text": "Schild Verkehrzeichen Nr.598 Verbot Höhe liefern und montieren.",
+"einheit": "Stk.",
+"vk_aktuell": 182.25,
+"vk_ziel": 175.5
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.09.12",
+"text": "Rammschutzpoller D=76mm liefern und auf der Baustelle lagern. Farbgebung wählbar ausgelb / schwarzwe",
+"einheit": "Stk.",
+"vk_aktuell": 101.25,
+"vk_ziel": 97.5
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.09.13",
+"text": "Rammschutzpoller D=76mm montieren.",
+"einheit": "Stk.",
+"vk_aktuell": 182.25,
+"vk_ziel": 175.5
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.09.14",
+"text": "Rammschutzpoller D=159mm liefern und auf der Baustelle lagern. Farbgebung wählbar ausgelb / schwarzw",
+"einheit": "Stk.",
+"vk_aktuell": 135.0,
+"vk_ziel": 130.0
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.09.15",
+"text": "Rammschutzpoller D=159mm montieren.",
+"einheit": "Stk.",
+"vk_aktuell": 195.75,
+"vk_ziel": 188.5
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.09.16",
+"text": "Herstellung von Fahrbahnmarkierung als Oberflächenbeschichtung bestehend aus:Parkflächenkennzeichnun",
+"einheit": "m",
+"vk_aktuell": 162.0,
+"vk_ziel": 156.0
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.09.17",
+"text": "Herstellung von Fahrbahnmarkierung als Oberflächenbeschichtung bestehend aus:Parkflächenkennzeichnun",
+"einheit": "Stk.",
+"vk_aktuell": 189.0,
+"vk_ziel": 182.0
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.09.18",
+"text": "Miete Bagger",
+"einheit": "Stk.",
+"vk_aktuell": 168.75,
+"vk_ziel": 162.5
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.09.19",
+"text": "Miete Radlader",
+"einheit": "Stk.",
+"vk_aktuell": 168.75,
+"vk_ziel": 162.5
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.09.20",
+"text": "Fahrer Bagger od. Radlader",
+"einheit": "Std.",
+"vk_aktuell": 114.75,
+"vk_ziel": 110.5
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.10.01",
+"text": "Entsorgung Bodenmaterial, Kleinstmenge bis 3m³",
+"einheit": "m³",
+"vk_aktuell": 337.5,
+"vk_ziel": 325.0
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.10.02",
+"text": "Entsorgung Bauschutt, Kleinstmenge bis 3m³",
+"einheit": "m³",
+"vk_aktuell": 391.5,
+"vk_ziel": 377.0
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.10.03",
+"text": "Entsorgung Bodenmaterial",
+"einheit": "to",
+"vk_aktuell": 114.75,
+"vk_ziel": 110.5
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.10.04",
+"text": "Entsorgung Grüngut",
+"einheit": "to",
+"vk_aktuell": 155.25,
+"vk_ziel": 149.5
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.10.05",
+"text": "Entsorgung Asphalt",
+"einheit": "to",
+"vk_aktuell": 101.25,
+"vk_ziel": 97.5
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.10.06",
+"text": "Bodenprobe",
+"einheit": "Stk.",
+"vk_aktuell": 607.5,
+"vk_ziel": 585.0
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.10.07",
+"text": "Zulage Entsorgung Bodenmaterial Klasse BM-0 L/S; BM-0T; BM-0",
+"einheit": "to",
+"vk_aktuell": 81.0,
+"vk_ziel": 78.0
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.10.08",
+"text": "Zulage Entsorgung Bodenmaterial Klasse BM-F0",
+"einheit": "to",
+"vk_aktuell": 40.5,
+"vk_ziel": 39.0
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.10.09",
+"text": "Zulage Entsorgung Bodenmaterial Klasse BM-F1",
+"einheit": "to",
+"vk_aktuell": 43.2,
+"vk_ziel": 41.6
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.10.10",
+"text": "Zulage Entsorgung Bodenmaterial Klasse BM-F2",
+"einheit": "to",
+"vk_aktuell": 47.25,
+"vk_ziel": 45.5
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.10.11",
+"text": "Zulage Entsorgung Bodenmaterial Klasse BM-F3",
+"einheit": "to",
+"vk_aktuell": 47.25,
+"vk_ziel": 45.5
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.10.12",
+"text": "Zulage Entsorgung Bodenmaterial Klasse DK 0",
+"einheit": "to",
+"vk_aktuell": 47.25,
+"vk_ziel": 45.5
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.10.13",
+"text": "Zulage Entsorgung Bodenmaterial Klasse DK 1",
+"einheit": "to",
+"vk_aktuell": 47.25,
+"vk_ziel": 45.5
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.10.14",
+"text": "Zulage Entsorgung Bodenmaterial Klasse DK 2",
+"einheit": "to",
+"vk_aktuell": 54.0,
+"vk_ziel": 52.0
+},
+{
+"gewerk": "Tiefbau",
+"pos": "7.10.15",
+"text": "Zulage Entsorgung Bodenmaterial Klasse DK 3",
+"einheit": "to",
+"vk_aktuell": 81.0,
+"vk_ziel": 78.0
+},
+{
+"gewerk": "Tiefbau",
+"pos": "Quelle: Preise_StandardLVTiefbau_aktuell.xlsx, Blatt \"Kalkulation\". EK je Position = VK aktuell / 1,35 (siehe Kalkulationsregeln).",
+"text": "",
+"einheit": "",
+"vk_aktuell": null,
+"vk_ziel": null
+}
+]

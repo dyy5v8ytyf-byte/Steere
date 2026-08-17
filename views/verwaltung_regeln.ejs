@@ -1,0 +1,172 @@
+<%- include('partials/kopf') %>
+<div class="seitenkopf">
+  <div><h1>Regeln</h1>
+    <div class="unter">Womit die Anwendung nachfragt und wie aus Mengen Material wird</div></div>
+  <a class="knopf leer" href="/verwaltung">Zurück</a>
+</div>
+
+<div class="kasten" style="margin-bottom:18px">
+  <b>Warum das hier steht und nicht im Programmcode.</b> Was bei einer Begehung gefragt werden muss, ändert sich mit
+  jedem Objekttyp und mit jeder Erfahrung. Solange diese Regeln Datensätze sind, kann sie jemand aus dem Team am
+  Abend nach einer Baustelle ergänzen. Stünden sie im Code, bräuchte es dafür einen Entwickler und eine neue Version.
+</div>
+
+<!-- ================= PRÜFREGELN ================= -->
+<div class="karte" id="pruef">
+  <h2>Rückfragen bei der Begehung</h2><div class="marke-strich"></div>
+  <div class="hinweis-klein" style="margin-bottom:12px">
+    Eine <b>strenge</b> Regel blockiert die Freigabe der Begehung. Alles andere ist ein Hinweis, der beantwortet oder begründet werden kann.
+  </div>
+  <div class="tab-scroll"><table>
+    <thead><tr><th style="width:44px">Nr.</th><th>Frage</th><th>Prüfung</th><th>gilt</th><th></th></tr></thead>
+    <tbody><% pruefregeln.forEach(function(p){ %>
+      <tr<%= p.aktiv ? '' : ' style="opacity:.45"' %>>
+        <td class="mono" style="font-size:12px"><%= p.reihenfolge %></td>
+        <td><b><%= p.name %></b>
+          <% if (p.streng) { %> <span class="pille rot">Freigabebedingung</span><% } %>
+          <br><span style="font-size:12px"><%= p.frage %></span>
+          <% if (p.warum) { %><br><span style="font-size:11px;color:var(--ink3)"><%= p.warum %></span><% } %></td>
+        <td style="font-size:12px"><%= p.pruefart %><% if (p.parameter) { %><br><span class="mono" style="font-size:11px;color:var(--ink3)"><%= p.parameter %></span><% } %>
+          <% if (p.vergleich != null) { %><br><span style="font-size:11px;color:var(--ink3)">≥ <%= p.vergleich %></span><% } %></td>
+        <td><span class="pille"><%= p.gilt_fuer_art || 'immer' %></span></td>
+        <td class="z">
+          <details class="block" style="margin:0;border:none;background:none"><summary style="padding:3px 0">ändern</summary>
+            <div class="inhalt" style="padding:8px 0 0;min-width:340px;text-align:left">
+              <form method="post" action="/verwaltung/regeln/pruef/<%= p.id %>">
+                <div class="felder2">
+                  <div class="feld"><label>Kurzname</label><input type="text" name="name" value="<%= p.name %>"></div>
+                  <div class="feld"><label>Reihenfolge</label><input type="text" name="reihenfolge" value="<%= p.reihenfolge %>"></div>
+                </div>
+                <div class="feld"><label>Frage</label><input type="text" name="frage" value="<%= p.frage %>"></div>
+                <div class="feld"><label>Warum das wichtig ist</label><textarea name="warum" rows="2"><%= p.warum || '' %></textarea></div>
+                <div class="felder3">
+                  <div class="feld"><label>Prüfart</label><select name="pruefart">
+                    <% PRUEFARTEN.forEach(function(a){ %><option value="<%= a[0] %>" <%= p.pruefart === a[0] ? 'selected' : '' %>><%= a[1] %></option><% }) %></select></div>
+                  <div class="feld"><label>Parameter</label><input type="text" name="parameter" value="<%= p.parameter || '' %>" list="felderliste"></div>
+                  <div class="feld"><label>Vergleichswert</label><input type="text" name="vergleich" value="<%= p.vergleich == null ? '' : p.vergleich %>"></div>
+                </div>
+                <div class="feld"><label>Gilt für Art</label><select name="gilt_fuer_art">
+                  <option value="">immer</option>
+                  <option value="AC" <%= p.gilt_fuer_art === 'AC' ? 'selected' : '' %>>nur AC</option>
+                  <option value="DC" <%= p.gilt_fuer_art === 'DC' ? 'selected' : '' %>>nur DC</option></select></div>
+                <div class="haken"><input type="checkbox" id="s<%= p.id %>" name="streng" <%= p.streng ? 'checked' : '' %>><label for="s<%= p.id %>">Blockiert die Freigabe</label></div>
+                <div class="reihe">
+                  <button class="knopf leer mini" type="submit">Speichern</button>
+                  <button class="knopf leer mini" type="submit" name="umschalten" value="1"><%= p.aktiv ? 'Stilllegen' : 'Aktivieren' %></button>
+                </div>
+              </form>
+            </div>
+          </details>
+        </td>
+      </tr>
+    <% }) %></tbody></table></div>
+
+  <details class="block">
+    <summary>Rückfrage ergänzen</summary>
+    <div class="inhalt">
+      <form method="post" action="/verwaltung/regeln/pruef">
+        <div class="felder2">
+          <div class="feld"><label>Kurzname</label><input type="text" name="name" placeholder="z. B. Deckenhöhe"></div>
+          <div class="feld"><label>Reihenfolge</label><input type="text" name="reihenfolge" value="200"></div>
+        </div>
+        <div class="feld"><label>Frage *</label><input type="text" name="frage" required placeholder="Wie hoch ist die lichte Höhe unter der Decke?"></div>
+        <div class="feld"><label>Warum das wichtig ist</label><textarea name="warum" rows="2" placeholder="Der Satz, den derjenige liest, der die Frage beantworten soll."></textarea></div>
+        <div class="felder3">
+          <div class="feld"><label>Prüfart</label><select name="pruefart">
+            <% PRUEFARTEN.forEach(function(a){ %><option value="<%= a[0] %>"><%= a[1] %></option><% }) %></select></div>
+          <div class="feld"><label>Parameter</label><input type="text" name="parameter" list="felderliste" placeholder="Feldname / Titel / Abschnittstyp"></div>
+          <div class="feld"><label>Vergleichswert</label><input type="text" name="vergleich"></div>
+        </div>
+        <div class="feld"><label>Gilt für Art</label><select name="gilt_fuer_art">
+          <option value="">immer</option><option value="AC">nur AC</option><option value="DC">nur DC</option></select></div>
+        <div class="haken"><input type="checkbox" id="sneu" name="streng"><label for="sneu">Blockiert die Freigabe</label></div>
+        <button class="knopf mini" type="submit">Anlegen</button>
+      </form>
+      <datalist id="felderliste"><% FELDER.forEach(function(f){ %><option value="<%= f %>"><% }) %></datalist>
+    </div>
+  </details>
+</div>
+
+<!-- ================= STÜCKLISTE ================= -->
+<div class="karte" id="stueck">
+  <h2>Stücklistenregeln</h2><div class="marke-strich"></div>
+  <div class="hinweis-klein" style="margin-bottom:12px">
+    Menge = Bezugswert × Faktor, danach Verschnittzuschlag, danach ggf. aufrunden.
+    Die Rechnung steht später bei jeder Zeile der Stückliste — nachprüfbar statt geraten.
+  </div>
+  <div class="tab-scroll"><table>
+    <thead><tr><th>Artikel</th><th>Gruppe</th><th>Bezug</th><th class="z">Faktor</th><th class="z">Verschnitt</th><th>gilt</th><th></th></tr></thead>
+    <tbody><% slregeln.forEach(function(s){ %>
+      <tr<%= s.aktiv ? '' : ' style="opacity:.45"' %>>
+        <td><b><%= s.artikel %></b> <span style="color:var(--ink3)">/ <%= s.einheit %></span>
+          <% if (s.beschreibung) { %><br><span style="font-size:11px;color:var(--ink3)"><%= s.beschreibung %></span><% } %></td>
+        <td><span class="pille"><%= s.gruppe %></span></td>
+        <td style="font-size:12px"><%= s.bezug %><% if (s.parameter) { %><br><span style="font-size:11px;color:var(--ink3)"><%= s.parameter %></span><% } %></td>
+        <td class="z"><%= s.faktor %></td>
+        <td class="z"><%= s.verschnitt_pct %> %</td>
+        <td><span class="pille"><%= s.gilt_fuer_art || 'immer' %></span></td>
+        <td class="z">
+          <details class="block" style="margin:0;border:none;background:none"><summary style="padding:3px 0">ändern</summary>
+            <div class="inhalt" style="padding:8px 0 0;min-width:340px;text-align:left">
+              <form method="post" action="/verwaltung/regeln/stueck/<%= s.id %>">
+                <div class="felder3">
+                  <div class="feld"><label>Gruppe</label><input type="text" name="gruppe" value="<%= s.gruppe %>"></div>
+                  <div class="feld"><label>Einheit</label><input type="text" name="einheit" value="<%= s.einheit %>"></div>
+                  <div class="feld"><label>Reihenfolge</label><input type="text" name="reihenfolge" value="<%= s.reihenfolge %>"></div>
+                </div>
+                <div class="feld"><label>Artikel</label><input type="text" name="artikel" value="<%= s.artikel %>"></div>
+                <div class="feld"><label>Beschreibung</label><input type="text" name="beschreibung" value="<%= s.beschreibung || '' %>"></div>
+                <div class="felder3">
+                  <div class="feld"><label>Bezug</label><select name="bezug">
+                    <% BEZUEGE.forEach(function(bz){ %><option value="<%= bz %>" <%= s.bezug === bz ? 'selected' : '' %>><%= bz %></option><% }) %></select></div>
+                  <div class="feld"><label>Faktor</label><input type="text" name="faktor" value="<%= s.faktor %>"></div>
+                  <div class="feld"><label>Verschnitt %</label><input type="text" name="verschnitt_pct" value="<%= s.verschnitt_pct %>"></div>
+                </div>
+                <div class="felder2">
+                  <div class="feld"><label>Parameter (bei Bezug „abschnitt_typ")</label><input type="text" name="parameter" value="<%= s.parameter || '' %>"></div>
+                  <div class="feld"><label>Gilt für Art</label><select name="gilt_fuer_art">
+                    <option value="">immer</option>
+                    <option value="AC" <%= s.gilt_fuer_art === 'AC' ? 'selected' : '' %>>nur AC</option>
+                    <option value="DC" <%= s.gilt_fuer_art === 'DC' ? 'selected' : '' %>>nur DC</option></select></div>
+                </div>
+                <div class="haken"><input type="checkbox" id="a<%= s.id %>" name="aufrunden" <%= s.aufrunden ? 'checked' : '' %>><label for="a<%= s.id %>">Auf ganze Einheiten aufrunden</label></div>
+                <div class="reihe">
+                  <button class="knopf leer mini" type="submit">Speichern</button>
+                  <button class="knopf leer mini" type="submit" name="umschalten" value="1"><%= s.aktiv ? 'Stilllegen' : 'Aktivieren' %></button>
+                </div>
+              </form>
+            </div>
+          </details>
+        </td>
+      </tr>
+    <% }) %></tbody></table></div>
+
+  <details class="block">
+    <summary>Stücklistenregel ergänzen</summary>
+    <div class="inhalt">
+      <form method="post" action="/verwaltung/regeln/stueck">
+        <div class="felder3">
+          <div class="feld"><label>Gruppe</label><input type="text" name="gruppe" value="Elektro"></div>
+          <div class="feld"><label>Einheit</label><input type="text" name="einheit" value="Stk."></div>
+          <div class="feld"><label>Reihenfolge</label><input type="text" name="reihenfolge" value="300"></div>
+        </div>
+        <div class="feld"><label>Artikel *</label><input type="text" name="artikel" required></div>
+        <div class="feld"><label>Beschreibung</label><input type="text" name="beschreibung"></div>
+        <div class="felder3">
+          <div class="feld"><label>Bezug</label><select name="bezug">
+            <% BEZUEGE.forEach(function(bz){ %><option value="<%= bz %>"><%= bz %></option><% }) %></select></div>
+          <div class="feld"><label>Faktor</label><input type="text" name="faktor" value="1"></div>
+          <div class="feld"><label>Verschnitt %</label><input type="text" name="verschnitt_pct" value="0"></div>
+        </div>
+        <div class="felder2">
+          <div class="feld"><label>Parameter</label><input type="text" name="parameter"></div>
+          <div class="feld"><label>Gilt für Art</label><select name="gilt_fuer_art">
+            <option value="">immer</option><option value="AC">nur AC</option><option value="DC">nur DC</option></select></div>
+        </div>
+        <div class="haken"><input type="checkbox" id="aneu" name="aufrunden" checked><label for="aneu">Auf ganze Einheiten aufrunden</label></div>
+        <button class="knopf mini" type="submit">Anlegen</button>
+      </form>
+    </div>
+  </details>
+</div>
+<%- include('partials/fuss') %>

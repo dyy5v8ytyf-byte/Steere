@@ -1,30 +1,53 @@
-<%- include('partials/head', { title: 'Neuer Kunde' }) %>
+<%- include('partials/kopf') %>
+<div class="seitenkopf"><div><h1>Neuer Kunde</h1><div class="unter">Erstes Projekt und Ansprechpartner können gleich mit angelegt werden.</div></div></div>
+<form method="post" action="/kunden/neu">
+<div class="spalten s2">
+  <div class="karte">
+    <h2>Firma</h2><div class="marke-strich"></div>
+    <div class="feld"><label>Firma *</label><input type="text" name="firma" required autofocus></div>
+    <div class="felder2">
+      <div class="feld"><label>Branche</label><input type="text" name="branche"></div>
+      <div class="feld"><label>Quelle</label><input type="text" name="quelle" placeholder="Messe, Empfehlung, LinkedIn"></div>
+    </div>
+    <div class="feld"><label>Adresse</label><input type="text" name="adresse"></div>
+    <div class="feld"><label>Website</label><input type="text" name="website"></div>
+    <div class="feld"><label>Notiz</label><textarea name="notiz"></textarea></div>
+    <% felder.forEach(function(f){ %>
+      <div class="feld"><label><%= f.bezeichnung %></label>
+      <% if (f.typ === 'auswahl') { %>
+        <select name="feld_<%= f.id %>"><option value=""></option>
+        <% (f.optionen||'').split(',').map(function(s){return s.trim()}).filter(Boolean).forEach(function(o){ %><option><%= o %></option><% }) %></select>
+      <% } else { %>
+        <input type="<%= f.typ === 'zahl' ? 'number' : f.typ === 'datum' ? 'date' : 'text' %>" name="feld_<%= f.id %>" step="any">
+      <% } %></div>
+    <% }) %>
+  </div>
 
-<h1>Neuer Kunde</h1>
-
-<form method="post" action="/kunden" class="card">
-  <div class="grid-form">
-    <div><label>Firma *</label><input type="text" name="firma" required></div>
-    <div><label>Branche</label><input type="text" name="branche"></div>
-    <div><label>Adresse</label><input type="text" name="adresse"></div>
-    <div><label>Website</label><input type="text" name="website"></div>
-    <div><label>Lead-Quelle</label><input type="text" name="quelle" placeholder="z.B. Messe, LinkedIn, Empfehlung"></div>
-    <div><label>Ansprechpartner Name</label><input type="text" name="ap1_name"></div>
-    <div><label>Ansprechpartner Kontakt (Tel/E-Mail)</label><input type="text" name="ap1_kontakt"></div>
-    <div>
-      <label>Projektmanager</label>
-      <select name="projektmanager_id">
-        <option value="">– noch offen –</option>
-        <% employees.forEach(function(e) { %><option value="<%= e.id %>"><%= e.name %> (<%= e.role %>)</option><% }) %>
-      </select>
+  <div>
+    <div class="karte">
+      <h2>Ansprechpartner</h2><div class="marke-strich"></div>
+      <div class="feld"><label>Name</label><input type="text" name="ap_name"></div>
+      <div class="felder2">
+        <div class="feld"><label>Telefon</label><input type="text" name="ap_telefon"></div>
+        <div class="feld"><label>E-Mail</label><input type="text" name="ap_email"></div>
+      </div>
+      <div class="feld"><label>Funktion</label><input type="text" name="ap_rolle"></div>
+    </div>
+    <div class="karte">
+      <h2>Erstes Projekt</h2><div class="marke-strich"></div>
+      <div class="feld"><label>Bezeichnung</label><input type="text" name="projekt_bezeichnung"></div>
+      <div class="feld"><label>Beschreibung</label><textarea name="projekt_beschreibung"></textarea></div>
+      <div class="felder3">
+        <div class="feld"><label>Phase</label><select name="projekt_phase"><% phasen.forEach(function(p){ %><option><%= p %></option><% }) %></select></div>
+        <div class="feld"><label>Gewerk</label><select name="gewerk"><option value=""></option><option>AC</option><option>DC</option><option>AC+DC</option></select></div>
+        <div class="feld"><label>Potenzial</label><select name="potential"><option value="">—</option><option value="1">1 heiß</option><option value="2">2 mittel</option><option value="3">3 beobachten</option></select></div>
+      </div>
     </div>
   </div>
-  <div style="margin-top:10px;">
-    <label>Projektbeschreibung (mögliches Projekt)</label>
-    <textarea name="projekt_beschreibung" rows="3" style="width:100%;"></textarea>
-  </div>
-  <p class="muted">Startet automatisch in Phase "Terminanfrage".</p>
-  <button type="submit">Anlegen</button>
+</div>
+<div style="margin-top:18px" class="reihe">
+  <button class="knopf" type="submit">Kunde anlegen</button>
+  <a class="knopf leer" href="/kunden">Abbrechen</a>
+</div>
 </form>
-
-<%- include('partials/foot') %>
+<%- include('partials/fuss') %>

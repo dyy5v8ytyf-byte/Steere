@@ -1,0 +1,38 @@
+<%- include('partials/kopf') %>
+<div class="seitenkopf">
+  <div><h1>Aufgaben</h1><div class="unter"><%= aufgaben.filter(function(a){return !a.erledigt}).length %> offen</div></div>
+  <div class="reihe">
+    <a class="knopf leer" href="/aufgaben<%= zeigeErledigte ? '' : '?alle=1' %>"><%= zeigeErledigte ? 'Nur offene' : 'Auch erledigte' %></a>
+  </div>
+</div>
+
+<div class="karte">
+  <h2>Neue Aufgabe</h2><div class="marke-strich"></div>
+  <form method="post" action="/aufgaben/neu">
+    <div class="felder3">
+      <div class="feld"><label>Aufgabe</label><input type="text" name="text" required></div>
+      <div class="feld"><label>Fällig am</label><input type="date" name="faellig_am"></div>
+      <div class="feld"><label>Zuständig</label><select name="mitarbeiter_id"><option value="">—</option><% mitarbeiter.forEach(function(m){ %><option value="<%= m.id %>"><%= m.name %></option><% }) %></select></div>
+    </div>
+    <button class="knopf mini" type="submit">Anlegen</button>
+  </form>
+</div>
+
+<div class="karte">
+  <% if (!aufgaben.length) { %><div class="leer-hinweis">Nichts vorhanden.</div><% } else { %>
+  <div class="tab-scroll"><table>
+    <thead><tr><th></th><th>Aufgabe</th><th>Kunde / Projekt</th><th>Zuständig</th><th>Fällig</th><th>Status</th></tr></thead>
+    <tbody><% aufgaben.forEach(function(a){ %>
+      <tr style="<%= a.erledigt ? 'opacity:.5' : '' %>">
+        <td><form method="post" action="/aufgaben/<%= a.id %>"><input type="hidden" name="umschalten" value="1">
+          <button class="knopf leer mini" type="submit"><%= a.erledigt ? '↺' : '✓' %></button></form></td>
+        <td><b><%= a.text %></b><% if (a.notiz) { %><br><span style="font-size:12px;color:var(--ink3)"><%= a.notiz %></span><% } %></td>
+        <td><% if (a.kunde_id) { %><a href="/kunden/<%= a.kunde_id %>"><%= a.firma %></a><% } else { %>—<% } %><% if (a.bezeichnung) { %><br><span style="font-size:12px;color:var(--ink3)"><%= a.bezeichnung %></span><% } %></td>
+        <td><%= a.mitarbeiter || '—' %></td>
+        <td class="<%= faellig(a.faellig_am, a.erledigt) %>"><%= datum(a.faellig_am) %></td>
+        <td><span class="pille <%= a.status === 'erledigt' ? 'ok' : a.status === 'in Arbeit' ? 'akz' : '' %>"><%= a.status %></span></td>
+      </tr>
+    <% }) %></tbody></table></div>
+  <% } %>
+</div>
+<%- include('partials/fuss') %>

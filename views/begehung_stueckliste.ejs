@@ -1,0 +1,66 @@
+<%- include('partials/kopf') %>
+<div class="seitenkopf">
+  <div><h1>Stückliste <%= begehung.nummer %></h1>
+    <div class="unter"><%= begehung.objekt %><%= begehung.firma ? ' · ' + begehung.firma : '' %></div></div>
+  <div class="reihe">
+    <a class="knopf leer" href="/begehungen/<%= begehung.id %>">Zurück zur Begehung</a>
+    <button class="knopf leer nicht-drucken" type="button" onclick="window.print()">Drucken</button>
+  </div>
+</div>
+
+<div class="karte">
+  <h2>Grundlage</h2><div class="marke-strich"></div>
+  <div class="hinweis-klein" style="margin-bottom:12px">
+    Alles darunter ist aus diesen vier Zahlen gerechnet. Stimmt hier etwas nicht, stimmt die ganze Liste nicht —
+    deshalb steht die Rechnung bei jeder Zeile dabei.
+  </div>
+  <div class="spalten s4">
+    <div class="kz"><div class="n"><%= zahl(liste.grundlage.trassenlaenge) %> m</div><div class="t">Trasse gesamt</div></div>
+    <div class="kz"><div class="n"><%= zahl(liste.grundlage.stellplaetze_ausbau) %></div><div class="t">Stellplätze im Ausbau</div></div>
+    <div class="kz"><div class="n"><%= zahl(liste.grundlage.ladepunkte_ac) %></div><div class="t">Ladepunkte AC</div></div>
+    <div class="kz"><div class="n"><%= zahl(liste.grundlage.ladepunkte_dc) %></div><div class="t">Ladepunkte DC</div></div>
+  </div>
+  <% if (!liste.grundlage.trassenlaenge) { %>
+    <div class="melde warn" style="margin-top:14px">
+      <b>Keine Trassenlänge erfasst.</b> Alle längenabhängigen Zeilen fehlen dadurch. Die Längen stehen im Strompfad je Abschnitt.
+    </div>
+  <% } %>
+</div>
+
+<form method="post" action="/begehungen/<%= begehung.id %>/stueckliste/uebernehmen">
+<% if (!liste.gruppen.length) { %>
+  <div class="karte"><div class="leer-hinweis">Aus den vorhandenen Mengen lässt sich noch nichts ableiten.</div></div>
+<% } %>
+
+<% liste.gruppen.forEach(function(g){ %>
+  <div class="karte">
+    <h2><%= g.name %></h2><div class="marke-strich"></div>
+    <div class="tab-scroll"><table>
+      <thead><tr><th style="width:34px" class="nicht-drucken"></th><th>Artikel</th><th class="z">Menge</th><th>ME</th><th>Rechenweg</th></tr></thead>
+      <tbody><% g.zeilen.forEach(function(z){ %>
+        <tr>
+          <td class="nicht-drucken"><input type="checkbox" name="regel_id" value="<%= z.regel_id %>" checked style="width:16px;height:16px;accent-color:var(--brass)"></td>
+          <td><b><%= z.artikel %></b>
+            <% if (z.beschreibung) { %><br><span style="font-size:11.5px;color:var(--ink3)"><%= z.beschreibung %></span><% } %></td>
+          <td class="z" style="font-variant-numeric:tabular-nums"><%= zahl(z.menge) %></td>
+          <td><%= z.einheit %></td>
+          <td style="font-size:11.5px;color:var(--ink3)"><%= z.rechnung %></td>
+        </tr>
+      <% }) %></tbody></table></div>
+  </div>
+<% }) %>
+
+<% if (liste.gruppen.length) { %>
+<div class="karte nicht-drucken">
+  <div class="reihe">
+    <button class="knopf" type="submit">Ausgewählte als Feststellungen übernehmen</button>
+  </div>
+  <div class="kasten" style="margin-top:12px">
+    Die Übernahme schreibt die Zeilen als Feststellungen in die Begehung — mit Menge, Einheit und Rechenweg als Bemerkung.
+    Preise entstehen dabei keine; die werden im Angebot gesetzt.
+    Die Umrechnungsfaktoren stehen in der Verwaltung unter <b>Stücklistenregeln</b> und lassen sich dort ändern.
+  </div>
+</div>
+<% } %>
+</form>
+<%- include('partials/fuss') %>

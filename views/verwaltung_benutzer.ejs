@@ -1,0 +1,47 @@
+<%- include('partials/kopf') %>
+<div class="seitenkopf"><div><h1>Benutzer</h1>
+  <div class="unter">admin = alles inkl. Verwaltung · team = alles außer Verwaltung · partner = nur freigegebene Projekte</div></div>
+  <a class="knopf leer" href="/verwaltung">Zurück</a></div>
+
+<% if (neuesPasswort) { %>
+<div class="melde warn">
+  <b>Startpasswort für <%= neuesPasswort.email %>:</b>
+  <code style="font-size:15px;letter-spacing:.5px;background:var(--bg3);padding:3px 8px;border-radius:3px"><%= neuesPasswort.passwort %></code><br>
+  Bitte jetzt notieren und persönlich weitergeben — es wird nicht erneut angezeigt. Beim ersten Login muss es geändert werden.
+</div>
+<% } %>
+
+<div class="spalten s21">
+  <div class="karte">
+    <div class="tab-scroll"><table>
+      <thead><tr><th>Name</th><th>E-Mail</th><th>Rolle</th><th>Organisation</th><th>Letzter Login</th><th>Aktiv</th><th></th></tr></thead>
+      <tbody><% liste.forEach(function(u){ %>
+        <tr><td colspan="7" style="padding:0">
+          <form method="post" action="/verwaltung/benutzer" style="display:grid;grid-template-columns:1.2fr 1.4fr .8fr 1fr .9fr auto auto auto;gap:8px;align-items:center;padding:9px 0">
+            <input type="hidden" name="id" value="<%= u.id %>">
+            <input type="text" name="name" value="<%= u.name %>">
+            <span style="font-size:12.5px;color:var(--ink3)"><%= u.email %></span>
+            <select name="rolle"><% ['admin','team','partner'].forEach(function(r){ %><option <%= u.rolle === r ? 'selected' : '' %>><%= r %></option><% }) %></select>
+            <select name="organisation_id"><option value="">—</option><% organisationen.forEach(function(o){ %><option value="<%= o.id %>" <%= u.org === o.name ? 'selected' : '' %>><%= o.name %></option><% }) %></select>
+            <span style="font-size:12px;color:var(--ink3)"><%= u.letzter_login ? datum(u.letzter_login) : 'nie' %><%= u.muss_wechseln ? ' · Startpasswort' : '' %></span>
+            <label style="margin:0;display:flex;gap:5px;align-items:center;text-transform:none;letter-spacing:0"><input type="checkbox" name="aktiv" <%= u.aktiv ? 'checked' : '' %> style="width:15px;height:15px;accent-color:var(--brass)"></label>
+            <button class="knopf leer mini" type="submit">✓</button>
+            <button class="knopf leer mini" type="submit" name="zuruecksetzen" value="<%= u.id %>" title="Passwort zurücksetzen">↺</button>
+          </form>
+        </td></tr>
+      <% }) %></tbody></table></div>
+  </div>
+
+  <div class="karte">
+    <h2>Benutzer anlegen</h2><div class="marke-strich"></div>
+    <form method="post" action="/verwaltung/benutzer">
+      <div class="feld"><label>Name</label><input type="text" name="name" required></div>
+      <div class="feld"><label>E-Mail</label><input type="email" name="email" required></div>
+      <div class="feld"><label>Rolle</label><select name="rolle"><option value="team">team</option><option value="admin">admin</option><option value="partner">partner</option></select></div>
+      <div class="feld"><label>Organisation</label><select name="organisation_id"><option value="">—</option><% organisationen.forEach(function(o){ %><option value="<%= o.id %>"><%= o.name %> (<%= o.art %>)</option><% }) %></select></div>
+      <div class="kasten" style="margin-bottom:14px">Bei Rolle <b>partner</b> unbedingt die Organisation setzen — daran hängt, welche Projekte sichtbar sind. Ohne Organisation sieht ein Partner nichts.</div>
+      <button class="knopf" type="submit">Anlegen</button>
+    </form>
+  </div>
+</div>
+<%- include('partials/fuss') %>

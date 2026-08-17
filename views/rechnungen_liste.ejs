@@ -1,0 +1,41 @@
+<%- include('partials/kopf') %>
+<div class="seitenkopf">
+  <div><h1>Rechnungen</h1><div class="unter">Entwürfe sind änderbar, festgeschriebene Rechnungen nicht mehr</div></div>
+  <a class="knopf" href="/rechnungen/neu">Neue Rechnung</a>
+</div>
+<div class="spalten s3">
+  <div class="kz"><div class="n akz"><%= eur(summen.offen) %></div><div class="t">offen</div></div>
+  <div class="kz"><div class="n <%= Number(summen.ueberfaellig)>0?'akz':'' %>"><%= eur(summen.ueberfaellig) %></div><div class="t">davon überfällig</div></div>
+  <div class="kz"><div class="n"><%= summen.entwuerfe %></div><div class="t">Entwürfe</div></div>
+</div>
+<div class="karte" style="margin-top:18px">
+  <div class="reihe">
+    <a class="knopf leer mini" href="/rechnungen">alle</a>
+    <a class="knopf leer mini" href="/rechnungen?f=entwurf">Entwürfe</a>
+    <a class="knopf leer mini" href="/rechnungen?f=offen">offen</a>
+    <a class="knopf leer mini" href="/rechnungen?f=ueberfaellig">überfällig</a>
+  </div>
+</div>
+<div class="karte">
+  <% if (!liste.length) { %><div class="leer-hinweis">Keine Rechnung.</div><% } else { %>
+  <div class="tab-scroll"><table>
+    <thead><tr><th>Nummer</th><th>Datum</th><th>Kunde</th><th>Betreff</th><th>Status</th><th class="z">Netto</th><th class="z">Brutto</th><th>Zahlung</th></tr></thead>
+    <tbody><% liste.forEach(function(r){ %>
+      <tr>
+        <td><a href="/rechnungen/<%= r.id %>"><b><%= r.nummer %></b></a><% if (r.art==='storno') { %><br><span class="pille rot">Storno</span><% } %></td>
+        <td><%= datum(r.datum) %></td>
+        <td><a href="/kunden/<%= r.kunde_id %>"><%= r.firma %></a></td>
+        <td><%= r.betreff || '—' %></td>
+        <td><% if (!r.festgeschrieben) { %><span class="pille">Entwurf</span>
+            <% } else if (r.storniert_durch) { %><span class="pille rot">storniert</span>
+            <% } else if (r.bezahlt_am) { %><span class="pille ok">bezahlt</span>
+            <% } else if (r.tage_ueberfaellig > 0) { %><span class="pille rot"><%= r.tage_ueberfaellig %> Tage über</span>
+            <% } else { %><span class="pille akz">offen</span><% } %></td>
+        <td class="z"><%= eur(r.netto) %></td>
+        <td class="z"><%= eur(r.brutto) %></td>
+        <td><%= r.bezahlt_am ? datum(r.bezahlt_am) : (r.faellig_am ? 'fällig ' + datum(r.faellig_am) : '—') %></td>
+      </tr>
+    <% }) %></tbody></table></div>
+  <% } %>
+</div>
+<%- include('partials/fuss') %>

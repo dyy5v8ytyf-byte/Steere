@@ -1,0 +1,61 @@
+<%- include('partials/kopf') %>
+<div class="seitenkopf">
+  <div><h1>Erfahrungswerte</h1>
+    <div class="unter">Was die Anwendung aus den eigenen beauftragten Angeboten gezählt hat</div></div>
+  <a class="knopf leer" href="/verwaltung">Zurück</a>
+</div>
+
+<div class="kasten" style="margin-bottom:18px">
+  <b>Das hier ist keine künstliche Intelligenz, sondern eine Strichliste.</b>
+  Jedes Mal, wenn ein Angebot auf <b>Beauftragt</b> gesetzt wird und aus einer Begehung stammt, wird für den
+  Objekttyp mitgezählt, welche Positionen darin standen. Vorgeschlagen wird eine Position erst,
+  wenn es mindestens <b><%= MINDESTBASIS %></b> vergleichbare Aufträge gibt und sie in mindestens
+  <b><%= Math.round(SCHWELLE * 100) %> %</b> davon vorkam. Jeder Vorschlag trägt seine Zahl mit sich —
+  „bei 7 von 8 vergleichbaren Objekten". Wer eine Zeile nicht nachvollziehen kann, entfernt sie hier.
+</div>
+
+<% if (!zaehler.length) { %>
+  <div class="karte"><div class="leer-hinweis">
+    Noch nichts gezählt. Das beginnt mit dem ersten Angebot, das aus einer Begehung entstanden und beauftragt worden ist.
+  </div></div>
+<% } else { %>
+
+<div class="karte">
+  <h2>Objekttypen</h2><div class="marke-strich"></div>
+  <div class="tab-scroll"><table>
+    <thead><tr><th>Merkmal</th><th class="z">beauftragte Objekte</th><th>zuletzt</th></tr></thead>
+    <tbody><% zaehler.forEach(function(z){ %>
+      <tr><td class="mono" style="font-size:12.5px"><%= z.merkmal %></td>
+        <td class="z"><%= z.gesamt %></td>
+        <td><%= datum(z.zuletzt_am) %></td></tr>
+    <% }) %></tbody></table></div>
+</div>
+
+<% gruppen.forEach(function(g){ %>
+  <div class="karte">
+    <h2 style="font-size:16px"><span class="mono"><%= g.merkmal %></span></h2>
+    <div class="hinweis-klein" style="margin-bottom:10px">Grundlage: <%= g.gesamt %> beauftragte(s) Objekt(e)</div>
+    <div class="tab-scroll"><table>
+      <thead><tr><th>Position</th><th>ME</th><th class="z">Treffer</th><th class="z">Anteil</th><th>Beispiel</th><th></th></tr></thead>
+      <tbody><% g.zeilen.forEach(function(z){
+        var anteil = g.gesamt ? z.treffer / g.gesamt : 0; %>
+        <tr<%= anteil >= SCHWELLE && g.gesamt >= MINDESTBASIS ? '' : ' style="opacity:.5"' %>>
+          <td><%= z.text %></td>
+          <td><%= z.einheit || '—' %></td>
+          <td class="z"><%= z.treffer %> / <%= g.gesamt %></td>
+          <td class="z"><%= Math.round(anteil * 100) %> %</td>
+          <td style="font-size:11.5px;color:var(--ink3)"><%= z.beispiel || '—' %></td>
+          <td class="z">
+            <form method="post" action="/verwaltung/erfahrungen/<%= z.id %>">
+              <button class="knopf gefahr mini" type="submit">Entfernen</button>
+            </form>
+          </td>
+        </tr>
+      <% }) %></tbody></table></div>
+    <div class="hinweis-klein" style="margin-top:8px">
+      Blass dargestellte Zeilen liegen unter der Schwelle und werden nicht vorgeschlagen.
+    </div>
+  </div>
+<% }) %>
+<% } %>
+<%- include('partials/fuss') %>

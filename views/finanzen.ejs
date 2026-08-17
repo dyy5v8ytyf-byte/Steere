@@ -1,0 +1,89 @@
+<%- include('partials/kopf') %>
+<div class="seitenkopf">
+  <div><h1>Finanzen</h1><div class="unter">Alle Werte aus dieser Datenbank — jede Zahl führt auf einen Beleg zurück</div></div>
+  <div class="reihe"><a class="knopf leer" href="/rechnungen?f=ueberfaellig">Überfällige</a><a class="knopf" href="/rechnungen/neu">Neue Rechnung</a></div>
+</div>
+
+<div class="spalten s4">
+  <div class="kz"><div class="n akz"><%= eur(k.umsatz_jahr) %></div><div class="t">Umsatz laufendes Jahr, netto</div></div>
+  <div class="kz"><div class="n"><%= eur(k.umsatz_monat) %></div><div class="t">Umsatz laufender Monat</div></div>
+  <div class="kz"><div class="n"><%= eur(k.auftragsbestand) %></div><div class="t">Auftragsbestand, noch nicht abgerechnet</div></div>
+  <div class="kz"><div class="n"><%= eur(k.retainer_monat) %></div><div class="t">wiederkehrend je Monat</div></div>
+</div>
+
+<div class="spalten s4" style="margin-top:16px">
+  <div class="kz"><div class="n"><%= eur(k.angebote_offen) %></div><div class="t"><%= k.angebote_anzahl %> Angebote versendet</div></div>
+  <div class="kz"><div class="n"><%= eur(k.beauftragt) %></div><div class="t">beauftragt</div></div>
+  <div class="kz"><div class="n"><%= eur(k.offen_gesamt) %></div><div class="t">offene Forderungen brutto</div></div>
+  <div class="kz"><div class="n <%= Number(k.ueberfaellig)>0?'akz':'' %>"><%= eur(k.ueberfaellig) %></div><div class="t"><%= k.ueberfaellig_anzahl %> überfällig</div></div>
+</div>
+
+<div class="spalten s21" style="margin-top:18px">
+  <div class="karte">
+    <h2>Umsatzverlauf</h2>
+    <div class="hinweis-klein">Nach Rechnungsdatum, festgeschriebene Rechnungen, Stornos abgezogen.</div>
+    <% var maxU = Math.max.apply(null, verlauf.map(function(v){return Number(v.umsatz)}).concat([1])); %>
+    <div style="display:flex;align-items:flex-end;gap:5px;height:150px;padding:10px 0;border-bottom:1px solid var(--linie)">
+      <% verlauf.forEach(function(v){ %>
+        <div style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%" title="<%= v.monat %>: <%= eur(v.umsatz) %>">
+          <div style="width:100%;background:<%= Number(v.umsatz)>0?'var(--brass)':'var(--linie)' %>;height:<%= Math.max(2, Math.round(Number(v.umsatz)/maxU*118)) %>px;border-radius:2px 2px 0 0"></div>
+        </div>
+      <% }) %>
+    </div>
+    <div style="display:flex;gap:5px;margin-top:6px">
+      <% verlauf.forEach(function(v){ %>
+        <div style="flex:1;text-align:center;font-size:9.5px;color:var(--ink3)"><%= v.monat.slice(5) %></div>
+      <% }) %>
+    </div>
+  </div>
+
+  <div class="karte">
+    <h2>Umsatz je Kunde</h2>
+    <% if (!top.length) { %><div class="leer-hinweis">Noch kein abgerechneter Umsatz.</div><% } else { %>
+    <div class="tab-scroll"><table>
+      <thead><tr><th>Kunde</th><th class="z">Rechnungen</th><th class="z">Umsatz</th></tr></thead>
+      <tbody><% top.forEach(function(t){ %>
+        <tr><td><a href="/kunden/<%= t.id %>"><%= t.firma %></a></td><td class="z"><%= t.rechnungen %></td>
+          <td class="z"><b><%= eur(t.umsatz) %></b></td></tr>
+      <% }) %></tbody></table></div>
+    <% } %>
+  </div>
+</div>
+
+<div class="spalten s21" style="margin-top:18px">
+  <div class="karte">
+    <h2>Offene Posten</h2>
+    <% if (!offen.length) { %><div class="leer-hinweis">Nichts offen.</div><% } else { %>
+    <div class="tab-scroll"><table>
+      <thead><tr><th>Nummer</th><th>Kunde</th><th>Datum</th><th>Fällig</th><th class="z">Brutto</th><th class="z">Tage</th></tr></thead>
+      <tbody><% offen.forEach(function(o){ %>
+        <tr><td><a href="/rechnungen/<%= o.id %>"><b><%= o.nummer %></b></a></td><td><%= o.firma %></td>
+          <td><%= datum(o.datum) %></td><td><%= datum(o.faellig_am) %></td>
+          <td class="z"><%= eur(o.brutto) %></td>
+          <td class="z <%= o.tage_ueberfaellig > 0 ? 'ist-ueberfaellig' : '' %>"><%= o.tage_ueberfaellig > 0 ? '+' + o.tage_ueberfaellig : '—' %></td></tr>
+      <% }) %></tbody></table></div>
+    <% } %>
+  </div>
+
+  <div class="karte">
+    <h2>Retainer-Auslastung</h2>
+    <div class="hinweis-klein">Laufender Monat. Aus Leistungen und Zeiterfassung zusammen.</div>
+    <% if (!retainer.length) { %><div class="leer-hinweis">Kein aktiver Retainer.</div><% } else { %>
+      <% retainer.forEach(function(r){ var quote = Number(r.stunden_monat)>0 ? Number(r.ist_stunden)/Number(r.stunden_monat)*100 : 0; %>
+        <div style="padding:11px 0;border-bottom:1px solid var(--linie2)">
+          <div style="display:flex;justify-content:space-between;align-items:baseline">
+            <b style="color:var(--ink)"><%= r.organisation %></b>
+            <span style="font-size:13px;color:<%= quote>100?'var(--akzent)':'var(--ink2)' %>"><%= zahl(r.ist_stunden) %> / <%= zahl(r.stunden_monat) %> h</span>
+          </div>
+          <div style="height:5px;background:var(--bg3);border-radius:3px;margin-top:6px;overflow:hidden">
+            <div style="height:100%;background:<%= quote>100?'var(--rot)':'var(--brass)' %>;width:<%= Math.min(100, quote) %>%"></div>
+          </div>
+          <div style="font-size:11.5px;color:var(--ink3);margin-top:4px">
+            <%= eur(r.entgelt_netto) %> je Monat<%= Number(r.extra_stunden)>0 ? ' · ' + zahl(r.extra_stunden) + ' h außerhalb' : '' %><%= Number(r.km)>0 ? ' · ' + zahl(r.km) + ' km' : '' %>
+          </div>
+        </div>
+      <% }) %>
+    <% } %>
+  </div>
+</div>
+<%- include('partials/fuss') %>

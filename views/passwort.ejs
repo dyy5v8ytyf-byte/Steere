@@ -1,0 +1,15 @@
+<%- include('partials/kopf') %>
+<div class="seitenkopf"><div><h1>Passwort ändern</h1>
+<% if (benutzer.muss_wechseln) { %><div class="unter">Sie verwenden noch ein Startpasswort. Bitte jetzt ändern.</div><% } %>
+</div></div>
+<div class="karte" style="max-width:520px">
+  <div class="marke-strich"></div>
+  <% if (fehler) { %><div class="melde fehler"><%= fehler %></div><% } %>
+  <form method="post" action="/passwort">
+    <div class="feld"><label>Bisheriges Passwort</label><input type="password" name="alt" required autocomplete="current-password"></div>
+    <div class="feld"><label>Neues Passwort (mindestens 12 Zeichen)</label><input type="password" name="neu" required minlength="12" autocomplete="new-password"></div>
+    <div class="feld"><label>Neues Passwort wiederholen</label><input type="password" name="neu2" required minlength="12" autocomplete="new-password"></div>
+    <button class="knopf" type="submit">Passwort ändern</button>
+  </form>
+</div>
+<%- include('partials/fuss') %>

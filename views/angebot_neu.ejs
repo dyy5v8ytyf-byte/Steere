@@ -1,0 +1,38 @@
+<%- include('partials/kopf') %>
+<div class="seitenkopf"><div><h1>Neues Angebot</h1><div class="unter">Die Nummer wird beim Anlegen automatisch vergeben und läuft an AN-2026-0144 an.</div></div></div>
+<form method="post" action="/angebote/neu">
+<div class="spalten s2">
+  <div class="karte">
+    <h2>Zuordnung</h2><div class="marke-strich"></div>
+    <div class="feld"><label>Kunde *</label>
+      <select name="kunde_id" required><option value="">bitte wählen</option>
+      <% kunden.forEach(function(k){ %><option value="<%= k.id %>" <%= vorgabeKunde === k.id ? 'selected' : '' %>><%= k.firma %></option><% }) %></select></div>
+    <div class="feld"><label>Projekt</label>
+      <select name="projekt_id"><option value="">— ohne Projektbezug —</option>
+      <% projekte.forEach(function(p){ %><option value="<%= p.id %>" <%= vorgabeProjekt === p.id ? 'selected' : '' %>><%= p.firma %> — <%= p.bezeichnung %></option><% }) %></select></div>
+    <div class="feld"><label>Empfänger (Anschriftenblock)</label><textarea name="empfaenger" placeholder="Firma&#10;z. Hd. Frau ...&#10;Straße&#10;PLZ Ort"></textarea></div>
+    <div class="feld"><label>Anrede</label><input type="text" name="anrede" placeholder="Sehr geehrte Frau ..."></div>
+  </div>
+  <div class="karte">
+    <h2>Bauvorhaben</h2><div class="marke-strich"></div>
+    <div class="feld"><label>Bauvorhaben / Standort</label><input type="text" name="bauvorhaben" placeholder="Objekt, Straße, PLZ Ort"></div>
+    <div class="feld"><label>Gewerk</label><input type="text" name="gewerk" placeholder="Vor-Ort-Begehung / Planung Ladeinfrastruktur"></div>
+    <div class="feld"><label>Vorlage</label>
+      <select name="vorlage_id">
+        <option value="">— ohne Vorlage, leeres Angebot —</option>
+        <% vorlagenListe.forEach(function(v){ %>
+          <option value="<%= v.id %>" <%= v.ist_standard ? 'selected' : '' %>><%= v.name %> (<%= v.positionen %> Pos.)</option>
+        <% }) %>
+      </select></div>
+    <div class="feld"><label>Einleitung</label><textarea name="einleitung" placeholder="Bleibt leer = Text der Vorlage"></textarea></div>
+    <div class="kasten">Mit einer Vorlage kommen Einleitung, Vorbemerkungen, Hinweise und das Positionsgerüst fertig mit.
+      Ohne Vorlage werden nur die Standardkonditionen vorbelegt (Zahlungsziel, Bindefrist, VNB-Vorbehalt).
+      Alles bleibt danach frei änderbar.</div>
+  </div>
+</div>
+<div style="margin-top:18px" class="reihe">
+  <button class="knopf" type="submit">Angebot anlegen</button>
+  <a class="knopf leer" href="/angebote">Abbrechen</a>
+</div>
+</form>
+<%- include('partials/fuss') %>

@@ -1,0 +1,75 @@
+<%- include('partials/kopf') %>
+<div class="seitenkopf"><div><h1>Organisationen &amp; Retainer</h1>
+  <div class="unter">Partnerfirmen wie FiERAX und deren Retainer-Vereinbarungen</div></div>
+  <a class="knopf leer" href="/verwaltung">Zurück</a></div>
+
+<div class="spalten s21">
+  <div class="karte">
+    <h2>Organisationen</h2>
+    <div class="tab-scroll"><table>
+      <thead><tr><th>Name</th><th>Kürzel</th><th>Art</th><th class="z">Benutzer</th><th class="z">Projekte</th><th>Aktiv</th><th></th></tr></thead>
+      <tbody><% liste.forEach(function(o){ %>
+        <tr><td colspan="7" style="padding:0">
+          <form method="post" action="/verwaltung/organisationen" style="display:grid;grid-template-columns:1.6fr .7fr .8fr .5fr .5fr auto auto;gap:8px;align-items:center;padding:9px 0">
+            <input type="hidden" name="id" value="<%= o.id %>">
+            <input type="text" name="name" value="<%= o.name %>">
+            <input type="text" name="kuerzel" value="<%= o.kuerzel || '' %>">
+            <select name="art"><option value="partner" <%= o.art === 'partner' ? 'selected' : '' %>>partner</option><option value="intern" <%= o.art === 'intern' ? 'selected' : '' %>>intern</option></select>
+            <span style="font-size:12.5px;color:var(--ink3);text-align:right"><%= o.benutzer %></span>
+            <span style="font-size:12.5px;color:var(--ink3);text-align:right"><%= o.projekte %></span>
+            <input type="checkbox" name="aktiv" <%= o.aktiv ? 'checked' : '' %> style="width:15px;height:15px;accent-color:var(--brass)">
+            <button class="knopf leer mini" type="submit">✓</button>
+          </form>
+        </td></tr>
+      <% }) %></tbody></table></div>
+
+    <details class="block"><summary>Organisation anlegen</summary><div class="inhalt">
+      <form method="post" action="/verwaltung/organisationen">
+        <div class="felder3">
+          <div class="feld"><label>Name</label><input type="text" name="name" required></div>
+          <div class="feld"><label>Kürzel</label><input type="text" name="kuerzel"></div>
+          <div class="feld"><label>Art</label><select name="art"><option value="partner">partner</option><option value="intern">intern</option></select></div>
+        </div>
+        <button class="knopf mini" type="submit">Anlegen</button>
+      </form>
+    </div></details>
+  </div>
+
+  <div class="karte">
+    <h2>Retainer</h2>
+    <% retainer.forEach(function(r){ %>
+      <details class="block"><summary><%= r.org %> — <%= r.bezeichnung %><%= r.aktiv ? '' : ' (inaktiv)' %></summary><div class="inhalt">
+        <form method="post" action="/verwaltung/retainer">
+          <input type="hidden" name="id" value="<%= r.id %>">
+          <div class="feld"><label>Bezeichnung</label><input type="text" name="bezeichnung" value="<%= r.bezeichnung %>"></div>
+          <div class="felder2">
+            <div class="feld"><label>Stunden je Monat</label><input type="text" name="stunden_monat" value="<%= r.stunden_monat %>"></div>
+            <div class="feld"><label>Entgelt netto</label><input type="text" name="entgelt_netto" value="<%= r.entgelt_netto %>"></div>
+          </div>
+          <div class="felder2">
+            <div class="feld"><label>Start</label><input type="date" name="start_am" value="<%= fuerFeld(r.start_am) %>"></div>
+            <div class="feld"><label>Ende</label><input type="date" name="ende_am" value="<%= fuerFeld(r.ende_am) %>"></div>
+          </div>
+          <div class="feld"><label>Hinweis (erscheint im Nachweis)</label><input type="text" name="hinweis" value="<%= r.hinweis || '' %>"></div>
+          <div class="haken"><input type="checkbox" id="ra<%= r.id %>" name="aktiv" <%= r.aktiv ? 'checked' : '' %>><label for="ra<%= r.id %>">aktiv</label></div>
+          <button class="knopf mini" type="submit">Speichern</button>
+        </form>
+      </div></details>
+    <% }) %>
+
+    <details class="block"><summary>Retainer anlegen</summary><div class="inhalt">
+      <form method="post" action="/verwaltung/retainer">
+        <div class="feld"><label>Organisation</label><select name="organisation_id" required>
+          <% liste.filter(function(o){return o.art === 'partner'}).forEach(function(o){ %><option value="<%= o.id %>"><%= o.name %></option><% }) %></select></div>
+        <div class="feld"><label>Bezeichnung</label><input type="text" name="bezeichnung" placeholder="Retainer 1 — Aufbau gemeinsames PM"></div>
+        <div class="felder2">
+          <div class="feld"><label>Stunden je Monat</label><input type="text" name="stunden_monat" value="80"></div>
+          <div class="feld"><label>Entgelt netto</label><input type="text" name="entgelt_netto" value="7500"></div>
+        </div>
+        <div class="feld"><label>Start</label><input type="date" name="start_am"></div>
+        <button class="knopf mini" type="submit">Anlegen</button>
+      </form>
+    </div></details>
+  </div>
+</div>
+<%- include('partials/fuss') %>

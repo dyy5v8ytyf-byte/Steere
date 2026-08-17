@@ -1,0 +1,271 @@
+/* =====================================================================
+   STEER.E Plattform · Oberfläche
+   Markenrichtung "Kurs" — Navy / Messing, Hell- und Dunkelmodus.
+   ===================================================================== */
+
+:root{
+  --brass:#C89B4A;
+  --brass-hell:#DDB365;
+  --ok:#4F8A6B;
+  --ok-hell:#7FC49E;
+  --warn:#C4763A;
+  --rot:#B2453C;
+  --radius:3px;
+  --seite:clamp(16px,3vw,36px);
+}
+
+html[data-modus="dunkel"]{
+  --bg:#0A1628; --bg2:#0E1D33; --bg3:#132540; --karte:#0E1D33;
+  --ink:#F2EEE6; --ink2:#A9BACE; --ink3:#7E8FA6;
+  --linie:rgba(242,238,230,.13); --linie2:rgba(242,238,230,.07);
+  --akzent:#C89B4A; --akzent-ink:#0A1628;
+  --feld-bg:#0A1628; --feld-linie:rgba(242,238,230,.18);
+}
+html[data-modus="hell"]{
+  --bg:#F5F2EC; --bg2:#FFFDF8; --bg3:#EDE8DC; --karte:#FFFDF8;
+  --ink:#0A1628; --ink2:#48576B; --ink3:#6E7C90;
+  --linie:#DCD5C6; --linie2:#E8E2D5;
+  --akzent:#8A5E15; --akzent-ink:#FFFDF8;
+  --feld-bg:#FFFFFF; --feld-linie:#CFC7B5;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;
+  background:var(--bg); color:var(--ink); line-height:1.55; font-size:15px;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:var(--ink)}
+h1,h2,h3,.serif{font-family:Georgia,'Times New Roman',serif;font-weight:700;letter-spacing:-.01em;line-height:1.15}
+h1{font-size:clamp(22px,2.4vw,30px)}
+h2{font-size:19px;margin-bottom:12px}
+h3{font-size:16px}
+.mono,code,pre{font-family:ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,monospace}
+
+/* ---------- Kopfzeile ---------- */
+.kopf{position:sticky;top:0;z-index:40;background:var(--bg2);border-bottom:1px solid var(--linie)}
+.kopf .innen{display:flex;align-items:center;gap:22px;padding:11px var(--seite);max-width:1600px;margin:0 auto}
+.marke{display:flex;align-items:center;gap:11px;text-decoration:none;margin-right:6px}
+.marke .wm{font-family:Georgia,serif;font-size:19px;font-weight:700;letter-spacing:.02em;line-height:1.05}
+.marke .wm i{font-style:normal;color:var(--brass)}
+.marke .sub{font-size:8.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink3);margin-top:2px}
+.menue{display:flex;gap:3px;flex-wrap:wrap;margin-right:auto}
+.menue a{
+  text-decoration:none;font-size:13.5px;color:var(--ink2);padding:7px 12px;border-radius:var(--radius);
+}
+.menue a:hover{background:var(--bg3);color:var(--ink)}
+.menue a.an{color:var(--akzent);background:var(--bg3)}
+.kopf .rechts{display:flex;align-items:center;gap:10px}
+.wer{font-size:12px;color:var(--ink3);text-align:right;line-height:1.35}
+.wer b{display:block;color:var(--ink);font-size:13px;font-weight:600}
+.knopf-klein{
+  border:1px solid var(--linie);background:transparent;color:var(--ink2);
+  border-radius:999px;padding:7px 12px;font-size:12px;cursor:pointer;text-decoration:none;display:inline-block;
+}
+.knopf-klein:hover{border-color:var(--akzent);color:var(--akzent)}
+
+/* ---------- Layout ---------- */
+main{max-width:1600px;margin:0 auto;padding:26px var(--seite) 70px}
+.seitenkopf{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;flex-wrap:wrap;margin-bottom:22px}
+.seitenkopf .unter{color:var(--ink3);font-size:13.5px;margin-top:5px}
+.reihe{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.spalten{display:grid;gap:18px}
+.s2{grid-template-columns:repeat(2,1fr)}
+.s3{grid-template-columns:repeat(3,1fr)}
+.s4{grid-template-columns:repeat(4,1fr)}
+.s21{grid-template-columns:1.6fr 1fr}
+@media(max-width:1100px){.s4{grid-template-columns:repeat(2,1fr)}.s3{grid-template-columns:1fr 1fr}.s21{grid-template-columns:1fr}}
+@media(max-width:700px){.s2,.s3,.s4{grid-template-columns:1fr}}
+
+/* ---------- Karten ---------- */
+.karte{background:var(--karte);border:1px solid var(--linie);border-radius:var(--radius);padding:20px}
+.karte + .karte{margin-top:16px}
+.karte > h2{display:flex;align-items:baseline;gap:10px}
+.karte .hinweis-klein{font-size:12.5px;color:var(--ink3);margin-bottom:14px}
+.marke-strich{width:30px;height:2px;background:var(--brass);margin:0 0 14px}
+
+/* ---------- Kennzahlen ---------- */
+.kz{background:var(--karte);border:1px solid var(--linie);border-radius:var(--radius);padding:18px}
+.kz .n{font-family:Georgia,serif;font-size:30px;font-weight:700;line-height:1;letter-spacing:-.02em}
+.kz .n.akz{color:var(--akzent)}
+.kz .t{font-size:12.5px;color:var(--ink3);margin-top:8px}
+
+/* ---------- Tabellen ---------- */
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{
+  text-align:left;font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink3);
+  font-weight:600;padding:0 10px 10px 0;border-bottom:1px solid var(--linie);white-space:nowrap;
+}
+td{padding:10px 10px 10px 0;border-bottom:1px solid var(--linie2);vertical-align:top;color:var(--ink2)}
+tr:hover td{background:var(--bg3)}
+td.z,th.z{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+td b,td strong{color:var(--ink);font-weight:600}
+td a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--linie)}
+td a:hover{color:var(--akzent);border-color:var(--akzent)}
+.tab-scroll{overflow-x:auto}
+
+/* ---------- Marken / Status ---------- */
+.pille{
+  display:inline-block;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;
+  padding:4px 9px;border-radius:999px;border:1px solid var(--linie);color:var(--ink3);white-space:nowrap;
+}
+.pille.akz{border-color:var(--akzent);color:var(--akzent)}
+.pille.ok{border-color:var(--ok);color:var(--ok-hell)}
+html[data-modus="hell"] .pille.ok{color:#2F6B4C}
+.pille.warn{border-color:var(--warn);color:var(--warn)}
+.pille.rot{border-color:var(--rot);color:var(--rot)}
+.pille.voll{background:var(--akzent);color:var(--akzent-ink);border-color:var(--akzent)}
+.ist-ueberfaellig{color:var(--rot) !important;font-weight:600}
+.ist-bald{color:var(--warn) !important;font-weight:600}
+
+/* ---------- Formulare ---------- */
+label{display:block;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:5px;font-weight:600}
+input[type=text],input[type=email],input[type=password],input[type=date],input[type=number],input[type=month],select,textarea{
+  width:100%;background:var(--feld-bg);color:var(--ink);border:1px solid var(--feld-linie);
+  border-radius:var(--radius);padding:9px 11px;font-size:14px;font-family:inherit;
+}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--akzent);box-shadow:0 0 0 2px color-mix(in srgb,var(--akzent) 22%,transparent)}
+textarea{min-height:88px;resize:vertical;line-height:1.5}
+.feld{margin-bottom:13px}
+.felder2{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}
+.felder3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0 14px}
+@media(max-width:700px){.felder2,.felder3{grid-template-columns:1fr}}
+.haken{display:flex;align-items:center;gap:8px;margin-bottom:13px}
+.haken input{width:16px;height:16px;accent-color:var(--brass)}
+.haken label{margin:0;text-transform:none;letter-spacing:0;font-size:13.5px;color:var(--ink2);font-weight:400}
+
+.knopf{
+  display:inline-block;background:var(--akzent);color:var(--akzent-ink);border:1px solid var(--akzent);
+  border-radius:var(--radius);padding:10px 20px;font-size:14px;font-weight:600;cursor:pointer;
+  text-decoration:none;font-family:inherit;
+}
+.knopf:hover{background:var(--brass-hell);border-color:var(--brass-hell);color:#0A1628}
+.knopf.leer{background:transparent;color:var(--ink);border-color:var(--linie)}
+.knopf.leer:hover{border-color:var(--akzent);color:var(--akzent);background:transparent}
+.knopf.gefahr{background:transparent;color:var(--rot);border-color:var(--rot)}
+.knopf.gefahr:hover{background:var(--rot);color:#fff}
+.knopf.mini{padding:6px 12px;font-size:12.5px;font-weight:500}
+
+/* ---------- Hinweise ---------- */
+.melde{
+  border-left:3px solid var(--ok);background:var(--bg2);border-radius:var(--radius);
+  padding:13px 17px;margin-bottom:18px;font-size:14px;color:var(--ink2);
+}
+.melde.warn{border-left-color:var(--warn)}
+.melde.fehler{border-left-color:var(--rot)}
+.kasten{
+  border:1px solid var(--linie);border-left:3px solid var(--akzent);border-radius:var(--radius);
+  padding:16px 19px;font-size:13.5px;color:var(--ink2);background:var(--bg2);
+}
+.kasten b{color:var(--ink)}
+.leer-hinweis{color:var(--ink3);font-size:13.5px;padding:22px 0;text-align:center}
+
+/* ---------- Anmeldung ---------- */
+.anmelde-seite{min-height:100vh;display:grid;place-items:center;padding:24px;
+  background-image:radial-gradient(circle at 74% 18%,color-mix(in srgb,var(--brass) 16%,transparent),transparent 55%)}
+.anmelde-karte{width:100%;max-width:400px;background:var(--karte);border:1px solid var(--linie);
+  border-radius:var(--radius);padding:34px}
+.anmelde-karte .wm{font-family:Georgia,serif;font-size:27px;font-weight:700;letter-spacing:.02em}
+.anmelde-karte .wm i{font-style:normal;color:var(--brass)}
+.anmelde-karte .sub{font-size:9px;letter-spacing:.19em;text-transform:uppercase;color:var(--ink3);margin:4px 0 26px}
+
+/* ---------- Details / Aufklappen ---------- */
+details.block{border:1px solid var(--linie);border-radius:var(--radius);margin-top:14px;background:var(--bg2)}
+details.block > summary{cursor:pointer;padding:12px 16px;font-size:12.5px;color:var(--akzent);
+  letter-spacing:.06em;list-style:none;font-weight:600}
+details.block > summary::-webkit-details-marker{display:none}
+details.block > summary::before{content:"+ "}
+details.block[open] > summary::before{content:"– "}
+details.block .inhalt{padding:0 16px 16px}
+
+/* ---------- Druck ---------- */
+@media print{
+  .kopf,.nicht-drucken,.knopf,form.nicht-drucken{display:none !important}
+  body{background:#fff;color:#000;font-size:11pt}
+  main{padding:0;max-width:none}
+  .karte{border:none;padding:0;background:#fff}
+  a{color:#000;border:none}
+}
+
+/* ---------- Textbausteine ---------- */
+.baustein-wahl{margin-left:8px;font-size:11px;padding:2px 6px;background:var(--feld-bg);
+  color:var(--ink3);border:1px solid var(--feld-linie);border-radius:var(--radius);
+  max-width:230px;text-transform:none;letter-spacing:0}
+.baustein-wahl:focus{outline:1px solid var(--brass)}
+
+/* ---------- Rückfragen aus der Begehung ---------- */
+.frage{border-left:3px solid var(--brass);background:var(--bg2);padding:11px 14px;margin-bottom:10px;
+  border-radius:0 var(--radius) var(--radius) 0}
+.frage.streng{border-left-color:var(--rot)}
+.frage .was{font-size:13.5px;color:var(--ink);margin-bottom:3px}
+.frage .warum{font-size:12px;color:var(--ink3)}
+.frage .quelle{font-size:11px;color:var(--brass);letter-spacing:.05em;text-transform:uppercase;margin-top:5px}
+
+/* =====================================================================
+   Telefon — die Begehung wird auf dem iPhone erfasst, nicht am Schreibtisch.
+   Die Erfassungsmasken sind mit festen Spaltenbreiten gebaut, weil sie am
+   Rechner als Tabelle lesbar sein muessen. Auf dem Telefon wird daraus
+   untereinander. Die Ueberschreibung braucht !important, weil die Raster
+   als style-Attribut direkt an der Zeile stehen.
+   ===================================================================== */
+@media(max-width:780px){
+  .kopf .innen{flex-wrap:wrap;gap:10px;padding:9px var(--seite)}
+  .menue{width:100%;order:3;gap:2px;overflow-x:auto;flex-wrap:nowrap;
+    padding-bottom:2px;-webkit-overflow-scrolling:touch}
+  .menue a{white-space:nowrap;padding:8px 11px;font-size:13px}
+  .kopf .rechts{margin-left:auto;gap:7px}
+  .wer{display:none}
+
+  main{padding:18px var(--seite) 90px}
+  .seitenkopf{align-items:flex-start}
+  .seitenkopf .reihe{width:100%}
+
+  /* Erfassungszeilen: aus Spalten wird eine Liste.
+     Damit untereinander stehende Felder nicht ineinanderlaufen, bekommt
+     jede Zeile auf dem Telefon einen eigenen Rahmen — man sieht, wo ein
+     Abschnitt anfaengt und wo er aufhoert. */
+  main form[style*="grid-template-columns"],
+  main div[style*="grid-template-columns"]{
+    grid-template-columns:1fr !important;
+    gap:6px !important;
+    padding:13px !important;
+    margin-bottom:12px;
+    border:1px solid var(--linie) !important;
+    border-radius:var(--radius);
+    background:var(--bg2);
+  }
+  main div[style*="grid-template-columns"] div[style*="grid-template-columns"]{
+    border:none !important;background:none;padding:0 !important;margin:0
+  }
+  main [style*="grid-column:2/-1"]{grid-column:1/-1 !important}
+
+  /* Eingaben gross genug fuer Finger; 16px verhindert das Zoomen in iOS. */
+  input,select,textarea{font-size:16px !important;min-height:44px}
+  textarea{min-height:88px}
+  .knopf,.knopf-klein,button{min-height:44px}
+  .knopf.mini{min-height:38px}
+
+  /* Tabellen scrollen seitlich statt zu zerlaufen. */
+  .tab-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .tab-scroll table{min-width:640px}
+
+  .frage{padding:12px}
+  .baustein-wahl{max-width:100%;margin:6px 0 0;display:block}
+}
+
+/* Sehr schmale Geraete */
+@media(max-width:420px){
+  .marke .sub{display:none}
+  h1{font-size:21px}
+  .kz{padding:14px}
+  .kz .n{font-size:25px}
+}
+
+/* Beschriftung, die nur auf dem Telefon gebraucht wird: am Rechner steht
+   sie in der Spaltenueberschrift, dort waere sie doppelt. */
+.mfeld{margin:0;display:block}
+.mfeld > span{display:none}
+@media(max-width:780px){
+  .mfeld > span{display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--ink3);margin-bottom:4px}
+}

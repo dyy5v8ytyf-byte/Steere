@@ -1,0 +1,105 @@
+<%- include('partials/kopf') %>
+<div class="seitenkopf">
+  <div><h1>Altdaten übernehmen</h1>
+    <div class="unter">Die 45 Kunden aus der alten Kundenliste in die Plattform holen</div></div>
+  <a class="knopf leer" href="/verwaltung">Zurück</a>
+</div>
+
+<div class="spalten s21">
+  <div class="karte">
+    <h2>Datei auswählen</h2><div class="marke-strich"></div>
+    <p style="color:var(--ink2);font-size:14px;margin-bottom:16px">
+      Gemeint ist <span class="mono">db/seed_data.json</span> aus dem alten Programm
+      (bzw. <span class="mono">altdaten_kunden.json</span> aus dem Übergabepaket).
+      Die Datei wird nur gelesen und nicht gespeichert — übernommen werden die
+      Kunden, Ansprechpartner, ein Projekt je Kunde, Ersttermine und der
+      Gesprächsverlauf.
+    </p>
+
+    <form method="post" action="/verwaltung/altdaten" id="formular">
+      <div class="feld">
+        <label>Datei</label>
+        <input type="file" id="datei" accept=".json,application/json">
+      </div>
+      <textarea name="inhalt" id="inhalt" style="display:none"></textarea>
+      <div id="status" style="font-size:13px;color:var(--ink3);margin-bottom:14px"></div>
+      <button class="knopf" type="submit" id="senden" disabled>Übernehmen</button>
+    </form>
+
+    <div class="kasten" style="margin-top:18px">
+      <b>Mehrfaches Ausführen ist ungefährlich.</b> Ein Kunde, den es schon gibt, wird
+      übersprungen und nicht überschrieben. Sie können die Übernahme also gefahrlos
+      wiederholen, wenn Sie unsicher sind, ob sie durchgelaufen ist.
+    </div>
+  </div>
+
+  <div>
+    <div class="karte">
+      <h2>Stand</h2><div class="marke-strich"></div>
+      <div class="spalten s2">
+        <div class="kz"><div class="n"><%= zahlen.kunden %></div><div class="t">Kunden gesamt</div></div>
+        <div class="kz"><div class="n akz"><%= zahlen.aus_altdaten %></div><div class="t">davon aus Altdaten</div></div>
+      </div>
+    </div>
+
+    <% if (bericht) { %>
+      <div class="karte">
+        <h2>Letzte Übernahme</h2><div class="marke-strich"></div>
+        <div class="tab-scroll"><table><tbody>
+          <tr><td>Datensätze in der Datei</td><td class="z"><b><%= bericht.gesamt %></b></td></tr>
+          <tr><td>neu übernommen</td><td class="z"><b style="color:var(--akzent)"><%= bericht.neu %></b></td></tr>
+          <tr><td>bereits vorhanden, unangetastet</td><td class="z"><b><%= bericht.vorhanden %></b></td></tr>
+          <tr><td>ohne Firmennamen, übersprungen</td><td class="z"><b><%= bericht.uebersprungen %></b></td></tr>
+        </tbody></table></div>
+        <% if (bericht.namen && bericht.namen.length) { %>
+          <div style="margin-top:14px;font-size:12.5px;color:var(--ink3);line-height:1.7">
+            <b style="color:var(--ink)">Übernommen:</b><br><%= bericht.namen.join(' · ') %>
+          </div>
+        <% } %>
+      </div>
+    <% } %>
+
+    <div class="karte">
+      <h2>Datenschutz</h2><div class="marke-strich"></div>
+      <p style="font-size:13.5px;color:var(--ink2);line-height:1.6">
+        Die Datei enthält Klarnamen, Mobilnummern und Gesprächsnotizen.
+        Sie gehört deshalb weder ins Repository noch in einen geteilten Ordner.
+        Nach der Übernahme leben die Daten ausschließlich in der Datenbank,
+        geschützt durch Anmeldung und Rollen.
+      </p>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var datei = document.getElementById('datei');
+  var inhalt = document.getElementById('inhalt');
+  var status = document.getElementById('status');
+  var senden = document.getElementById('senden');
+
+  datei.addEventListener('change', function () {
+    var f = datei.files && datei.files[0];
+    if (!f) { senden.disabled = true; status.textContent = ''; return; }
+    var leser = new FileReader();
+    leser.onload = function () {
+      var text = String(leser.result || '');
+      try {
+        var daten = JSON.parse(text);
+        if (!Array.isArray(daten)) throw new Error('keine Liste');
+        inhalt.value = text;
+        senden.disabled = false;
+        status.textContent = f.name + ' gelesen — ' + daten.length + ' Datensätze erkannt.';
+        status.style.color = 'var(--ok-hell)';
+      } catch (e) {
+        senden.disabled = true;
+        inhalt.value = '';
+        status.textContent = 'Diese Datei ist keine gültige Altdatenliste (erwartet wird JSON mit einer Liste von Kunden).';
+        status.style.color = 'var(--rot)';
+      }
+    };
+    leser.readAsText(f, 'utf-8');
+  });
+})();
+</script>
+<%- include('partials/fuss') %>

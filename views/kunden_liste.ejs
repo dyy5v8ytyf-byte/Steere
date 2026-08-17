@@ -1,40 +1,38 @@
-<%- include('partials/head', { title: 'Kunden' }) %>
-
-<div class="flex-between">
-  <h1>Kunden &amp; Projekte</h1>
-  <a href="/kunden/neu"><button>+ Neuer Kunde</button></a>
+<%- include('partials/kopf') %>
+<div class="seitenkopf">
+  <div><h1>Kunden &amp; Projekte</h1><div class="unter"><%= kunden.length %> Kunde(n) angezeigt</div></div>
+  <a class="knopf" href="/kunden/neu">Neuer Kunde</a>
 </div>
 
-<form method="get" action="/kunden" class="grid-form" style="margin-bottom:16px;">
-  <div>
-    <label>Suche Firma</label>
-    <input type="text" name="q" value="<%= q %>">
-  </div>
-  <div>
-    <label>Phase</label>
-    <select name="phase">
-      <option value="">Alle</option>
-      <% PHASES.forEach(function(p) { %>
-        <option value="<%= p %>" <%= phase === p ? 'selected' : '' %>><%= p %></option>
-      <% }) %>
-    </select>
-  </div>
-  <div style="justify-content:flex-end; flex-direction:row;"><button type="submit">Filtern</button></div>
-</form>
+<div class="karte">
+  <form method="get" action="/kunden" class="felder3">
+    <div class="feld"><label>Suche</label><input type="text" name="q" value="<%= suche %>" placeholder="Firma, Branche, Ansprechpartner"></div>
+    <div class="feld"><label>Phase</label>
+      <select name="phase"><option value="">alle</option>
+      <% phasen.forEach(function(p){ %><option value="<%= p %>" <%= phase === p ? 'selected' : '' %>><%= p %></option><% }) %>
+      </select></div>
+    <div class="feld"><label>&nbsp;</label><button class="knopf leer" type="submit">Filtern</button>
+      <% if (suche || phase) { %><a class="knopf leer" href="/kunden">Zurücksetzen</a><% } %></div>
+  </form>
+</div>
 
-<table>
-  <tr><th>Firma</th><th>Branche</th><th>Projekt</th><th>Phase</th><th>Potential</th><th>Letzte Aktivität</th><th></th></tr>
-  <% rows.forEach(function(r) { %>
-    <tr>
-      <td><%= r.firma %></td>
-      <td><%= r.branche || '' %></td>
-      <td><%= r.bezeichnung || '' %></td>
-      <td><% if (r.phase) { %><span class="tag" style="background:<%= PHASE_COLORS[r.phase] %>"><%= r.phase %></span><% } %></td>
-      <td><%= r.potential || '' %></td>
-      <td><%= r.letzte_aktivitaet_am ? dayjs(r.letzte_aktivitaet_am).format('DD.MM.YYYY') : '' %></td>
-      <td><a href="/kunden/<%= r.customer_id %>">öffnen →</a></td>
-    </tr>
-  <% }) %>
-</table>
-
-<%- include('partials/foot') %>
+<div class="karte">
+  <% if (!kunden.length) { %><div class="leer-hinweis">Keine Treffer.</div><% } else { %>
+  <div class="tab-scroll"><table>
+    <thead><tr><th>Firma</th><th>Branche</th><th>Ansprechpartner</th><th class="z">Projekte</th><th>Phasen</th><th class="z">Potenzial</th></tr></thead>
+    <tbody>
+    <% kunden.forEach(function(k){ %>
+      <tr>
+        <td><a href="/kunden/<%= k.id %>"><b><%= k.firma %></b></a></td>
+        <td><%= k.branche || '—' %></td>
+        <td><%= k.ap_name || '—' %><% if (k.ap_telefon) { %><br><span style="font-size:12px;color:var(--ink3)"><%= k.ap_telefon %></span><% } %></td>
+        <td class="z"><%= k.projekte %></td>
+        <td><%= k.phasen || '—' %></td>
+        <td class="z"><% if (k.potential) { %><span class="pille <%= k.potential === 1 ? 'voll' : k.potential === 2 ? 'akz' : '' %>"><%= k.potential === 1 ? 'heiß' : k.potential === 2 ? 'mittel' : 'beobachten' %></span><% } else { %>—<% } %></td>
+      </tr>
+    <% }) %>
+    </tbody>
+  </table></div>
+  <% } %>
+</div>
+<%- include('partials/fuss') %>

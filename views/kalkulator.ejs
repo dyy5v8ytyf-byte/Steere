@@ -1,0 +1,93 @@
+<%- include('partials/kopf') %>
+<div class="seitenkopf">
+  <div><h1>Retainer-Kalkulator</h1><div class="unter">Rechnet in beide Richtungen: aus Stunden ein Entgelt, oder aus einem Wunschsatz das Entgelt</div></div>
+  <a class="knopf leer" href="/kalkulator/zeiten">Zeiterfassung</a>
+</div>
+
+<div class="spalten s21">
+  <div class="karte">
+    <h2>Eingabe</h2><div class="marke-strich"></div>
+    <form method="get" action="/kalkulator">
+      <div class="felder2">
+        <div class="feld"><label>Kontingent Stunden je Monat</label><input type="text" name="stunden_monat" value="<%= eingabe.stunden_monat %>"></div>
+        <div class="feld"><label>Entgelt netto je Monat</label><input type="text" name="entgelt_netto" value="<%= eingabe.entgelt_netto %>"></div>
+      </div>
+      <div class="felder2">
+        <div class="feld"><label>Laufzeit Monate</label><input type="text" name="laufzeit_monate" value="<%= eingabe.laufzeit_monate %>"></div>
+        <div class="feld"><label>Satz außerhalb Kontingent</label><input type="text" name="stundensatz_extra" value="<%= eingabe.stundensatz_extra %>"></div>
+      </div>
+      <div class="felder3">
+        <div class="feld"><label>€ je km</label><input type="text" name="km_satz" value="<%= eingabe.km_satz %>"></div>
+        <div class="feld"><label>km je Monat</label><input type="text" name="km_monat" value="<%= eingabe.km_monat %>"></div>
+        <div class="feld"><label>Extra-Stunden</label><input type="text" name="extra_stunden" value="<%= eingabe.extra_stunden %>"></div>
+      </div>
+      <div class="feld"><label>Oder: Wunsch-Stundensatz vorgeben</label><input type="text" name="ziel_satz" placeholder="z. B. 95 — Entgelt wird daraus errechnet"></div>
+      <button class="knopf" type="submit">Rechnen</button>
+    </form>
+
+    <div style="margin-top:20px;padding-top:14px;border-top:1px solid var(--linie)">
+      <label>Übliche Zuschnitte</label>
+      <div class="tab-scroll"><table>
+        <thead><tr><th>Variante</th><th class="z">Stunden</th><th class="z">Entgelt</th><th class="z">Satz</th><th></th></tr></thead>
+        <tbody><% varianten.forEach(function(v){ %>
+          <tr><td><b><%= v.name %></b></td><td class="z"><%= v.stunden %> h</td><td class="z"><%= eur(v.entgelt) %></td>
+            <td class="z"><%= eur(v.satz) %></td>
+            <td class="z"><a class="knopf leer mini" href="/kalkulator?stunden_monat=<%= v.stunden %>&entgelt_netto=<%= v.entgelt %>">übernehmen</a></td></tr>
+        <% }) %></tbody></table></div>
+    </div>
+  </div>
+
+  <div>
+    <div class="spalten s2">
+      <div class="kz"><div class="n akz"><%= eur(erg.implizit) %></div><div class="t">impliziter Stundensatz</div></div>
+      <div class="kz"><div class="n"><%= zahl(Math.round(erg.nachlassProzent)) %> %</div><div class="t">Nachlass gegenüber <%= eur(erg.satzExtra) %></div></div>
+    </div>
+    <div class="karte" style="margin-top:16px">
+      <h2>Ergebnis</h2>
+      <div class="tab-scroll"><table><tbody>
+        <tr><td>Kontingent</td><td class="z"><b><%= zahl(erg.kontingent) %> h / Monat</b></td></tr>
+        <tr><td>Entgelt netto</td><td class="z"><b><%= eur(erg.entgelt) %> / Monat</b></td></tr>
+        <tr><td>Dieselben Stunden einzeln beauftragt</td><td class="z"><%= eur(erg.vergleichswert) %></td></tr>
+        <tr><td>Vorteil für den Kunden je Monat</td><td class="z" style="color:var(--ok-hell)"><b><%= eur(erg.ersparnisMonat) %></b></td></tr>
+        <tr><td>Fahrtkosten (<%= zahl(erg.kmMonat) %> km à <%= eur(erg.kmSatz) %>)</td><td class="z"><%= eur(erg.fahrtkosten) %></td></tr>
+        <tr><td>Leistung außerhalb (<%= zahl(erg.extraStunden) %> h à <%= eur(erg.satzExtra) %>)</td><td class="z"><%= eur(erg.extraLeistung) %></td></tr>
+        <tr class="summe"><td><b>Monatsrechnung gesamt netto</b></td><td class="z"><b style="color:var(--akzent)"><%= eur(erg.monatGesamt) %></b></td></tr>
+        <tr><td>Jahreswert bei <%= erg.laufzeit %> Monaten</td><td class="z"><b><%= eur(erg.jahreswert) %></b></td></tr>
+        <tr><td>Jahresstunden</td><td class="z"><%= zahl(erg.jahresstunden) %> h</td></tr>
+      </tbody></table></div>
+      <div class="kasten" style="margin-top:14px">
+        Der Vorteil für den Kunden entsteht aus dem Nachlass gegenüber der Einzelbeauftragung. Er ist nur belastbar, wenn ihr das Kontingent auch tatsächlich abruft — sonst zahlt der Kunde für nicht erbrachte Leistung, und genau das fällt beim ersten Monatsbericht auf.
+      </div>
+    </div>
+
+    <div class="karte">
+      <h2>Als Retainer anlegen</h2><div class="marke-strich"></div>
+      <form method="post" action="/kalkulator/uebernehmen">
+        <input type="hidden" name="stunden_monat" value="<%= erg.kontingent %>">
+        <input type="hidden" name="entgelt_netto" value="<%= erg.entgelt %>">
+        <input type="hidden" name="stundensatz_extra" value="<%= erg.satzExtra %>">
+        <input type="hidden" name="km_satz" value="<%= erg.kmSatz %>">
+        <input type="hidden" name="laufzeit_monate" value="<%= erg.laufzeit %>">
+        <div class="feld"><label>Organisation</label><select name="organisation_id" required><option value="">— wählen —</option>
+          <% organisationen.forEach(function(o){ %><option value="<%= o.id %>"><%= o.name %></option><% }) %></select></div>
+        <div class="feld"><label>Bezeichnung</label><input type="text" name="bezeichnung" placeholder="Retainer 1 — Aufbau gemeinsames Projektmanagement"></div>
+        <div class="feld"><label>Start</label><input type="date" name="start_am"></div>
+        <button class="knopf" type="submit">Retainer anlegen</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="karte">
+  <h2>Bestehende Retainer</h2>
+  <div class="tab-scroll"><table>
+    <thead><tr><th>Organisation</th><th>Bezeichnung</th><th class="z">Stunden</th><th class="z">Entgelt</th><th class="z">Satz</th><th>Aktiv</th><th></th></tr></thead>
+    <tbody><% retainer.forEach(function(r){ %>
+      <tr><td><b><%= r.org %></b></td><td><%= r.bezeichnung %></td>
+        <td class="z"><%= zahl(r.stunden_monat) %> h</td><td class="z"><%= eur(r.entgelt_netto) %></td>
+        <td class="z"><%= Number(r.stunden_monat)>0 ? eur(Number(r.entgelt_netto)/Number(r.stunden_monat)) : '—' %></td>
+        <td><span class="pille <%= r.aktiv?'ok':'' %>"><%= r.aktiv?'aktiv':'inaktiv' %></span></td>
+        <td class="z"><a class="knopf leer mini" href="/kalkulator/<%= r.id %>/bausteine">Bausteine</a></td></tr>
+    <% }) %></tbody></table></div>
+</div>
+<%- include('partials/fuss') %>

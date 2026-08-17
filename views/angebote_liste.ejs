@@ -1,0 +1,31 @@
+<%- include('partials/kopf') %>
+<div class="seitenkopf">
+  <div><h1>Angebote</h1><div class="unter"><%= angebote.length %> Angebot(e)</div></div>
+  <a class="knopf" href="/angebote/neu">Neues Angebot</a>
+</div>
+<div class="karte">
+  <form method="get" class="reihe" style="margin-bottom:4px">
+    <select name="status" style="max-width:200px"><option value="">alle Status</option>
+      <% STATUS.forEach(function(s){ %><option <%= status === s ? 'selected' : '' %>><%= s %></option><% }) %></select>
+    <button class="knopf leer mini" type="submit">Filtern</button>
+  </form>
+</div>
+<div class="karte">
+  <% if (!angebote.length) { %><div class="leer-hinweis">Kein Angebot vorhanden.</div><% } else { %>
+  <div class="tab-scroll"><table>
+    <thead><tr><th>Nummer</th><th>Datum</th><th>Kunde</th><th>Bauvorhaben</th><th class="z">Pos.</th><th>Status</th><th class="z">Netto</th><th class="z">Brutto</th></tr></thead>
+    <tbody><% angebote.forEach(function(a){ %>
+      <tr>
+        <td><a href="/angebote/<%= a.id %>"><b><%= a.nummer %></b></a></td>
+        <td><%= datum(a.datum) %></td>
+        <td><a href="/kunden/<%= a.kunde_id %>"><%= a.firma %></a></td>
+        <td><%= a.bauvorhaben || a.projekt || '—' %></td>
+        <td class="z"><%= a.positionen %></td>
+        <td><span class="pille <%= a.status === 'Beauftragt' ? 'ok' : a.status === 'Versendet' ? 'akz' : a.status === 'Abgelehnt' ? 'rot' : '' %>"><%= a.status %></span></td>
+        <td class="z"><%= eur(a.netto) %></td>
+        <td class="z"><%= eur(a.brutto) %></td>
+      </tr>
+    <% }) %></tbody></table></div>
+  <% } %>
+</div>
+<%- include('partials/fuss') %>

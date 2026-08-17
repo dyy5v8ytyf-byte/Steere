@@ -1,0 +1,26 @@
+<%- include('partials/kopf') %>
+<div class="seitenkopf"><div><h1>Einstellungen</h1>
+  <div class="unter">Diese Werte steuern das Programm. Änderungen wirken sofort und werden protokolliert.</div></div>
+  <a class="knopf leer" href="/verwaltung">Zurück</a></div>
+<form method="post" action="/verwaltung/einstellungen">
+<div class="karte">
+  <% liste.forEach(function(e){ %>
+    <div style="display:grid;grid-template-columns:230px 1fr;gap:16px;padding:13px 0;border-bottom:1px solid var(--linie2)">
+      <div>
+        <label style="margin-bottom:3px"><%= e.schluessel %></label>
+        <div style="font-size:12px;color:var(--ink3);line-height:1.45"><%= e.beschreibung || '' %></div>
+      </div>
+      <div>
+        <% if ((e.wert || '').length > 60) { %>
+          <textarea name="e_<%= e.schluessel %>" style="min-height:60px"><%= e.wert || '' %></textarea>
+        <% } else { %>
+          <input type="text" name="e_<%= e.schluessel %>" value="<%= e.wert || '' %>">
+        <% } %>
+        <div style="font-size:11px;color:var(--ink3);margin-top:3px">zuletzt geändert <%= datumZeit(e.geaendert_am) %></div>
+      </div>
+    </div>
+  <% }) %>
+  <div style="margin-top:18px"><button class="knopf" type="submit">Einstellungen speichern</button></div>
+</div>
+</form>
+<%- include('partials/fuss') %>

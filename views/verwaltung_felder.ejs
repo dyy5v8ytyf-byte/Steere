@@ -1,0 +1,47 @@
+<%- include('partials/kopf') %>
+<div class="seitenkopf"><div><h1>Eigene Felder</h1>
+  <div class="unter">Zusätzliche Felder in den Masken für Kunde, Projekt und Angebot</div></div>
+  <a class="knopf leer" href="/verwaltung">Zurück</a></div>
+
+<div class="kasten" style="margin-bottom:18px">
+  Neue Felder legen <b>keine</b> Datenbankspalten an — die Werte liegen separat. Deshalb kann das Anlegen, Umbenennen oder Deaktivieren eines Feldes keine vorhandenen Daten beschädigen.
+  Ein deaktiviertes Feld verschwindet aus den Masken, seine bereits erfassten Werte bleiben gespeichert und erscheinen wieder, sobald es reaktiviert wird.
+  Der interne Schlüssel eines Feldes ist unveränderlich — sonst verlören die Werte ihren Bezug.
+</div>
+
+<div class="spalten s21">
+  <div class="karte">
+    <% if (!liste.length) { %><div class="leer-hinweis">Noch keine eigenen Felder angelegt.</div><% } %>
+    <% liste.forEach(function(f){ %>
+      <details class="block"><summary><%= f.bereich %> · <%= f.bezeichnung %><%= f.aktiv ? '' : ' (inaktiv)' %> — <%= f.belegt %> Wert(e)</summary>
+      <div class="inhalt">
+        <form method="post" action="/verwaltung/felder">
+          <input type="hidden" name="id" value="<%= f.id %>">
+          <div class="felder3">
+            <div class="feld"><label>Bezeichnung</label><input type="text" name="bezeichnung" value="<%= f.bezeichnung %>"></div>
+            <div class="feld"><label>Typ</label><select name="typ"><% ['text','zahl','datum','auswahl','ja_nein'].forEach(function(t){ %><option <%= f.typ === t ? 'selected' : '' %>><%= t %></option><% }) %></select></div>
+            <div class="feld"><label>Reihenfolge</label><input type="text" name="reihenfolge" value="<%= f.reihenfolge %>"></div>
+          </div>
+          <div class="feld"><label>Optionen (bei Typ auswahl, kommagetrennt)</label><input type="text" name="optionen" value="<%= f.optionen || '' %>"></div>
+          <div class="feld"><label>Interner Schlüssel (unveränderlich)</label><input type="text" value="<%= f.schluessel %>" disabled></div>
+          <div class="haken"><input type="checkbox" id="fp<%= f.id %>" name="pflicht" <%= f.pflicht ? 'checked' : '' %>><label for="fp<%= f.id %>">Pflichtfeld</label></div>
+          <div class="haken"><input type="checkbox" id="fa<%= f.id %>" name="aktiv" <%= f.aktiv ? 'checked' : '' %>><label for="fa<%= f.id %>">aktiv (in den Masken sichtbar)</label></div>
+          <button class="knopf mini" type="submit">Speichern</button>
+        </form>
+      </div></details>
+    <% }) %>
+  </div>
+
+  <div class="karte">
+    <h2>Feld anlegen</h2><div class="marke-strich"></div>
+    <form method="post" action="/verwaltung/felder">
+      <div class="feld"><label>Bereich</label><select name="bereich"><option value="projekt">Projekt</option><option value="kunde">Kunde</option><option value="angebot">Angebot</option></select></div>
+      <div class="feld"><label>Bezeichnung</label><input type="text" name="bezeichnung" required placeholder="z. B. Netzbetreiber"></div>
+      <div class="feld"><label>Typ</label><select name="typ"><option>text</option><option>zahl</option><option>datum</option><option>auswahl</option><option>ja_nein</option></select></div>
+      <div class="feld"><label>Optionen (nur bei Typ auswahl)</label><input type="text" name="optionen" placeholder="Schleswig-Holstein Netz, E.ON, Westnetz"></div>
+      <div class="feld"><label>Reihenfolge</label><input type="text" name="reihenfolge" value="100"></div>
+      <button class="knopf" type="submit">Anlegen</button>
+    </form>
+  </div>
+</div>
+<%- include('partials/fuss') %>

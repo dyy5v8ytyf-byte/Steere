@@ -1,0 +1,34 @@
+<%- include('partials/kopf') %>
+<div class="seitenkopf"><div><h1>Neue Rechnung</h1>
+  <div class="unter">Die endgültige Nummer wird erst bei der Festschreibung vergeben — so bleibt der Nummernkreis lückenlos.</div></div></div>
+<form method="post" action="/rechnungen/neu">
+<div class="spalten s2">
+  <div class="karte">
+    <h2>Grundlage</h2><div class="marke-strich"></div>
+    <div class="feld"><label>Aus beauftragtem Angebot</label>
+      <select name="angebot_id"><option value="">— keines —</option>
+      <% angebote.forEach(function(a){ %><option value="<%= a.id %>"><%= a.nummer %> · <%= a.firma %> · <%= eur(a.netto) %></option><% }) %></select>
+      <div class="hinweis-klein" style="margin-top:5px">Übernimmt alle Positionen des Angebots.</div></div>
+    <div class="feld"><label>Oder aus Retainer-Monat</label>
+      <select name="retainer_id"><option value="">— keiner —</option>
+      <% retainer.forEach(function(r){ %><option value="<%= r.id %>"><%= r.org %> · <%= r.bezeichnung %> · <%= eur(r.entgelt_netto) %>/Monat</option><% }) %></select></div>
+    <div class="feld"><label>Leistungsmonat (bei Retainer)</label><input type="month" name="monat" value="<%= new Date().toISOString().slice(0,7) %>"></div>
+    <div class="feld"><label>Oder Kunde direkt</label>
+      <select name="kunde_id"><option value="">—</option>
+      <% kunden.forEach(function(k){ %><option value="<%= k.id %>"><%= k.firma %></option><% }) %></select></div>
+  </div>
+  <div class="karte">
+    <h2>Angaben</h2><div class="marke-strich"></div>
+    <div class="feld"><label>Empfänger (Anschriftenblock)</label><textarea name="empfaenger" placeholder="Firma&#10;z. Hd. ...&#10;Straße&#10;PLZ Ort"></textarea></div>
+    <div class="feld"><label>Anrede</label><input type="text" name="anrede" placeholder="Sehr geehrte Frau ..."></div>
+    <div class="feld"><label>Betreff</label><input type="text" name="betreff"></div>
+    <div class="feld"><label>Leistungszeitraum</label><input type="text" name="leistungszeitraum"></div>
+    <div class="kasten">Zahlungsziel <%= e.rechnung_zahlungsziel_tage %> Tage, Umsatzsteuer <%= e.mwst_satz %> % — beides in der Verwaltung änderbar.</div>
+  </div>
+</div>
+<div class="reihe" style="margin-top:18px">
+  <button class="knopf" type="submit">Entwurf anlegen</button>
+  <a class="knopf leer" href="/rechnungen">Abbrechen</a>
+</div>
+</form>
+<%- include('partials/fuss') %>

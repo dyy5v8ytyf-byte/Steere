@@ -1,0 +1,4282 @@
+[
+{
+"kategorie": "Elektro",
+"text": "100mm C-Schiene liefern und montieren",
+"einheit": "Stk.",
+"belege": 2,
+"min": 24.17,
+"median": 24.29,
+"max": 24.4,
+"quelle": "P2500969_ANG0010877 APCOA Schillerplatz Stuttgart_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "160A Stromschiene gerade 3m mit 6 Abgängen",
+"einheit": "Stk.",
+"belege": 1,
+"min": 447.85,
+"median": 447.85,
+"max": 447.85,
+"quelle": "P2500969_ANG0010877 APCOA Schillerplatz Stuttgart_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "1x25mm² Potentialausgleichsleitung einseitiger Anschluss",
+"einheit": "Stk.",
+"belege": 1,
+"min": 17.42,
+"median": 17.42,
+"max": 17.42,
+"quelle": "P2500963_ANG0011009_Goldbeck_HQHamburg_rev2.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "1x50mm² Potentialausgleichsleitung einseitiger Anschluss",
+"einheit": "Stk.",
+"belege": 1,
+"min": 15.95,
+"median": 15.95,
+"max": 15.95,
+"quelle": "P2501046_ANG0010704_Duwensee_2AS.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "200mm C-Schiene liefern und montieren",
+"einheit": "Stk.",
+"belege": 1,
+"min": 25.09,
+"median": 25.09,
+"max": 25.09,
+"quelle": "P2500963_ANG0011009_Goldbeck_HQHamburg_rev2.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "32A Abgangskasten KN Schienensystem mit ÜSS Typ 2",
+"einheit": "Stk.",
+"belege": 1,
+"min": 498.48,
+"median": 498.48,
+"max": 498.48,
+"quelle": "P2500969_ANG0010877 APCOA Schillerplatz Stuttgart_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "32A Abgangskasten KS Schienensystem mit ÜSS Typ 2",
+"einheit": "Stk.",
+"belege": 1,
+"min": 551.09,
+"median": 551.09,
+"max": 551.09,
+"quelle": "P2501056_ANG0010891 Wüstenroth Oberursel.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "32A Abgangskasten mit 5 Teilungseinheiten für Stromschiene",
+"einheit": "Stk.",
+"belege": 2,
+"min": 103.12,
+"median": 112.53,
+"max": 121.95,
+"quelle": "P2500969_ANG0010877 APCOA Schillerplatz Stuttgart_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "AK09 Aufputzkleinverteiler Überspannungsschutz Gebäudeaustritt",
+"einheit": "Stk",
+"belege": 1,
+"min": 92.82,
+"median": 92.82,
+"max": 92.82,
+"quelle": "Belegbearbeitung P2600151_ANG0010991_UTA Försterei Hasselbusch_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "AK42 Aufputzkleinverteiler für 4 Ladepunkte liefern und montieren",
+"einheit": "Stk",
+"belege": 1,
+"min": 378.95,
+"median": 378.95,
+"max": 378.95,
+"quelle": "Belegbearbeitung P2600151_ANG0010991_UTA Försterei Hasselbusch_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Abgangskasten 32A, 3-pol+N, MCB 32A C liefern montieren",
+"einheit": "Stk",
+"belege": 1,
+"min": 490.95,
+"median": 490.95,
+"max": 490.95,
+"quelle": "P2501106_ANG0010839_Techem_BLB_WE1990_ErsatzparkhausBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Abstimmung Netzanschluss Verfügbarkeit/Beauftragung",
+"einheit": "Stk",
+"belege": 3,
+"min": 195.3,
+"median": 195.3,
+"max": 195.3,
+"quelle": "P2501108_ANG0010847_Techem_BLB_WE1035_BlueBoxBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Abstimmung Netzanschluss Verfügbarkeit/Beauftragung",
+"einheit": "St",
+"belege": 2,
+"min": 195.3,
+"median": 195.3,
+"max": 195.3,
+"quelle": "P2501106_ANG0010839_Techem_BLB_WE1990_ErsatzparkhausBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Aluminium-Steckrohr ES 16 liefern und montieren",
+"einheit": "m",
+"belege": 1,
+"min": 33.9,
+"median": 33.9,
+"max": 33.9,
+"quelle": "P2501056_ANG0010891 Wüstenroth Oberursel.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Aluminium-Steckrohr ES 25 liefern und montieren",
+"einheit": "m",
+"belege": 1,
+"min": 35.86,
+"median": 35.86,
+"max": 35.86,
+"quelle": "P2501056_ANG0010891 Wüstenroth Oberursel.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Aluminium-Steckrohr ES 40 liefern und montieren",
+"einheit": "m",
+"belege": 1,
+"min": 43.08,
+"median": 43.08,
+"max": 43.08,
+"quelle": "P2501056_ANG0010891 Wüstenroth Oberursel.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Aluminium-Steckrohr ES32 liefern und montieren",
+"einheit": "m",
+"belege": 1,
+"min": 45.05,
+"median": 45.05,
+"max": 45.05,
+"quelle": "Belegbearbeitung P2600151_ANG0010991_UTA Försterei Hasselbusch_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Aufstellung Verteilersockel inkl. Schrank",
+"einheit": "St",
+"belege": 1,
+"min": 430.0,
+"median": 430.0,
+"max": 430.0,
+"quelle": "Angebot 221852GeneralLV.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Biegsames Schutz-/Leerrohr R-20",
+"einheit": "m",
+"belege": 1,
+"min": 8.0,
+"median": 8.0,
+"max": 8.0,
+"quelle": "P2501046_ANG0010704_Duwensee_2AS.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Biegsames Schutz-/Leerrohr R-40",
+"einheit": "m",
+"belege": 1,
+"min": 9.51,
+"median": 9.51,
+"max": 9.51,
+"quelle": "P2501046_ANG0010704_Duwensee_2AS.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Bogen 90° für Weitspanntrasse 200mm",
+"einheit": "Stk.",
+"belege": 1,
+"min": 146.94,
+"median": 146.94,
+"max": 146.94,
+"quelle": "P2500963_ANG0011009_Goldbeck_HQHamburg_rev2.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Brandschottschließung DN150 mittels HILTI",
+"einheit": "Stk",
+"belege": 1,
+"min": 218.64,
+"median": 218.64,
+"max": 218.64,
+"quelle": "P2501105_ANG0010853_BLBAOLIS_WE1992_HSBIBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Bügelschelle 12-16mm",
+"einheit": "Stk.",
+"belege": 1,
+"min": 3.22,
+"median": 3.22,
+"max": 3.22,
+"quelle": "P2500963_ANG0011009_Goldbeck_HQHamburg_rev2.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Bügelschelle 16-22mm liefern und montieren",
+"einheit": "Stk",
+"belege": 1,
+"min": 3.14,
+"median": 3.14,
+"max": 3.14,
+"quelle": "Belegbearbeitung P2600151_ANG0010991_UTA Försterei Hasselbusch_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Bügelschelle 34-40mm",
+"einheit": "Stk.",
+"belege": 1,
+"min": 3.72,
+"median": 3.72,
+"max": 3.72,
+"quelle": "P2500963_ANG0011009_Goldbeck_HQHamburg_rev2.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Bügelschelle 46-52mm",
+"einheit": "Stk.",
+"belege": 1,
+"min": 4.09,
+"median": 4.09,
+"max": 4.09,
+"quelle": "P2500969_ANG0010877 APCOA Schillerplatz Stuttgart_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Bügelschelle 8-12mm",
+"einheit": "Stk.",
+"belege": 2,
+"min": 3.12,
+"median": 3.12,
+"max": 3.12,
+"quelle": "P2500969_ANG0010877 APCOA Schillerplatz Stuttgart_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Bügelschelle 8-12mm liefern und montieren",
+"einheit": "Stk",
+"belege": 1,
+"min": 3.07,
+"median": 3.07,
+"max": 3.07,
+"quelle": "Belegbearbeitung P2600151_ANG0010991_UTA Försterei Hasselbusch_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Bügelschellen liefern montieren 8-58mm",
+"einheit": "Stk",
+"belege": 2,
+"min": 3.89,
+"median": 3.89,
+"max": 3.89,
+"quelle": "P2501109_ANG0010854_Techem_BLB_WE1639_PolizeipraesidiumBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "C-Profilschiene 30x15mm Wandbefestigung",
+"einheit": "m",
+"belege": 3,
+"min": 34.81,
+"median": 34.81,
+"max": 34.81,
+"quelle": "P2501108_ANG0010847_Techem_BLB_WE1035_BlueBoxBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "C-Schiene 100mm liefern und montieren",
+"einheit": "Stk",
+"belege": 1,
+"min": 24.17,
+"median": 24.17,
+"max": 24.17,
+"quelle": "Belegbearbeitung P2600151_ANG0010991_UTA Försterei Hasselbusch_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Durchgangsklemme blau Phoenix PT4-TWIN/1P liefern und montieren",
+"einheit": "Stk",
+"belege": 1,
+"min": 3.91,
+"median": 3.91,
+"max": 3.91,
+"quelle": "Belegbearbeitung P2600151_ANG0010991_UTA Försterei Hasselbusch_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Durchgangsklemme grau Phoenix PT4-TWIN/1P liefern und montieren",
+"einheit": "Stk",
+"belege": 1,
+"min": 3.91,
+"median": 3.91,
+"max": 3.91,
+"quelle": "Belegbearbeitung P2600151_ANG0010991_UTA Försterei Hasselbusch_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Durchgangsklemme grün/gelb Phoenix PT4-TWIN/1P liefern und montieren",
+"einheit": "Stk",
+"belege": 1,
+"min": 5.7,
+"median": 5.7,
+"max": 5.7,
+"quelle": "Belegbearbeitung P2600151_ANG0010991_UTA Försterei Hasselbusch_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Durchgangsklemmen Abschlussdeckel Phoenix D-PT4-TWIN liefern und montieren",
+"einheit": "Stk",
+"belege": 1,
+"min": 1.85,
+"median": 1.85,
+"max": 1.85,
+"quelle": "Belegbearbeitung P2600151_ANG0010991_UTA Försterei Hasselbusch_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Dübel Montage Decken/Wände mit Wärmedämmplatten",
+"einheit": "Stk.",
+"belege": 1,
+"min": 10.44,
+"median": 10.44,
+"max": 10.44,
+"quelle": "P2500963_ANG0011009_Goldbeck_HQHamburg_rev2.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Eingrabsockel einbauen und Verteilerschrank aufsetzen inkl. Baugrube",
+"einheit": "St",
+"belege": 1,
+"min": 350.0,
+"median": 350.0,
+"max": 350.0,
+"quelle": "Angebot 221822Dortmund.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Einspeisekasten 160A links/rechts für Stromschiene",
+"einheit": "Stk.",
+"belege": 1,
+"min": 452.17,
+"median": 452.17,
+"max": 452.17,
+"quelle": "P2500969_ANG0010877 APCOA Schillerplatz Stuttgart_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Elektroinstallationsrohr AD 20mm AP",
+"einheit": "m",
+"belege": 3,
+"min": 15.49,
+"median": 15.49,
+"max": 15.49,
+"quelle": "P2501109_ANG0010854_Techem_BLB_WE1639_PolizeipraesidiumBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Elektroinstallationsrohr AD 32mm AP",
+"einheit": "m",
+"belege": 3,
+"min": 16.41,
+"median": 16.41,
+"max": 16.41,
+"quelle": "P2501109_ANG0010854_Techem_BLB_WE1639_PolizeipraesidiumBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Elektroinstallationsrohr AD 40mm AP",
+"einheit": "m",
+"belege": 1,
+"min": 19.94,
+"median": 19.94,
+"max": 19.94,
+"quelle": "P2501105_ANG0010853_BLBAOLIS_WE1992_HSBIBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Elektroinstallationsrohr PVC-U AD 16mm AP Abstandsschellen",
+"einheit": "m",
+"belege": 1,
+"min": 15.79,
+"median": 15.79,
+"max": 15.79,
+"quelle": "P2501121_ANG0010811_TAWO Anfrage Berlin Friedrichstraße Tishman Speyer.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Elektroinstallationsrohr PVC-U AD 25mm AP Abstandsschellen",
+"einheit": "m",
+"belege": 1,
+"min": 16.05,
+"median": 16.05,
+"max": 16.05,
+"quelle": "P2501121_ANG0010811_TAWO Anfrage Berlin Friedrichstraße Tishman Speyer.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Elektroinstallationsrohr PVC-U AD 32mm AP Abstandsschellen",
+"einheit": "m",
+"belege": 1,
+"min": 16.71,
+"median": 16.71,
+"max": 16.71,
+"quelle": "P2501121_ANG0010811_TAWO Anfrage Berlin Friedrichstraße Tishman Speyer.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Erdung Erdungssammelltg Stahl niro Rd10",
+"einheit": "m",
+"belege": 1,
+"min": 16.03,
+"median": 16.03,
+"max": 16.03,
+"quelle": "P2501107_ANG0010851_Techem_BLB_WE19902_LOKBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Erdungsbandrohrschelle D26,9-165mm",
+"einheit": "Stk.",
+"belege": 1,
+"min": 19.41,
+"median": 19.41,
+"max": 19.41,
+"quelle": "P2501046_ANG0010704_Duwensee_2AS.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Erdungsklemme 4-50qmm an Rundstahl 8-10mm",
+"einheit": "Stk.",
+"belege": 1,
+"min": 13.09,
+"median": 13.09,
+"max": 13.09,
+"quelle": "P2501046_ANG0010704_Duwensee_2AS.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Erdübergangswiderstand der Erdungsanlage messen/protokollieren",
+"einheit": "Stk.",
+"belege": 1,
+"min": 108.6,
+"median": 108.6,
+"max": 108.6,
+"quelle": "P2501046_ANG0010704_Duwensee_2AS.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Erstprüfung Neuanlage nach VDE 100-600",
+"einheit": "Stk",
+"belege": 3,
+"min": 248.0,
+"median": 248.0,
+"max": 248.0,
+"quelle": "P2501108_ANG0010847_Techem_BLB_WE1035_BlueBoxBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Erstprüfung Neuanlage nach VDE 100-600",
+"einheit": "St",
+"belege": 2,
+"min": 248.0,
+"median": 248.0,
+"max": 248.0,
+"quelle": "P2501106_ANG0010839_Techem_BLB_WE1990_ErsatzparkhausBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Erstprüfung des Schienensystems nach DIN VDE 0100-600",
+"einheit": "pschl.",
+"belege": 1,
+"min": 275.5,
+"median": 275.5,
+"max": 275.5,
+"quelle": "P2500969_ANG0010877 APCOA Schillerplatz Stuttgart_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "FI-Schutzschalter 1p+N B16A mit LS liefern montieren",
+"einheit": "Stk",
+"belege": 1,
+"min": 47.54,
+"median": 47.54,
+"max": 47.54,
+"quelle": "P2501108_ANG0010847_Techem_BLB_WE1035_BlueBoxBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Fachgerechtes Verschließen/Verdichten Wanddurchbruch",
+"einheit": "Stk",
+"belege": 1,
+"min": 88.5,
+"median": 88.5,
+"max": 88.5,
+"quelle": "P2501109_ANG0010854_Techem_BLB_WE1639_PolizeipraesidiumBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Fehlerstrom-Schutzschalter 3p+N 25A TYP-A",
+"einheit": "Stk.",
+"belege": 1,
+"min": 63.09,
+"median": 63.09,
+"max": 63.09,
+"quelle": "P2501056_ANG0010891 Wüstenroth Oberursel.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Fehlerstrom-Schutzschalter 3p+N 40A TYP-A",
+"einheit": "Stk.",
+"belege": 1,
+"min": 62.74,
+"median": 62.74,
+"max": 62.74,
+"quelle": "P2500969_ANG0010877 APCOA Schillerplatz Stuttgart_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Flammwidriges Stangenrohr H16 PVC liefern und montieren",
+"einheit": "m",
+"belege": 1,
+"min": 15.79,
+"median": 15.79,
+"max": 15.79,
+"quelle": "P2500963_ANG0011009_Goldbeck_HQHamburg_rev2.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Flammwidriges Stangenrohr H25 PVC liefern und montieren",
+"einheit": "Meter",
+"belege": 1,
+"min": 16.07,
+"median": 16.07,
+"max": 16.07,
+"quelle": "P2500969_ANG0010877 APCOA Schillerplatz Stuttgart_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Flammwidriges Stangenrohr H32 PVC liefern und montieren",
+"einheit": "m",
+"belege": 1,
+"min": 16.71,
+"median": 16.71,
+"max": 16.71,
+"quelle": "P2500963_ANG0011009_Goldbeck_HQHamburg_rev2.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Gelenkverbinder universelle Breite vertikal 0-90°",
+"einheit": "Stk.",
+"belege": 1,
+"min": 65.85,
+"median": 65.85,
+"max": 65.85,
+"quelle": "P2500963_ANG0011009_Goldbeck_HQHamburg_rev2.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "HELU POWER 1000 RV-K 1x185mm² verlegen",
+"einheit": "m",
+"belege": 1,
+"min": 78.41,
+"median": 78.41,
+"max": 78.41,
+"quelle": "P2501046_ANG0010704_Duwensee_2AS.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "HELU POWER 1000 RV-K 1x95mm² verlegen",
+"einheit": "m",
+"belege": 1,
+"min": 45.4,
+"median": 45.4,
+"max": 45.4,
+"quelle": "P2501046_ANG0010704_Duwensee_2AS.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Hauptleitungsabzweigklemme Forstamtzähler liefern und montieren",
+"einheit": "Stk",
+"belege": 1,
+"min": 36.52,
+"median": 36.52,
+"max": 36.52,
+"quelle": "Belegbearbeitung P2600151_ANG0010991_UTA Försterei Hasselbusch_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Hutschienen-Netzteil EFB HDR-15-5 5V liefern und montieren",
+"einheit": "Stk",
+"belege": 1,
+"min": 36.63,
+"median": 36.63,
+"max": 36.63,
+"quelle": "Belegbearbeitung P2600151_ANG0010991_UTA Försterei Hasselbusch_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Hutschienenmessgerät PAC2200",
+"einheit": "Stk.",
+"belege": 1,
+"min": 433.19,
+"median": 433.19,
+"max": 433.19,
+"quelle": "P2500969_ANG0010877 APCOA Schillerplatz Stuttgart_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Hutschienenmessgerät PAC2200 MID-konform bis 65A liefern und montieren",
+"einheit": "Stk",
+"belege": 1,
+"min": 442.18,
+"median": 442.18,
+"max": 442.18,
+"quelle": "Belegbearbeitung P2600151_ANG0010991_UTA Försterei Hasselbusch_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Hutschienenmessgerät PAC2200 für Lastmanagement",
+"einheit": "Stk.",
+"belege": 1,
+"min": 435.66,
+"median": 435.66,
+"max": 435.66,
+"quelle": "P2500963_ANG0011009_Goldbeck_HQHamburg_rev2.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Hängestiel HI 80/300 mit Kopfplatte",
+"einheit": "Stk.",
+"belege": 1,
+"min": 88.98,
+"median": 88.98,
+"max": 88.98,
+"quelle": "P2500963_ANG0011009_Goldbeck_HQHamburg_rev2.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Hängestiel HI 80/500 mit Kopfplatte",
+"einheit": "Stk.",
+"belege": 1,
+"min": 107.6,
+"median": 107.6,
+"max": 107.6,
+"quelle": "P2500963_ANG0011009_Goldbeck_HQHamburg_rev2.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Janitza KUW2/40-200/1A Kabelumbaustromwandler",
+"einheit": "Stk.",
+"belege": 1,
+"min": 99.26,
+"median": 99.26,
+"max": 99.26,
+"quelle": "P2500963_ANG0011009_Goldbeck_HQHamburg_rev2.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Janitza Kabelumbaustromwandler",
+"einheit": "Stk.",
+"belege": 1,
+"min": 99.26,
+"median": 99.26,
+"max": 99.26,
+"quelle": "P2500969_ANG0010877 APCOA Schillerplatz Stuttgart_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Kabel NYCWY 4x35SM/16 verlegen",
+"einheit": "m",
+"belege": 2,
+"min": 8.0,
+"median": 21.72,
+"max": 35.44,
+"quelle": "P2501107_ANG0010851_Techem_BLB_WE19902_LOKBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Kabel NYY-J 1x16RE (Erdung)",
+"einheit": "m",
+"belege": 4,
+"min": 7.67,
+"median": 7.67,
+"max": 7.67,
+"quelle": "P2501108_ANG0010847_Techem_BLB_WE1035_BlueBoxBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Kabel NYY-J 1x50RE",
+"einheit": "m",
+"belege": 1,
+"min": 14.87,
+"median": 14.87,
+"max": 14.87,
+"quelle": "P2501109_ANG0010854_Techem_BLB_WE1639_PolizeipraesidiumBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Kabel NYY-J 5x16RE in Kabelrinne/Kanal",
+"einheit": "m",
+"belege": 1,
+"min": 23.5,
+"median": 23.5,
+"max": 23.5,
+"quelle": "P2501108_ANG0010847_Techem_BLB_WE1035_BlueBoxBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Kabel NYY-J 5x6RE in Kabelrinne/Kanal",
+"einheit": "m",
+"belege": 4,
+"min": 12.83,
+"median": 12.83,
+"max": 12.83,
+"quelle": "P2501107_ANG0010851_Techem_BLB_WE19902_LOKBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Kabelrinne gelocht Stahl bandverz. H35mm B300mm",
+"einheit": "m",
+"belege": 1,
+"min": 96.54,
+"median": 96.54,
+"max": 96.54,
+"quelle": "P2501105_ANG0010853_BLBAOLIS_WE1992_HSBIBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Kabelschutzrohr PE-HD AD 50mm liefern",
+"einheit": "m",
+"belege": 3,
+"min": 8.85,
+"median": 8.85,
+"max": 8.85,
+"quelle": "P2501108_ANG0010847_Techem_BLB_WE1035_BlueBoxBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Kabelschutzrohr PE-HD AD50mm WD4,6mm liefern Straße",
+"einheit": "m",
+"belege": 1,
+"min": 6.0,
+"median": 6.0,
+"max": 6.0,
+"quelle": "Angebot 221822Dortmund.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Kabelschutzrohr PE-HD-Verbundrohr flexibel AD 110mm",
+"einheit": "m",
+"belege": 1,
+"min": 10.08,
+"median": 10.08,
+"max": 10.08,
+"quelle": "P2501109_ANG0010854_Techem_BLB_WE1639_PolizeipraesidiumBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Kabelschutzrohr PE-HD-Verbundrohr flexibel AD110mm L50m Ringbunde liefern",
+"einheit": "m",
+"belege": 1,
+"min": 7.5,
+"median": 7.5,
+"max": 7.5,
+"quelle": "Angebot 221822Dortmund.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Kabelzugschacht Tiefe bis 100cm inkl. Abdeckung",
+"einheit": "ST",
+"belege": 1,
+"min": 2650.0,
+"median": 2650.0,
+"max": 2650.0,
+"quelle": "Angebot 221852GeneralLV.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Kernbohrung Beton D150-200mm T35-40cm",
+"einheit": "Stk",
+"belege": 1,
+"min": 359.0,
+"median": 359.0,
+"max": 359.0,
+"quelle": "P2501109_ANG0010854_Techem_BLB_WE1639_PolizeipraesidiumBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Kernbohrung Beton D150-200mm T35-40cm",
+"einheit": "St",
+"belege": 1,
+"min": 359.0,
+"median": 359.0,
+"max": 359.0,
+"quelle": "P2501105_ANG0010853_BLBAOLIS_WE1992_HSBIBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Klemmenbeschriftung Phoenix ZB6 liefern und montieren",
+"einheit": "Stk",
+"belege": 1,
+"min": 3.65,
+"median": 3.65,
+"max": 3.65,
+"quelle": "Belegbearbeitung P2600151_ANG0010991_UTA Försterei Hasselbusch_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Klemmleisten-Kennzeichnungsträger Phoenix KLM-A liefern und montieren",
+"einheit": "Stk",
+"belege": 1,
+"min": 4.03,
+"median": 4.03,
+"max": 4.03,
+"quelle": "Belegbearbeitung P2600151_ANG0010991_UTA Försterei Hasselbusch_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Kombi-Ableiter 3p+N+PE Typ 1+2 TT-/TN-S-Systeme",
+"einheit": "Stk.",
+"belege": 1,
+"min": 1600.03,
+"median": 1600.03,
+"max": 1600.03,
+"quelle": "P2501046_ANG0010704_Duwensee_2AS.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Kombi-Ableiter Typ1+2 Sammelschiene liefern und montieren",
+"einheit": "Stk",
+"belege": 1,
+"min": 200.08,
+"median": 200.08,
+"max": 200.08,
+"quelle": "Belegbearbeitung P2600151_ANG0010991_UTA Försterei Hasselbusch_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Korrosionsschutzbinde 50mm x 10m",
+"einheit": "Stk.",
+"belege": 1,
+"min": 14.91,
+"median": 14.91,
+"max": 14.91,
+"quelle": "P2501046_ANG0010704_Duwensee_2AS.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Ladeverteiler mit ÜSS, Netzwerktechnik, Fehlerstromschutz",
+"einheit": "Stk.",
+"belege": 1,
+"min": 5063.44,
+"median": 5063.44,
+"max": 5063.44,
+"quelle": "P2500969_ANG0010877 APCOA Schillerplatz Stuttgart_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Ladeverteiler mit Überspannungsschutz/Netzwerktechnik/Leitungsschutz",
+"einheit": "Stk",
+"belege": 2,
+"min": 6688.17,
+"median": 7283.75,
+"max": 7879.33,
+"quelle": "P2501109_ANG0010854_Techem_BLB_WE1639_PolizeipraesidiumBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Ladeverteiler Überspannungsschutz/Netzwerktechnik/Fehlerstromschutz",
+"einheit": "Stk",
+"belege": 1,
+"min": 7018.54,
+"median": 7018.54,
+"max": 7018.54,
+"quelle": "P2501107_ANG0010851_Techem_BLB_WE19902_LOKBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Leerrohr H16 PVC liefern und montieren",
+"einheit": "m",
+"belege": 1,
+"min": 15.66,
+"median": 15.66,
+"max": 15.66,
+"quelle": "Belegbearbeitung P2600151_ANG0010991_UTA Försterei Hasselbusch_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Leerrohr H32 PVC liefern und montieren",
+"einheit": "m",
+"belege": 1,
+"min": 16.95,
+"median": 16.95,
+"max": 16.95,
+"quelle": "Belegbearbeitung P2600151_ANG0010991_UTA Försterei Hasselbusch_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Leitungsschutzkanal Außen liefern montieren",
+"einheit": "m",
+"belege": 1,
+"min": 86.07,
+"median": 86.07,
+"max": 86.07,
+"quelle": "P2501109_ANG0010854_Techem_BLB_WE1639_PolizeipraesidiumBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Leitungsschutzschalter 3 polig B20A 6kA",
+"einheit": "Stk.",
+"belege": 1,
+"min": 50.23,
+"median": 50.23,
+"max": 50.23,
+"quelle": "P2501056_ANG0010891 Wüstenroth Oberursel.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Leitungsschutzschalter 3 polig C32A 6kA",
+"einheit": "Stk.",
+"belege": 2,
+"min": 56.13,
+"median": 56.13,
+"max": 56.13,
+"quelle": "P2500969_ANG0010877 APCOA Schillerplatz Stuttgart_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Leitungsschutzschalter 3-polig C32A 6kA liefern und montieren",
+"einheit": "Stk",
+"belege": 1,
+"min": 55.97,
+"median": 55.97,
+"max": 55.97,
+"quelle": "Belegbearbeitung P2600151_ANG0010991_UTA Försterei Hasselbusch_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Leitungsschutzschalter 3p C10A 6kA für MID-Zähler dyn. LMS",
+"einheit": "Stk.",
+"belege": 1,
+"min": 55.14,
+"median": 55.14,
+"max": 55.14,
+"quelle": "P2500963_ANG0011009_Goldbeck_HQHamburg_rev2.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Leitungsschutzschalter 3p C20A 6kA für MID-Zähler/dyn. LMS",
+"einheit": "Stk.",
+"belege": 1,
+"min": 55.0,
+"median": 55.0,
+"max": 55.0,
+"quelle": "P2500963_ANG0011009_Goldbeck_HQHamburg_rev2.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Meister/-in sämtl. Kosten/Zuschläge",
+"einheit": "h",
+"belege": 5,
+"min": 130.5,
+"median": 130.5,
+"max": 130.5,
+"quelle": "P2501108_ANG0010847_Techem_BLB_WE1035_BlueBoxBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Mersen NH00GG50V160 Sicherungseinsatz gG Gr.00 AC500V 160A",
+"einheit": "Stück",
+"belege": 1,
+"min": 9.19,
+"median": 9.19,
+"max": 9.19,
+"quelle": "P2500969_ANG0010877 APCOA Schillerplatz Stuttgart_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Mersen Sicherungseinsatz gG D02 NEOZED AC400V 35A",
+"einheit": "Stk",
+"belege": 3,
+"min": 4.12,
+"median": 4.12,
+"max": 4.38,
+"quelle": "P2501107_ANG0010851_Techem_BLB_WE19902_LOKBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Monteur/-in sämtl. Kosten/Zuschläge",
+"einheit": "h",
+"belege": 5,
+"min": 84.0,
+"median": 84.0,
+"max": 84.0,
+"quelle": "P2501108_ANG0010847_Techem_BLB_WE1035_BlueBoxBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "NH Sicherung NH2",
+"einheit": "Stk",
+"belege": 3,
+"min": 14.22,
+"median": 14.22,
+"max": 31.62,
+"quelle": "P2501107_ANG0010851_Techem_BLB_WE19902_LOKBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "NH00 Sicherungseinsatz 160A",
+"einheit": "Stk.",
+"belege": 1,
+"min": 8.33,
+"median": 8.33,
+"max": 8.33,
+"quelle": "P2500963_ANG0011009_Goldbeck_HQHamburg_rev2.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "NH01 Sicherungseinsatz 125A",
+"einheit": "Stk.",
+"belege": 1,
+"min": 12.21,
+"median": 12.21,
+"max": 12.21,
+"quelle": "P2500969_ANG0010877 APCOA Schillerplatz Stuttgart_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "NH02 Sicherungseinsatz 315A",
+"einheit": "Stk.",
+"belege": 1,
+"min": 13.37,
+"median": 13.37,
+"max": 13.37,
+"quelle": "P2501046_ANG0010704_Duwensee_2AS.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "NYCWY 4X70/35mm² Energie-/Steuerkabel liefern und einziehen",
+"einheit": "m",
+"belege": 1,
+"min": 82.7,
+"median": 82.7,
+"max": 82.7,
+"quelle": "P2500963_ANG0011009_Goldbeck_HQHamburg_rev2.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "NYCWY 4x150mm²/70mm² Energie-/Steuerkabel einziehen",
+"einheit": "m",
+"belege": 1,
+"min": 118.35,
+"median": 118.35,
+"max": 118.35,
+"quelle": "P2501109_ANG0010854_Techem_BLB_WE1639_PolizeipraesidiumBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "NYY-J 1X240mm² Energie-/Steuerkabel liefern und einziehen",
+"einheit": "m",
+"belege": 1,
+"min": 54.11,
+"median": 54.11,
+"max": 54.11,
+"quelle": "P2501046_ANG0010704_Duwensee_2AS.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "NYY-J 1x240mm² einseitiger Anschluss",
+"einheit": "Stk.",
+"belege": 1,
+"min": 87.15,
+"median": 87.15,
+"max": 87.15,
+"quelle": "P2501046_ANG0010704_Duwensee_2AS.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "NYY-J 1x25mm² Potentialausgleichsleitung Erdverlegung",
+"einheit": "m",
+"belege": 1,
+"min": 10.89,
+"median": 10.89,
+"max": 10.89,
+"quelle": "P2500963_ANG0011009_Goldbeck_HQHamburg_rev2.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "NYY-J 1x50mm² Potentialausgleichsleitung Erdverlegung",
+"einheit": "m",
+"belege": 1,
+"min": 17.42,
+"median": 17.42,
+"max": 17.42,
+"quelle": "P2501046_ANG0010704_Duwensee_2AS.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "NYY-J 3X2,5mm² Energie-/Steuerkabel liefern und einziehen",
+"einheit": "m",
+"belege": 1,
+"min": 7.11,
+"median": 7.11,
+"max": 7.11,
+"quelle": "P2501046_ANG0010704_Duwensee_2AS.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "NYY-J 3x2,5mm² Energie-/Steuerkabel einziehen",
+"einheit": "m",
+"belege": 2,
+"min": 6.96,
+"median": 6.96,
+"max": 6.96,
+"quelle": "P2501108_ANG0010847_Techem_BLB_WE1035_BlueBoxBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "NYY-J 3x2,5mm² bis 5x4mm² einseitiger Anschluss",
+"einheit": "Stk.",
+"belege": 1,
+"min": 36.25,
+"median": 36.25,
+"max": 36.25,
+"quelle": "P2500963_ANG0011009_Goldbeck_HQHamburg_rev2.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "NYY-J 5X2,5mm² Energie-/Steuerkabel liefern und einziehen",
+"einheit": "m",
+"belege": 1,
+"min": 9.23,
+"median": 9.23,
+"max": 9.23,
+"quelle": "P2500963_ANG0011009_Goldbeck_HQHamburg_rev2.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "NYY-J 5X6mm² Energie-/Steuerkabel liefern und einziehen",
+"einheit": "m",
+"belege": 2,
+"min": 13.98,
+"median": 14.4,
+"max": 14.82,
+"quelle": "P2501056_ANG0010891 Wüstenroth Oberursel.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "NYY-J 5X6mm² einseitiger Anschluss",
+"einheit": "Stk.",
+"belege": 1,
+"min": 65.25,
+"median": 65.25,
+"max": 65.25,
+"quelle": "P2500969_ANG0010877 APCOA Schillerplatz Stuttgart_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "NYY-J 5X95mm² Energie-/Steuerkabel liefern und einziehen",
+"einheit": "m",
+"belege": 1,
+"min": 101.19,
+"median": 101.19,
+"max": 101.19,
+"quelle": "P2500969_ANG0010877 APCOA Schillerplatz Stuttgart_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "NYY-J 5x10mm² Energie-/Steuerkabel liefern und verlegen",
+"einheit": "m",
+"belege": 1,
+"min": 18.33,
+"median": 18.33,
+"max": 18.33,
+"quelle": "Belegbearbeitung P2600151_ANG0010991_UTA Försterei Hasselbusch_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "NYY-J 5x6-5x16mm² einseitiger Anschluss",
+"einheit": "Stk",
+"belege": 1,
+"min": 58.0,
+"median": 58.0,
+"max": 58.0,
+"quelle": "Belegbearbeitung P2600151_ANG0010991_UTA Försterei Hasselbusch_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "NYY-J 5x6mm² Energie-/Steuerkabel liefern und einziehen",
+"einheit": "Meter",
+"belege": 1,
+"min": 13.68,
+"median": 13.68,
+"max": 13.68,
+"quelle": "P2500969_ANG0010877 APCOA Schillerplatz Stuttgart_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "NYY-J 5x6mm² bis 5x16mm² einseitiger Anschluss",
+"einheit": "Stk.",
+"belege": 2,
+"min": 58.0,
+"median": 59.33,
+"max": 60.65,
+"quelle": "P2501056_ANG0010891 Wüstenroth Oberursel.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "NYY-J 5x70mm² einseitiger Anschluss",
+"einheit": "Stk.",
+"belege": 1,
+"min": 131.28,
+"median": 131.28,
+"max": 131.28,
+"quelle": "P2500963_ANG0011009_Goldbeck_HQHamburg_rev2.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "NYY-J 5x95mm² einseitiger Anschluss",
+"einheit": "Stk.",
+"belege": 1,
+"min": 158.4,
+"median": 158.4,
+"max": 158.4,
+"quelle": "P2500969_ANG0010877 APCOA Schillerplatz Stuttgart_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "NYY-O 1X240mm² Energie-/Steuerkabel liefern und einziehen",
+"einheit": "m",
+"belege": 1,
+"min": 54.11,
+"median": 54.11,
+"max": 54.11,
+"quelle": "P2501046_ANG0010704_Duwensee_2AS.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "NYY-O/J 5x1x185mm² Energie-/Steuerkabel einziehen",
+"einheit": "m",
+"belege": 1,
+"min": 181.45,
+"median": 181.45,
+"max": 181.45,
+"quelle": "P2501105_ANG0010853_BLBAOLIS_WE1992_HSBIBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "NYY-O/J 5x1x240mm² Energie-/Steuerkabel einziehen",
+"einheit": "m",
+"belege": 1,
+"min": 199.14,
+"median": 199.14,
+"max": 199.14,
+"quelle": "P2501105_ANG0010853_BLBAOLIS_WE1992_HSBIBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Niedax BAK 22.2 Hammerfuß Bügelschelle f.2 Kabel D18-22mm",
+"einheit": "Stk.",
+"belege": 1,
+"min": 5.97,
+"median": 5.97,
+"max": 5.97,
+"quelle": "P2501046_ANG0010704_Duwensee_2AS.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Niedax BAK 26.2 Hammerfuß Bügelschelle f.2 Kabel D22-26mm",
+"einheit": "Stk.",
+"belege": 1,
+"min": 6.65,
+"median": 6.65,
+"max": 6.65,
+"quelle": "P2501046_ANG0010704_Duwensee_2AS.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Niedax BAK14.2 Hammerfuß-Bügelschelle f.2 Kabel D10-14mm",
+"einheit": "Stk.",
+"belege": 1,
+"min": 5.91,
+"median": 5.91,
+"max": 5.91,
+"quelle": "P2501046_ANG0010704_Duwensee_2AS.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Niedax BAK22 Hammerfuß Bügelschelle 1 Kabel D18-22mm",
+"einheit": "Stk.",
+"belege": 1,
+"min": 4.21,
+"median": 4.21,
+"max": 4.21,
+"quelle": "P2501046_ANG0010704_Duwensee_2AS.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Niedax DW16 Doppelwanne D14-16mm",
+"einheit": "Stk.",
+"belege": 1,
+"min": 1.02,
+"median": 1.02,
+"max": 1.02,
+"quelle": "P2501046_ANG0010704_Duwensee_2AS.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Niedax DW22 Doppelwanne D20-22mm",
+"einheit": "Stk.",
+"belege": 1,
+"min": 1.06,
+"median": 1.06,
+"max": 1.06,
+"quelle": "P2501046_ANG0010704_Duwensee_2AS.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Niedax DW26 Doppelwanne D22-26mm",
+"einheit": "Stk.",
+"belege": 1,
+"min": 1.09,
+"median": 1.09,
+"max": 1.09,
+"quelle": "P2501046_ANG0010704_Duwensee_2AS.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Niedax GWA16 Gegenwanne Bügelschelle D12-16mm",
+"einheit": "Stk.",
+"belege": 1,
+"min": 0.68,
+"median": 0.68,
+"max": 0.68,
+"quelle": "P2501046_ANG0010704_Duwensee_2AS.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Niedax GWA22 Gegenwanne Bügelschelle D18-22mm",
+"einheit": "Stk.",
+"belege": 1,
+"min": 0.72,
+"median": 0.72,
+"max": 0.72,
+"quelle": "P2501046_ANG0010704_Duwensee_2AS.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Niedax GWA26 Gegenwanne Bügelschelle D22-26mm",
+"einheit": "Stk.",
+"belege": 1,
+"min": 0.76,
+"median": 0.76,
+"max": 0.76,
+"quelle": "P2501046_ANG0010704_Duwensee_2AS.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Niedax WRL105.200 Weitspannkabelrinne 105x200",
+"einheit": "m",
+"belege": 1,
+"min": 82.69,
+"median": 82.69,
+"max": 82.69,
+"quelle": "P2500963_ANG0011009_Goldbeck_HQHamburg_rev2.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Prüfung Verteilung nach DIN VDE 0100-600 protokollieren",
+"einheit": "Stk",
+"belege": 1,
+"min": 304.5,
+"median": 304.5,
+"max": 304.5,
+"quelle": "Belegbearbeitung P2600151_ANG0010991_UTA Försterei Hasselbusch_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Prüfung der Verteilung nach DIN VDE 0100-600",
+"einheit": "Stk.",
+"belege": 1,
+"min": 304.5,
+"median": 304.5,
+"max": 304.5,
+"quelle": "P2500963_ANG0011009_Goldbeck_HQHamburg_rev2.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Prüfung der ersten Verteilung nach DIN VDE 0100-600",
+"einheit": "Stk.",
+"belege": 1,
+"min": 332.0,
+"median": 332.0,
+"max": 332.0,
+"quelle": "P2500969_ANG0010877 APCOA Schillerplatz Stuttgart_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Querträger 200mm Weitspanntrasse an Hängestiel",
+"einheit": "Stk.",
+"belege": 1,
+"min": 144.77,
+"median": 144.77,
+"max": 144.77,
+"quelle": "P2500963_ANG0011009_Goldbeck_HQHamburg_rev2.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Rammschutzpoller liefern und in Erdreich einbauen",
+"einheit": "Stk",
+"belege": 1,
+"min": 243.4,
+"median": 243.4,
+"max": 243.4,
+"quelle": "P2501107_ANG0010851_Techem_BLB_WE19902_LOKBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Reihenklemmen Endhalter Phoenix E/UK liefern und montieren",
+"einheit": "Stk",
+"belege": 1,
+"min": 3.91,
+"median": 3.91,
+"max": 3.91,
+"quelle": "Belegbearbeitung P2600151_ANG0010991_UTA Försterei Hasselbusch_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Steuerleitung via Schraubklemme einseitig anschließen",
+"einheit": "Stk",
+"belege": 1,
+"min": 15.0,
+"median": 15.0,
+"max": 15.0,
+"quelle": "Belegbearbeitung P2600151_ANG0010991_UTA Försterei Hasselbusch_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Steuerleitung via Schraubklemme einseitig anschließen",
+"einheit": "Stk.",
+"belege": 1,
+"min": 15.05,
+"median": 15.05,
+"max": 15.05,
+"quelle": "P2500963_ANG0011009_Goldbeck_HQHamburg_rev2.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Stromlaufplan",
+"einheit": "Stk",
+"belege": 3,
+"min": 86.9,
+"median": 86.9,
+"max": 86.9,
+"quelle": "P2501108_ANG0010847_Techem_BLB_WE1035_BlueBoxBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Stromlaufplan",
+"einheit": "St",
+"belege": 1,
+"min": 86.9,
+"median": 86.9,
+"max": 86.9,
+"quelle": "P2501105_ANG0010853_BLBAOLIS_WE1992_HSBIBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Stützpfeiler aus U-Profil liefern montieren",
+"einheit": "Stk",
+"belege": 1,
+"min": 1075.14,
+"median": 1075.14,
+"max": 1075.14,
+"quelle": "P2501109_ANG0010854_Techem_BLB_WE1639_PolizeipraesidiumBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "TAB-konforme Wandlermessung 400A für Bielefelder Netz GmbH",
+"einheit": "Stk",
+"belege": 2,
+"min": 5896.0,
+"median": 5896.0,
+"max": 5896.0,
+"quelle": "P2501109_ANG0010854_Techem_BLB_WE1639_PolizeipraesidiumBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Tiefenerder V4A",
+"einheit": "m",
+"belege": 3,
+"min": 158.72,
+"median": 158.72,
+"max": 158.72,
+"quelle": "P2501108_ANG0010847_Techem_BLB_WE1035_BlueBoxBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Trennsteg universelle Breite für Kabeltrennung",
+"einheit": "m",
+"belege": 1,
+"min": 22.66,
+"median": 22.66,
+"max": 22.66,
+"quelle": "P2500963_ANG0011009_Goldbeck_HQHamburg_rev2.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Trägerklammer für Rohre 20mm",
+"einheit": "Stk",
+"belege": 2,
+"min": 7.28,
+"median": 7.28,
+"max": 7.28,
+"quelle": "P2501109_ANG0010854_Techem_BLB_WE1639_PolizeipraesidiumBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Trägerklammer für Rohre 32mm",
+"einheit": "Stk",
+"belege": 2,
+"min": 7.51,
+"median": 7.51,
+"max": 7.51,
+"quelle": "P2501109_ANG0010854_Techem_BLB_WE1639_PolizeipraesidiumBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Trägerklemmen Installationsrohre H16 an Trägersystemen",
+"einheit": "Stk.",
+"belege": 1,
+"min": 8.5,
+"median": 8.5,
+"max": 8.5,
+"quelle": "P2500963_ANG0011009_Goldbeck_HQHamburg_rev2.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Trägerklemmen Installationsrohre H32 an Trägersystemen",
+"einheit": "Stk.",
+"belege": 1,
+"min": 7.75,
+"median": 7.75,
+"max": 7.75,
+"quelle": "P2500963_ANG0011009_Goldbeck_HQHamburg_rev2.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Umbau Bestandsverteilung für 10 Ladestationen (Set)",
+"einheit": "Stk.",
+"belege": 1,
+"min": 1318.53,
+"median": 1318.53,
+"max": 1318.53,
+"quelle": "P2500963_ANG0011009_Goldbeck_HQHamburg_rev2.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Unterverteilung im Bestand komplett öffnen",
+"einheit": "Stk",
+"belege": 1,
+"min": 300.0,
+"median": 300.0,
+"max": 300.0,
+"quelle": "P2501108_ANG0010847_Techem_BLB_WE1035_BlueBoxBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Verbinder Kl.H Parallelverbindung Stahl niro",
+"einheit": "Stk",
+"belege": 1,
+"min": 22.8,
+"median": 22.8,
+"max": 22.8,
+"quelle": "P2501109_ANG0010854_Techem_BLB_WE1639_PolizeipraesidiumBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Verdrahtungsleitungen für Schaltschränke 6mm² liefern",
+"einheit": "m",
+"belege": 1,
+"min": 20.95,
+"median": 20.95,
+"max": 20.95,
+"quelle": "Belegbearbeitung P2600151_ANG0010991_UTA Försterei Hasselbusch_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Wandlerschrank AP IP44 2 Zählerplätze",
+"einheit": "Stk",
+"belege": 1,
+"min": 4111.0,
+"median": 4111.0,
+"max": 4111.0,
+"quelle": "P2501107_ANG0010851_Techem_BLB_WE19902_LOKBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Wandlerschrank AP IP44 2 Zählerplätze",
+"einheit": "St",
+"belege": 1,
+"min": 4111.0,
+"median": 4111.0,
+"max": 4111.0,
+"quelle": "P2501105_ANG0010853_BLBAOLIS_WE1992_HSBIBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "YSLY-JZ 3x1,5mm² PVC Steuerleitung mit nummerierten Adern",
+"einheit": "m",
+"belege": 1,
+"min": 6.71,
+"median": 6.71,
+"max": 6.71,
+"quelle": "P2500963_ANG0011009_Goldbeck_HQHamburg_rev2.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "YSLY-JZ 3x2,5qmm PVC Steuerleitung liefern und verlegen",
+"einheit": "m",
+"belege": 1,
+"min": 7.23,
+"median": 7.23,
+"max": 7.23,
+"quelle": "Belegbearbeitung P2600151_ANG0010991_UTA Försterei Hasselbusch_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Ölflex 2X2,5mm² Energie-/Steuerkabel liefern und einziehen",
+"einheit": "m",
+"belege": 1,
+"min": 17.98,
+"median": 17.98,
+"max": 17.98,
+"quelle": "P2501046_ANG0010704_Duwensee_2AS.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Überspannungs-Ableiter 3p+N Typ2 Hutschiene liefern und montieren",
+"einheit": "Stk",
+"belege": 1,
+"min": 136.21,
+"median": 136.21,
+"max": 136.21,
+"quelle": "Belegbearbeitung P2600151_ANG0010991_UTA Försterei Hasselbusch_rev1.0.pdf"
+},
+{
+"kategorie": "Elektro",
+"text": "Überstromschutz für Hutschienennetzteil liefern und montieren",
+"einheit": "Stk",
+"belege": 1,
+"min": 23.62,
+"median": 23.62,
+"max": 23.62,
+"quelle": "Belegbearbeitung P2600151_ANG0010991_UTA Försterei Hasselbusch_rev1.0.pdf"
+},
+{
+"kategorie": "Ladeinfrastruktur",
+"text": "ABL Wallbox eM4 Twin Controller eichrechtskonform 22kW",
+"einheit": "Stk.",
+"belege": 1,
+"min": 3339.6,
+"median": 3339.6,
+"max": 3339.6,
+"quelle": "P2500963_ANG0011009_Goldbeck_HQHamburg_rev2.0.pdf"
+},
+{
+"kategorie": "Ladeinfrastruktur",
+"text": "ABL Wallbox eM4 Twin Extender eichrechtskonform 22kW",
+"einheit": "Stk.",
+"belege": 1,
+"min": 2906.4,
+"median": 2906.4,
+"max": 2906.4,
+"quelle": "P2500963_ANG0011009_Goldbeck_HQHamburg_rev2.0.pdf"
+},
+{
+"kategorie": "Ladeinfrastruktur",
+"text": "Alfen Eve Single Pro DE 3PH T2 eichrechtskonform beschaffen/liefern",
+"einheit": "Stk.",
+"belege": 1,
+"min": 1742.16,
+"median": 1742.16,
+"max": 1742.16,
+"quelle": "P2501056_ANG0010891 Wüstenroth Oberursel.pdf"
+},
+{
+"kategorie": "Ladeinfrastruktur",
+"text": "Backend-Inbetriebnahme des ersten Ladepunktes",
+"einheit": "Stk.",
+"belege": 1,
+"min": 90.0,
+"median": 90.0,
+"max": 90.0,
+"quelle": "P2501121_ANG0010811_TAWO Anfrage Berlin Friedrichstraße Tishman Speyer.pdf"
+},
+{
+"kategorie": "Ladeinfrastruktur",
+"text": "Backend-Inbetriebnahme jedes weiteren Ladepunktes",
+"einheit": "Stk.",
+"belege": 1,
+"min": 60.0,
+"median": 60.0,
+"max": 60.0,
+"quelle": "P2501121_ANG0010811_TAWO Anfrage Berlin Friedrichstraße Tishman Speyer.pdf"
+},
+{
+"kategorie": "Ladeinfrastruktur",
+"text": "Baugrube AC",
+"einheit": "ST",
+"belege": 1,
+"min": 120.0,
+"median": 120.0,
+"max": 120.0,
+"quelle": "Angebot 221852GeneralLV.pdf"
+},
+{
+"kategorie": "Ladeinfrastruktur",
+"text": "Baugrube DC",
+"einheit": "ST",
+"belege": 1,
+"min": 390.0,
+"median": 390.0,
+"max": 390.0,
+"quelle": "Angebot 221852GeneralLV.pdf"
+},
+{
+"kategorie": "Ladeinfrastruktur",
+"text": "Betonsockelsteine für Rohrpfosten D60/76mm",
+"einheit": "St",
+"belege": 1,
+"min": 88.0,
+"median": 88.0,
+"max": 88.0,
+"quelle": "Angebot 221822Dortmund.pdf"
+},
+{
+"kategorie": "Ladeinfrastruktur",
+"text": "Einmalige Ausgabegebühr S4C-Ladekarte mit RFID-Standard",
+"einheit": "Stk.",
+"belege": 1,
+"min": 14.95,
+"median": 14.95,
+"max": 14.95,
+"quelle": "P2501121_ANG0010811_TAWO Anfrage Berlin Friedrichstraße Tishman Speyer.pdf"
+},
+{
+"kategorie": "Ladeinfrastruktur",
+"text": "Einmalige Einrichtungsgebühr Backend-Submandant/Onboarding",
+"einheit": "Stk.",
+"belege": 1,
+"min": 595.0,
+"median": 595.0,
+"max": 595.0,
+"quelle": "P2501121_ANG0010811_TAWO Anfrage Berlin Friedrichstraße Tishman Speyer.pdf"
+},
+{
+"kategorie": "Ladeinfrastruktur",
+"text": "Fachgerechte Montage AC Ladestation",
+"einheit": "Stk",
+"belege": 5,
+"min": 158.5,
+"median": 158.5,
+"max": 158.5,
+"quelle": "P2501108_ANG0010847_Techem_BLB_WE1035_BlueBoxBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Ladeinfrastruktur",
+"text": "Fachgerechte Montage AC Stele",
+"einheit": "Stk",
+"belege": 1,
+"min": 117.88,
+"median": 117.88,
+"max": 117.88,
+"quelle": "P2501109_ANG0010854_Techem_BLB_WE1639_PolizeipraesidiumBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Ladeinfrastruktur",
+"text": "Fotodokumentation für Ladesäuleninfrastruktur",
+"einheit": "psch.",
+"belege": 1,
+"min": 142.22,
+"median": 142.22,
+"max": 142.22,
+"quelle": "Angebot 221852GeneralLV.pdf"
+},
+{
+"kategorie": "Ladeinfrastruktur",
+"text": "Frachtkosten 1 charger (Shipping by parcel)",
+"einheit": "Stk",
+"belege": 1,
+"min": 68.75,
+"median": 68.75,
+"max": 68.75,
+"quelle": "Belegbearbeitung P2600151_ANG0010991_UTA Försterei Hasselbusch_rev1.0.pdf"
+},
+{
+"kategorie": "Ladeinfrastruktur",
+"text": "Fundament setzen AC",
+"einheit": "St",
+"belege": 1,
+"min": 189.0,
+"median": 189.0,
+"max": 189.0,
+"quelle": "Angebot 221852GeneralLV.pdf"
+},
+{
+"kategorie": "Ladeinfrastruktur",
+"text": "Fundament setzen DC Alpitronic o.Ä. Gewicht bis 1t",
+"einheit": "St",
+"belege": 1,
+"min": 460.0,
+"median": 460.0,
+"max": 460.0,
+"quelle": "Angebot 221852GeneralLV.pdf"
+},
+{
+"kategorie": "Ladeinfrastruktur",
+"text": "Fundament setzen DC größer 1to",
+"einheit": "St",
+"belege": 1,
+"min": 890.0,
+"median": 890.0,
+"max": 890.0,
+"quelle": "Angebot 221852GeneralLV.pdf"
+},
+{
+"kategorie": "Ladeinfrastruktur",
+"text": "HYC 400 mit 4 Powerstack (400kW) inkl. Kabelmanagement, Terminal, CCS2-Kabel, Lieferung",
+"einheit": "Stück",
+"belege": 1,
+"min": 75000.0,
+"median": 75000.0,
+"max": 75000.0,
+"quelle": "HYC400_S4C_KAngebot 17112025_V2501285_A_.pdf"
+},
+{
+"kategorie": "Ladeinfrastruktur",
+"text": "Hutschienenmessgerät PAC2200 LMS Controller/Energiezähler liefern und montieren",
+"einheit": "Stk",
+"belege": 1,
+"min": 448.34,
+"median": 448.34,
+"max": 448.34,
+"quelle": "Belegbearbeitung P2600151_ANG0010991_UTA Försterei Hasselbusch_rev1.0.pdf"
+},
+{
+"kategorie": "Ladeinfrastruktur",
+"text": "Inbetriebnahme AC-Ladepunkt nach DIN VDE 0100-600",
+"einheit": "Stk",
+"belege": 5,
+"min": 145.0,
+"median": 145.0,
+"max": 145.0,
+"quelle": "P2501108_ANG0010847_Techem_BLB_WE1035_BlueBoxBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Ladeinfrastruktur",
+"text": "Inbetriebnahme AC-Ladepunkt nach DIN VDE 0100-600",
+"einheit": "Stk.",
+"belege": 2,
+"min": 145.0,
+"median": 145.0,
+"max": 145.0,
+"quelle": "P2501056_ANG0010891 Wüstenroth Oberursel.pdf"
+},
+{
+"kategorie": "Ladeinfrastruktur",
+"text": "Inbetriebnahme AC-Ladepunkt nach DIN VDE 0100-600 protokollieren",
+"einheit": "Stk",
+"belege": 1,
+"min": 145.0,
+"median": 145.0,
+"max": 145.0,
+"quelle": "Belegbearbeitung P2600151_ANG0010991_UTA Försterei Hasselbusch_rev1.0.pdf"
+},
+{
+"kategorie": "Ladeinfrastruktur",
+"text": "Inbetriebnahme DC-Power Unit nach DIN VDE 0100-600",
+"einheit": "Stk.",
+"belege": 1,
+"min": 870.0,
+"median": 870.0,
+"max": 870.0,
+"quelle": "P2501046_ANG0010704_Duwensee_2AS.pdf"
+},
+{
+"kategorie": "Ladeinfrastruktur",
+"text": "Inbetriebnahme SAT Box nach DIN VDE 0100-600",
+"einheit": "Stk.",
+"belege": 1,
+"min": 261.0,
+"median": 261.0,
+"max": 261.0,
+"quelle": "P2501046_ANG0010704_Duwensee_2AS.pdf"
+},
+{
+"kategorie": "Ladeinfrastruktur",
+"text": "Janitza KUW1/40-125/1A Kabelumbaustromwandler liefern und montieren",
+"einheit": "Stk",
+"belege": 1,
+"min": 99.26,
+"median": 99.26,
+"max": 99.26,
+"quelle": "Belegbearbeitung P2600151_ANG0010991_UTA Försterei Hasselbusch_rev1.0.pdf"
+},
+{
+"kategorie": "Ladeinfrastruktur",
+"text": "Kunststofffundament für Ladesäulen und Wallbox-Stelen",
+"einheit": "St",
+"belege": 1,
+"min": 362.5,
+"median": 362.5,
+"max": 362.5,
+"quelle": "Angebot 221822Dortmund.pdf"
+},
+{
+"kategorie": "Ladeinfrastruktur",
+"text": "Ladeeinrichtung EV inkl. Mennekes Amtron4Business, Montage, IBN",
+"einheit": "Stk.",
+"belege": 1,
+"min": 1478.27,
+"median": 1478.27,
+"max": 1478.27,
+"quelle": "P2501121_ANG0010811_TAWO Anfrage Berlin Friedrichstraße Tishman Speyer.pdf"
+},
+{
+"kategorie": "Ladeinfrastruktur",
+"text": "Ladesäule montieren AC",
+"einheit": "St",
+"belege": 1,
+"min": 210.0,
+"median": 210.0,
+"max": 210.0,
+"quelle": "Angebot 221852GeneralLV.pdf"
+},
+{
+"kategorie": "Ladeinfrastruktur",
+"text": "Ladesäule montieren DC Alpitronic o.Ä.",
+"einheit": "St",
+"belege": 1,
+"min": 890.0,
+"median": 890.0,
+"max": 890.0,
+"quelle": "Angebot 221852GeneralLV.pdf"
+},
+{
+"kategorie": "Ladeinfrastruktur",
+"text": "Ladesäule montieren DC groß",
+"einheit": "St",
+"belege": 1,
+"min": 1680.0,
+"median": 1680.0,
+"max": 1680.0,
+"quelle": "Angebot 221852GeneralLV.pdf"
+},
+{
+"kategorie": "Ladeinfrastruktur",
+"text": "Lastmanagement LOBAS CompactController inkl. §14a EnWG",
+"einheit": "Stk.",
+"belege": 1,
+"min": 1138.6,
+"median": 1138.6,
+"max": 1138.6,
+"quelle": "P2500969_ANG0010877 APCOA Schillerplatz Stuttgart_rev1.0.pdf"
+},
+{
+"kategorie": "Ladeinfrastruktur",
+"text": "Lastmanagementsystem Hersteller Lobas",
+"einheit": "Stk.",
+"belege": 1,
+"min": 3001.51,
+"median": 3001.51,
+"max": 3001.51,
+"quelle": "P2501121_ANG0010811_TAWO Anfrage Berlin Friedrichstraße Tishman Speyer.pdf"
+},
+{
+"kategorie": "Ladeinfrastruktur",
+"text": "Lobas einmalige Lizenz pro Ladeeinrichtung",
+"einheit": "Stk.",
+"belege": 1,
+"min": 229.85,
+"median": 229.85,
+"max": 229.85,
+"quelle": "P2500969_ANG0010877 APCOA Schillerplatz Stuttgart_rev1.0.pdf"
+},
+{
+"kategorie": "Ladeinfrastruktur",
+"text": "Montage AC Ladestation inkl. Kabelanschluss/Befestigungsmaterial",
+"einheit": "Stk",
+"belege": 1,
+"min": 158.5,
+"median": 158.5,
+"max": 158.5,
+"quelle": "Belegbearbeitung P2600151_ANG0010991_UTA Försterei Hasselbusch_rev1.0.pdf"
+},
+{
+"kategorie": "Ladeinfrastruktur",
+"text": "Montage AC Ladestation nach Herstellervorgabe inkl. Kabelanschluss",
+"einheit": "Stk.",
+"belege": 2,
+"min": 161.15,
+"median": 204.81,
+"max": 248.47,
+"quelle": "P2501056_ANG0010891 Wüstenroth Oberursel.pdf"
+},
+{
+"kategorie": "Ladeinfrastruktur",
+"text": "Montage DC-PowerUnit nach Herstellervorgabe inkl. Kabelanschluss",
+"einheit": "Stk.",
+"belege": 1,
+"min": 2286.99,
+"median": 2286.99,
+"max": 2286.99,
+"quelle": "P2501046_ANG0010704_Duwensee_2AS.pdf"
+},
+{
+"kategorie": "Ladeinfrastruktur",
+"text": "Montage SAT Box nach Herstellervorgabe inkl. Kabelanschluss",
+"einheit": "Stk.",
+"belege": 1,
+"min": 494.49,
+"median": 494.49,
+"max": 494.49,
+"quelle": "P2501046_ANG0010704_Duwensee_2AS.pdf"
+},
+{
+"kategorie": "Ladeinfrastruktur",
+"text": "Montage und Inbetriebnahme gem. APCOA-Vorgabe",
+"einheit": "Stk.",
+"belege": 1,
+"min": 359.0,
+"median": 359.0,
+"max": 359.0,
+"quelle": "P2500969_ANG0010877 APCOA Schillerplatz Stuttgart_rev1.0.pdf"
+},
+{
+"kategorie": "Ladeinfrastruktur",
+"text": "Parametrierung Software + Ladepunkte inkl. Lizenz Lastmanagement",
+"einheit": "Stk.",
+"belege": 1,
+"min": 226.95,
+"median": 226.95,
+"max": 226.95,
+"quelle": "P2501121_ANG0010811_TAWO Anfrage Berlin Friedrichstraße Tishman Speyer.pdf"
+},
+{
+"kategorie": "Ladeinfrastruktur",
+"text": "Parkplatzbegrenzung \"Parkstopp\" aus Polyethylen (PE)",
+"einheit": "St",
+"belege": 1,
+"min": 170.0,
+"median": 170.0,
+"max": 170.0,
+"quelle": "Angebot 221822Dortmund.pdf"
+},
+{
+"kategorie": "Ladeinfrastruktur",
+"text": "Power Unit Axon Side 360 DLBS beschaffen und liefern",
+"einheit": "Stk.",
+"belege": 1,
+"min": 60775.0,
+"median": 60775.0,
+"max": 60775.0,
+"quelle": "P2501046_ANG0010704_Duwensee_2AS.pdf"
+},
+{
+"kategorie": "Ladeinfrastruktur",
+"text": "Richtzeichen Gr.1 D2mm RA1 Richtzeichen 314",
+"einheit": "St",
+"belege": 1,
+"min": 99.0,
+"median": 99.0,
+"max": 99.0,
+"quelle": "Angebot 221822Dortmund.pdf"
+},
+{
+"kategorie": "Ladeinfrastruktur",
+"text": "Rohrpfosten Stahl verz. D60,3mm WD2,9mm L3,25m",
+"einheit": "St",
+"belege": 1,
+"min": 104.5,
+"median": 104.5,
+"max": 104.5,
+"quelle": "Angebot 221822Dortmund.pdf"
+},
+{
+"kategorie": "Ladeinfrastruktur",
+"text": "SAT Box mit Kabelaufroller beschaffen und liefern",
+"einheit": "Stk.",
+"belege": 1,
+"min": 17266.25,
+"median": 17266.25,
+"max": 17266.25,
+"quelle": "P2501046_ANG0010704_Duwensee_2AS.pdf"
+},
+{
+"kategorie": "Ladeinfrastruktur",
+"text": "Zaptec Pro Backplate (BP)",
+"einheit": "Stk",
+"belege": 1,
+"min": 55.0,
+"median": 55.0,
+"max": 55.0,
+"quelle": "Belegbearbeitung P2600151_ANG0010991_UTA Försterei Hasselbusch_rev1.0.pdf"
+},
+{
+"kategorie": "Ladeinfrastruktur",
+"text": "Zaptec Pro M&E Bundle Bridge (MID+Eichrecht+Sense 65A) inkl. BP",
+"einheit": "Stk",
+"belege": 1,
+"min": 1106.25,
+"median": 1106.25,
+"max": 1106.25,
+"quelle": "Belegbearbeitung P2600151_ANG0010991_UTA Försterei Hasselbusch_rev1.0.pdf"
+},
+{
+"kategorie": "Netzwerk",
+"text": "Aufputz Medienverteiler Netzwerktechnik inkl. Switch (bedarfsw.)",
+"einheit": "Stk.",
+"belege": 1,
+"min": 463.56,
+"median": 463.56,
+"max": 463.56,
+"quelle": "P2500969_ANG0010877 APCOA Schillerplatz Stuttgart_rev1.0.pdf"
+},
+{
+"kategorie": "Netzwerk",
+"text": "Außenantenne inkl. 15m Kabel liefern montieren",
+"einheit": "Stk",
+"belege": 1,
+"min": 212.85,
+"median": 212.85,
+"max": 212.85,
+"quelle": "P2501105_ANG0010853_BLBAOLIS_WE1992_HSBIBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Netzwerk",
+"text": "Bestückter Hensel-Mi Kleinverteiler für Netzwerktechnik (Set)",
+"einheit": "Stk.",
+"belege": 1,
+"min": 459.42,
+"median": 459.42,
+"max": 459.42,
+"quelle": "P2500963_ANG0011009_Goldbeck_HQHamburg_rev2.0.pdf"
+},
+{
+"kategorie": "Netzwerk",
+"text": "Datenkabel RJ45 via LSA-Modul einseitig anschließen",
+"einheit": "Stk.",
+"belege": 2,
+"min": 45.35,
+"median": 45.35,
+"max": 45.35,
+"quelle": "P2501056_ANG0010891 Wüstenroth Oberursel.pdf"
+},
+{
+"kategorie": "Netzwerk",
+"text": "Datenkabel außen Kat.6A ungeschirmt",
+"einheit": "m",
+"belege": 4,
+"min": 6.92,
+"median": 6.92,
+"max": 6.92,
+"quelle": "P2501108_ANG0010847_Techem_BLB_WE1035_BlueBoxBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Netzwerk",
+"text": "Datenkabel einseitiger Anschluss",
+"einheit": "Stk.",
+"belege": 1,
+"min": 44.79,
+"median": 44.79,
+"max": 44.79,
+"quelle": "P2500969_ANG0010877 APCOA Schillerplatz Stuttgart_rev1.0.pdf"
+},
+{
+"kategorie": "Netzwerk",
+"text": "EFB GES-2216 Hilbert 16-Port Gigabit Smart Lite Switch",
+"einheit": "Stk.",
+"belege": 1,
+"min": 216.15,
+"median": 216.15,
+"max": 216.15,
+"quelle": "P2500963_ANG0011009_Goldbeck_HQHamburg_rev2.0.pdf"
+},
+{
+"kategorie": "Netzwerk",
+"text": "Glasfaserkabel liefern und einziehen",
+"einheit": "m",
+"belege": 1,
+"min": 16.15,
+"median": 16.15,
+"max": 16.15,
+"quelle": "P2501046_ANG0010704_Duwensee_2AS.pdf"
+},
+{
+"kategorie": "Netzwerk",
+"text": "Glasfaserkabel via SC-Stecker einseitig anschließen",
+"einheit": "Stk.",
+"belege": 1,
+"min": 50.12,
+"median": 50.12,
+"max": 50.12,
+"quelle": "P2501046_ANG0010704_Duwensee_2AS.pdf"
+},
+{
+"kategorie": "Netzwerk",
+"text": "Hutschienennetzteil für Switch",
+"einheit": "Stk",
+"belege": 1,
+"min": 115.18,
+"median": 115.18,
+"max": 115.18,
+"quelle": "P2501109_ANG0010854_Techem_BLB_WE1639_PolizeipraesidiumBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Netzwerk",
+"text": "Inbetriebnahme & Konfiguration Netzwerk",
+"einheit": "Stk.",
+"belege": 1,
+"min": 167.75,
+"median": 167.75,
+"max": 167.75,
+"quelle": "P2500969_ANG0010877 APCOA Schillerplatz Stuttgart_rev1.0.pdf"
+},
+{
+"kategorie": "Netzwerk",
+"text": "Inbetriebnahme & Konfiguration Router",
+"einheit": "Stk.",
+"belege": 2,
+"min": 29.0,
+"median": 29.0,
+"max": 29.0,
+"quelle": "P2501046_ANG0010704_Duwensee_2AS.pdf"
+},
+{
+"kategorie": "Netzwerk",
+"text": "Kupfer Datenkabel Außenbereich Kat.7 liefern und einziehen",
+"einheit": "m",
+"belege": 1,
+"min": 7.3,
+"median": 7.3,
+"max": 7.3,
+"quelle": "P2501056_ANG0010891 Wüstenroth Oberursel.pdf"
+},
+{
+"kategorie": "Netzwerk",
+"text": "Kupfer Datenkabel Innenbereich Kat.7 liefern und einziehen",
+"einheit": "Meter",
+"belege": 1,
+"min": 9.92,
+"median": 9.92,
+"max": 9.92,
+"quelle": "P2500969_ANG0010877 APCOA Schillerplatz Stuttgart_rev1.0.pdf"
+},
+{
+"kategorie": "Netzwerk",
+"text": "Kupfer Datenkabel Innenbereich Kat.7 liefern und einziehen",
+"einheit": "m",
+"belege": 1,
+"min": 6.59,
+"median": 6.59,
+"max": 6.59,
+"quelle": "P2500963_ANG0011009_Goldbeck_HQHamburg_rev2.0.pdf"
+},
+{
+"kategorie": "Netzwerk",
+"text": "Medienconverter liefern und montieren",
+"einheit": "Stk.",
+"belege": 1,
+"min": 78.08,
+"median": 78.08,
+"max": 78.08,
+"quelle": "P2501046_ANG0010704_Duwensee_2AS.pdf"
+},
+{
+"kategorie": "Netzwerk",
+"text": "Messung Cu PL Link Ea",
+"einheit": "Stk",
+"belege": 3,
+"min": 24.0,
+"median": 24.0,
+"max": 24.0,
+"quelle": "P2501108_ANG0010847_Techem_BLB_WE1035_BlueBoxBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Netzwerk",
+"text": "Messung Cu PL Link Ea",
+"einheit": "St",
+"belege": 2,
+"min": 24.0,
+"median": 24.0,
+"max": 24.0,
+"quelle": "P2501106_ANG0010839_Techem_BLB_WE1990_ErsatzparkhausBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Netzwerk",
+"text": "Multimediaverteiler Aufputz 3-reihig",
+"einheit": "Stk",
+"belege": 2,
+"min": 186.28,
+"median": 186.28,
+"max": 186.28,
+"quelle": "P2501108_ANG0010847_Techem_BLB_WE1035_BlueBoxBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Netzwerk",
+"text": "Netzwerk-Schienenabgangskasten KN Schienensystem (Set)",
+"einheit": "Stk.",
+"belege": 2,
+"min": 807.09,
+"median": 807.09,
+"max": 807.09,
+"quelle": "P2500969_ANG0010877 APCOA Schillerplatz Stuttgart_rev1.0.pdf"
+},
+{
+"kategorie": "Netzwerk",
+"text": "Netzwerk-Switch 16 Port",
+"einheit": "Stk",
+"belege": 1,
+"min": 184.03,
+"median": 184.03,
+"max": 184.03,
+"quelle": "P2501109_ANG0010854_Techem_BLB_WE1639_PolizeipraesidiumBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Netzwerk",
+"text": "Patchkabel Cat.6a 0,5-2,0m",
+"einheit": "Stk",
+"belege": 2,
+"min": 12.37,
+"median": 12.37,
+"max": 12.37,
+"quelle": "P2501109_ANG0010854_Techem_BLB_WE1639_PolizeipraesidiumBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Netzwerk",
+"text": "Prüfen von Netzwerkleitungen und protokollieren",
+"einheit": "Stk.",
+"belege": 4,
+"min": 13.76,
+"median": 39.8,
+"max": 39.8,
+"quelle": "P2500969_ANG0010877 APCOA Schillerplatz Stuttgart_rev1.0.pdf"
+},
+{
+"kategorie": "Netzwerk",
+"text": "Teltonika RUT901 4G/LTE Router liefern montieren",
+"einheit": "Stk",
+"belege": 4,
+"min": 226.14,
+"median": 226.14,
+"max": 226.14,
+"quelle": "P2501108_ANG0010847_Techem_BLB_WE1035_BlueBoxBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Netzwerk",
+"text": "Teltonika Rut241 4G Router liefern und montieren",
+"einheit": "Stk.",
+"belege": 1,
+"min": 282.36,
+"median": 282.36,
+"max": 282.36,
+"quelle": "P2501046_ANG0010704_Duwensee_2AS.pdf"
+},
+{
+"kategorie": "Netzwerk",
+"text": "Teltonika Rut241 4G Router liefern und montieren (bedarfsw.)",
+"einheit": "Stk.",
+"belege": 1,
+"min": 303.36,
+"median": 303.36,
+"max": 303.36,
+"quelle": "P2500963_ANG0011009_Goldbeck_HQHamburg_rev2.0.pdf"
+},
+{
+"kategorie": "Service/Wartung",
+"text": "AC-Inbetriebnahme je Ladepunkt am Standort (EP)",
+"einheit": "Stk.",
+"belege": 1,
+"min": 71.25,
+"median": 71.25,
+"max": 71.25,
+"quelle": "P2501121_ANG0010811_TAWO Anfrage Berlin Friedrichstraße Tishman Speyer.pdf"
+},
+{
+"kategorie": "Service/Wartung",
+"text": "AC-Wartung je Ladepunkt am Standort (Einheitspreis)",
+"einheit": "Stk.",
+"belege": 1,
+"min": 55.42,
+"median": 55.42,
+"max": 55.42,
+"quelle": "P2501121_ANG0010811_TAWO Anfrage Berlin Friedrichstraße Tishman Speyer.pdf"
+},
+{
+"kategorie": "Service/Wartung",
+"text": "Anfahrt pauschal deutschlandweit (Entstörung, EP)",
+"einheit": "Stk.",
+"belege": 1,
+"min": 75.0,
+"median": 75.0,
+"max": 75.0,
+"quelle": "P2501121_ANG0010811_TAWO Anfrage Berlin Friedrichstraße Tishman Speyer.pdf"
+},
+{
+"kategorie": "Service/Wartung",
+"text": "Anfahrt pauschal deutschlandweit (Halbjährliche Prüfung, EP)",
+"einheit": "Stk.",
+"belege": 1,
+"min": 75.0,
+"median": 75.0,
+"max": 75.0,
+"quelle": "P2501121_ANG0010811_TAWO Anfrage Berlin Friedrichstraße Tishman Speyer.pdf"
+},
+{
+"kategorie": "Service/Wartung",
+"text": "Anfahrt pauschal deutschlandweit (Inbetriebnahme, EP)",
+"einheit": "Stk.",
+"belege": 1,
+"min": 75.0,
+"median": 75.0,
+"max": 75.0,
+"quelle": "P2501121_ANG0010811_TAWO Anfrage Berlin Friedrichstraße Tishman Speyer.pdf"
+},
+{
+"kategorie": "Service/Wartung",
+"text": "Anfahrt pauschal deutschlandweit (Ladekabelprüfung, EP)",
+"einheit": "Stk.",
+"belege": 1,
+"min": 75.0,
+"median": 75.0,
+"max": 75.0,
+"quelle": "P2501121_ANG0010811_TAWO Anfrage Berlin Friedrichstraße Tishman Speyer.pdf"
+},
+{
+"kategorie": "Service/Wartung",
+"text": "Anfahrt pauschal deutschlandweit (Reparatur, EP)",
+"einheit": "Stk.",
+"belege": 1,
+"min": 75.0,
+"median": 75.0,
+"max": 75.0,
+"quelle": "P2501121_ANG0010811_TAWO Anfrage Berlin Friedrichstraße Tishman Speyer.pdf"
+},
+{
+"kategorie": "Service/Wartung",
+"text": "Anfahrt pauschal deutschlandweit (Wartung, Einheitspreis)",
+"einheit": "Stk.",
+"belege": 1,
+"min": 75.0,
+"median": 75.0,
+"max": 75.0,
+"quelle": "P2501121_ANG0010811_TAWO Anfrage Berlin Friedrichstraße Tishman Speyer.pdf"
+},
+{
+"kategorie": "Service/Wartung",
+"text": "B2B-PreCheck: Terminvereinbarung, Anfahrt, Begehung, Angebotserstellung",
+"einheit": "Stk",
+"belege": 1,
+"min": 1080.0,
+"median": 1080.0,
+"max": 1080.0,
+"quelle": "Belegbearbeitung P2600151_ANG0010991_UTA Försterei Hasselbusch_rev1.0.pdf"
+},
+{
+"kategorie": "Service/Wartung",
+"text": "Betrieb inkl. Stromlieferung, Wartung nach DGUV V3 (monatlich)",
+"einheit": "Stk.",
+"belege": 1,
+"min": 26.21,
+"median": 26.21,
+"max": 26.21,
+"quelle": "P2501121_ANG0010811_TAWO Anfrage Berlin Friedrichstraße Tishman Speyer.pdf"
+},
+{
+"kategorie": "Service/Wartung",
+"text": "Betriebsführung Flotte, monatlich je Ladepunkt (bedarfsw.)",
+"einheit": "Stk.",
+"belege": 1,
+"min": 8.5,
+"median": 8.5,
+"max": 8.5,
+"quelle": "P2501121_ANG0010811_TAWO Anfrage Berlin Friedrichstraße Tishman Speyer.pdf"
+},
+{
+"kategorie": "Service/Wartung",
+"text": "Betriebsführung Mitarbeiterladen, monatlich (bedarfsw.)",
+"einheit": "Stk.",
+"belege": 1,
+"min": 2.5,
+"median": 2.5,
+"max": 2.5,
+"quelle": "P2501121_ANG0010811_TAWO Anfrage Berlin Friedrichstraße Tishman Speyer.pdf"
+},
+{
+"kategorie": "Service/Wartung",
+"text": "Betriebsführung öffentliches Laden, variable Servicegebühr 0,03€/kWh",
+"einheit": "Stk.",
+"belege": 1,
+"min": 0.0,
+"median": 0.0,
+"max": 0.0,
+"quelle": "P2501121_ANG0010811_TAWO Anfrage Berlin Friedrichstraße Tishman Speyer.pdf"
+},
+{
+"kategorie": "Service/Wartung",
+"text": "DC-Inbetriebnahme mit Comemso je Ladepunkt (EP)",
+"einheit": "Stk.",
+"belege": 1,
+"min": 142.5,
+"median": 142.5,
+"max": 142.5,
+"quelle": "P2501121_ANG0010811_TAWO Anfrage Berlin Friedrichstraße Tishman Speyer.pdf"
+},
+{
+"kategorie": "Service/Wartung",
+"text": "Halbjährliche Prüfung (AC/DC) je Ladepunkt (Einheitspreis)",
+"einheit": "Stk.",
+"belege": 1,
+"min": 31.67,
+"median": 31.67,
+"max": 31.67,
+"quelle": "P2501121_ANG0010811_TAWO Anfrage Berlin Friedrichstraße Tishman Speyer.pdf"
+},
+{
+"kategorie": "Service/Wartung",
+"text": "Instandsetzung nach Herstellervorgaben/Prüfung DGUV V3 (Preis auf Anfrage)",
+"einheit": "Stk.",
+"belege": 1,
+"min": 0.0,
+"median": 0.0,
+"max": 0.0,
+"quelle": "P2501121_ANG0010811_TAWO Anfrage Berlin Friedrichstraße Tishman Speyer.pdf"
+},
+{
+"kategorie": "Service/Wartung",
+"text": "Kosten kWh, Zielpreis 35 Cent/kWh",
+"einheit": "Stk.",
+"belege": 1,
+"min": 0.0,
+"median": 0.0,
+"max": 0.0,
+"quelle": "P2501121_ANG0010811_TAWO Anfrage Berlin Friedrichstraße Tishman Speyer.pdf"
+},
+{
+"kategorie": "Service/Wartung",
+"text": "Online-Anbindung der Ladepunkte per Mobilfunk (monatlich)",
+"einheit": "Stk.",
+"belege": 1,
+"min": 7.95,
+"median": 7.95,
+"max": 7.95,
+"quelle": "P2501121_ANG0010811_TAWO Anfrage Berlin Friedrichstraße Tishman Speyer.pdf"
+},
+{
+"kategorie": "Service/Wartung",
+"text": "SL Fast: Serviceeinsatz innerhalb 3 Wochen, 1h Entstörung",
+"einheit": "Stk.",
+"belege": 1,
+"min": 110.0,
+"median": 110.0,
+"max": 110.0,
+"quelle": "P2501121_ANG0010811_TAWO Anfrage Berlin Friedrichstraße Tishman Speyer.pdf"
+},
+{
+"kategorie": "Service/Wartung",
+"text": "SL Super-Fast: Serviceeinsatz innerhalb 72h, 1h Entstörung",
+"einheit": "Stk.",
+"belege": 1,
+"min": 231.0,
+"median": 231.0,
+"max": 231.0,
+"quelle": "P2501121_ANG0010811_TAWO Anfrage Berlin Friedrichstraße Tishman Speyer.pdf"
+},
+{
+"kategorie": "Service/Wartung",
+"text": "SL Ultra-Fast: Serviceeinsatz innerhalb 48h, 1h Entstörung",
+"einheit": "Stk.",
+"belege": 1,
+"min": 319.0,
+"median": 319.0,
+"max": 319.0,
+"quelle": "P2501121_ANG0010811_TAWO Anfrage Berlin Friedrichstraße Tishman Speyer.pdf"
+},
+{
+"kategorie": "Service/Wartung",
+"text": "Stundensatz Meister und Projektleiter",
+"einheit": "Std.",
+"belege": 4,
+"min": 130.5,
+"median": 130.5,
+"max": 130.5,
+"quelle": "P2500969_ANG0010877 APCOA Schillerplatz Stuttgart_rev1.0.pdf"
+},
+{
+"kategorie": "Service/Wartung",
+"text": "Stundensatz Meister und Projektleiter (bedarfsw.)",
+"einheit": "Std.",
+"belege": 3,
+"min": 130.5,
+"median": 130.5,
+"max": 130.5,
+"quelle": "P2501046_ANG0010704_Duwensee_2AS.pdf"
+},
+{
+"kategorie": "Service/Wartung",
+"text": "Stundensatz Meister und Projektleiter als Bauleitung",
+"einheit": "Std.",
+"belege": 1,
+"min": 130.5,
+"median": 130.5,
+"max": 130.5,
+"quelle": "P2500969_ANG0010877 APCOA Schillerplatz Stuttgart_rev1.0.pdf"
+},
+{
+"kategorie": "Service/Wartung",
+"text": "Stundensatz Servicetechniker (bedarfsw.)",
+"einheit": "Std.",
+"belege": 3,
+"min": 84.0,
+"median": 84.0,
+"max": 84.0,
+"quelle": "P2501046_ANG0010704_Duwensee_2AS.pdf"
+},
+{
+"kategorie": "Service/Wartung",
+"text": "Wartung Ladekabel am Standort (Einheitspreis)",
+"einheit": "Stk.",
+"belege": 1,
+"min": 23.75,
+"median": 23.75,
+"max": 23.75,
+"quelle": "P2501121_ANG0010811_TAWO Anfrage Berlin Friedrichstraße Tishman Speyer.pdf"
+},
+{
+"kategorie": "Service/Wartung",
+"text": "Wartung Ladekabel in S4C Niederlassung zzgl. Versand (EP)",
+"einheit": "Stk.",
+"belege": 1,
+"min": 23.75,
+"median": 23.75,
+"max": 23.75,
+"quelle": "P2501121_ANG0010811_TAWO Anfrage Berlin Friedrichstraße Tishman Speyer.pdf"
+},
+{
+"kategorie": "Sonstiges",
+"text": "An- und Abfahrtskosten bundesweit",
+"einheit": "pschl",
+"belege": 1,
+"min": 75.0,
+"median": 75.0,
+"max": 75.0,
+"quelle": "Belegbearbeitung P2600151_ANG0010991_UTA Försterei Hasselbusch_rev1.0.pdf"
+},
+{
+"kategorie": "Sonstiges",
+"text": "An- und Abfahrtskosten bundesweit",
+"einheit": "pschl.",
+"belege": 4,
+"min": 75.0,
+"median": 75.0,
+"max": 75.0,
+"quelle": "P2500969_ANG0010877 APCOA Schillerplatz Stuttgart_rev1.0.pdf"
+},
+{
+"kategorie": "Sonstiges",
+"text": "An- und Abfahrtskosten bundesweit (bedarfsw.)",
+"einheit": "pschl.",
+"belege": 3,
+"min": 75.0,
+"median": 75.0,
+"max": 75.0,
+"quelle": "P2501046_ANG0010704_Duwensee_2AS.pdf"
+},
+{
+"kategorie": "Sonstiges",
+"text": "An- und Abfahrtskosten bundesweit (bedarfsweise)",
+"einheit": "pschl",
+"belege": 1,
+"min": 75.0,
+"median": 75.0,
+"max": 75.0,
+"quelle": "Belegbearbeitung P2600151_ANG0010991_UTA Försterei Hasselbusch_rev1.0.pdf"
+},
+{
+"kategorie": "Sonstiges",
+"text": "An- und Abtransport Scherenbühne",
+"einheit": "Stk.",
+"belege": 1,
+"min": 455.0,
+"median": 455.0,
+"max": 455.0,
+"quelle": "P2501046_ANG0010704_Duwensee_2AS.pdf"
+},
+{
+"kategorie": "Sonstiges",
+"text": "Anfahrschutzpfosten liefern und setzen 79mm",
+"einheit": "St",
+"belege": 1,
+"min": 269.5,
+"median": 269.5,
+"max": 269.5,
+"quelle": "Angebot 221852GeneralLV.pdf"
+},
+{
+"kategorie": "Sonstiges",
+"text": "Anmeldung + Dokumentation gem. APCOA-Vorgabe",
+"einheit": "Stk.",
+"belege": 1,
+"min": 359.0,
+"median": 359.0,
+"max": 359.0,
+"quelle": "P2500969_ANG0010877 APCOA Schillerplatz Stuttgart_rev1.0.pdf"
+},
+{
+"kategorie": "Sonstiges",
+"text": "Antragstellung Niederspannung >12kW / Netzbetreiber-Kommunikation",
+"einheit": "Stk",
+"belege": 1,
+"min": 195.3,
+"median": 195.3,
+"max": 195.3,
+"quelle": "Belegbearbeitung P2600151_ANG0010991_UTA Försterei Hasselbusch_rev1.0.pdf"
+},
+{
+"kategorie": "Sonstiges",
+"text": "Antragstellung Niederspannung >12kW beim Netzbetreiber",
+"einheit": "Stk.",
+"belege": 3,
+"min": 195.3,
+"median": 195.3,
+"max": 195.3,
+"quelle": "P2501046_ANG0010704_Duwensee_2AS.pdf"
+},
+{
+"kategorie": "Sonstiges",
+"text": "Aufwuchs entsorgen",
+"einheit": "t",
+"belege": 1,
+"min": 44.0,
+"median": 44.0,
+"max": 44.0,
+"quelle": "Angebot 221822Dortmund.pdf"
+},
+{
+"kategorie": "Sonstiges",
+"text": "Ausschneiden der Dämmungen an der Decke für Hängestiele",
+"einheit": "Stk.",
+"belege": 1,
+"min": 696.0,
+"median": 696.0,
+"max": 696.0,
+"quelle": "P2500963_ANG0011009_Goldbeck_HQHamburg_rev2.0.pdf"
+},
+{
+"kategorie": "Sonstiges",
+"text": "Bauhelfer",
+"einheit": "h",
+"belege": 1,
+"min": 56.0,
+"median": 56.0,
+"max": 56.0,
+"quelle": "Angebot 221852GeneralLV.pdf"
+},
+{
+"kategorie": "Sonstiges",
+"text": "Baustelle einrichten und räumen",
+"einheit": "St",
+"belege": 1,
+"min": 1650.0,
+"median": 1650.0,
+"max": 1650.0,
+"quelle": "Angebot 221822Dortmund.pdf"
+},
+{
+"kategorie": "Sonstiges",
+"text": "Baustelle räumen und säubern",
+"einheit": "pschl",
+"belege": 1,
+"min": 262.25,
+"median": 262.25,
+"max": 262.25,
+"quelle": "Belegbearbeitung P2600151_ANG0010991_UTA Försterei Hasselbusch_rev1.0.pdf"
+},
+{
+"kategorie": "Sonstiges",
+"text": "Baustelle räumen und säubern",
+"einheit": "pschl.",
+"belege": 4,
+"min": 481.0,
+"median": 498.5,
+"max": 950.34,
+"quelle": "P2500969_ANG0010877 APCOA Schillerplatz Stuttgart_rev1.0.pdf"
+},
+{
+"kategorie": "Sonstiges",
+"text": "Baustelleneinrichtung (Bagger <10 to)",
+"einheit": "psch.",
+"belege": 1,
+"min": 1680.0,
+"median": 1680.0,
+"max": 1680.0,
+"quelle": "Angebot 221852GeneralLV.pdf"
+},
+{
+"kategorie": "Sonstiges",
+"text": "Baustelleneinrichtung (Mobilbagger >10 to - ca. 22to)",
+"einheit": "Psch.",
+"belege": 1,
+"min": 2490.0,
+"median": 2490.0,
+"max": 2490.0,
+"quelle": "Angebot 221852GeneralLV.pdf"
+},
+{
+"kategorie": "Sonstiges",
+"text": "Baustelleneinrichtung Elektro für 4 Wochen",
+"einheit": "pschl.",
+"belege": 2,
+"min": 524.5,
+"median": 524.5,
+"max": 524.5,
+"quelle": "P2501056_ANG0010891 Wüstenroth Oberursel.pdf"
+},
+{
+"kategorie": "Sonstiges",
+"text": "Baustelleneinrichtung Elektro/Ladepunkt für 6-10 Ladepunkte",
+"einheit": "pschl.",
+"belege": 1,
+"min": 299.99,
+"median": 299.99,
+"max": 299.99,
+"quelle": "P2500969_ANG0010877 APCOA Schillerplatz Stuttgart_rev1.0.pdf"
+},
+{
+"kategorie": "Sonstiges",
+"text": "Baustelleneinrichtung Elektro/Tiefbau für 4 Wochen",
+"einheit": "pschl",
+"belege": 1,
+"min": 305.75,
+"median": 305.75,
+"max": 305.75,
+"quelle": "Belegbearbeitung P2600151_ANG0010991_UTA Försterei Hasselbusch_rev1.0.pdf"
+},
+{
+"kategorie": "Sonstiges",
+"text": "Baustelleneinrichtung Elektro/Tiefbau für 4 Wochen",
+"einheit": "pschl.",
+"belege": 1,
+"min": 1774.5,
+"median": 1774.5,
+"max": 1774.5,
+"quelle": "P2501046_ANG0010704_Duwensee_2AS.pdf"
+},
+{
+"kategorie": "Sonstiges",
+"text": "Bauzaun Stahlrohrrahmen verz. Vergitterung H2m aufstellen/räumen",
+"einheit": "m",
+"belege": 1,
+"min": 20.56,
+"median": 20.56,
+"max": 20.56,
+"quelle": "Angebot 221822Dortmund.pdf"
+},
+{
+"kategorie": "Sonstiges",
+"text": "Beschilderung Bauzaun",
+"einheit": "St",
+"belege": 1,
+"min": 26.5,
+"median": 26.5,
+"max": 26.5,
+"quelle": "Angebot 221822Dortmund.pdf"
+},
+{
+"kategorie": "Sonstiges",
+"text": "Beweissicherung durch AN",
+"einheit": "St",
+"belege": 1,
+"min": 135.0,
+"median": 135.0,
+"max": 135.0,
+"quelle": "Angebot 221822Dortmund.pdf"
+},
+{
+"kategorie": "Sonstiges",
+"text": "Brandschottschließung bis DN 150 mittels HILTI",
+"einheit": "Stk.",
+"belege": 2,
+"min": 263.59,
+"median": 338.68,
+"max": 413.76,
+"quelle": "P2500969_ANG0010877 APCOA Schillerplatz Stuttgart_rev1.0.pdf"
+},
+{
+"kategorie": "Sonstiges",
+"text": "Brandschottschließung bis DN150 HILTI-Komponenten",
+"einheit": "Stk",
+"belege": 1,
+"min": 88.45,
+"median": 88.45,
+"max": 88.45,
+"quelle": "Belegbearbeitung P2600151_ANG0010991_UTA Försterei Hasselbusch_rev1.0.pdf"
+},
+{
+"kategorie": "Sonstiges",
+"text": "Demontage der bereits installierten LIS und Rückbau der Leitungen",
+"einheit": "Stk.",
+"belege": 1,
+"min": 696.0,
+"median": 696.0,
+"max": 696.0,
+"quelle": "P2500963_ANG0011009_Goldbeck_HQHamburg_rev2.0.pdf"
+},
+{
+"kategorie": "Sonstiges",
+"text": "Dokumentation der Arbeiten während/nach Inbetriebnahme",
+"einheit": "Stk",
+"belege": 1,
+"min": 252.5,
+"median": 252.5,
+"max": 252.5,
+"quelle": "Belegbearbeitung P2600151_ANG0010991_UTA Försterei Hasselbusch_rev1.0.pdf"
+},
+{
+"kategorie": "Sonstiges",
+"text": "Dokumentation der Arbeiten während/nach Inbetriebnahme",
+"einheit": "Stk.",
+"belege": 3,
+"min": 252.5,
+"median": 252.5,
+"max": 252.5,
+"quelle": "P2501046_ANG0010704_Duwensee_2AS.pdf"
+},
+{
+"kategorie": "Sonstiges",
+"text": "Dokumentation/Werkplanung je Liegenschaft",
+"einheit": "Stk",
+"belege": 3,
+"min": 980.0,
+"median": 980.0,
+"max": 980.0,
+"quelle": "P2501108_ANG0010847_Techem_BLB_WE1035_BlueBoxBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Sonstiges",
+"text": "Dokumentation/Werkplanung je Liegenschaft",
+"einheit": "St",
+"belege": 2,
+"min": 980.0,
+"median": 980.0,
+"max": 980.0,
+"quelle": "P2501106_ANG0010839_Techem_BLB_WE1990_ErsatzparkhausBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Sonstiges",
+"text": "Einmessen/Abstecken durch Bauleitung des AN",
+"einheit": "St",
+"belege": 1,
+"min": 260.0,
+"median": 260.0,
+"max": 260.0,
+"quelle": "Angebot 221822Dortmund.pdf"
+},
+{
+"kategorie": "Sonstiges",
+"text": "Einzelstrauch roden H bis 1-2m",
+"einheit": "St",
+"belege": 1,
+"min": 60.0,
+"median": 60.0,
+"max": 60.0,
+"quelle": "Angebot 221822Dortmund.pdf"
+},
+{
+"kategorie": "Sonstiges",
+"text": "Facharbeiter",
+"einheit": "h",
+"belege": 1,
+"min": 65.0,
+"median": 65.0,
+"max": 65.0,
+"quelle": "Angebot 221852GeneralLV.pdf"
+},
+{
+"kategorie": "Sonstiges",
+"text": "Facharbeiter/-in sämtliche Kosten/Zuschläge",
+"einheit": "h",
+"belege": 1,
+"min": 71.5,
+"median": 71.5,
+"max": 71.5,
+"quelle": "Angebot 221822Dortmund.pdf"
+},
+{
+"kategorie": "Sonstiges",
+"text": "Feuerwehrpfosten",
+"einheit": "St",
+"belege": 1,
+"min": 210.0,
+"median": 210.0,
+"max": 210.0,
+"quelle": "Angebot 221822Dortmund.pdf"
+},
+{
+"kategorie": "Sonstiges",
+"text": "Fotodokumentation",
+"einheit": "St",
+"belege": 1,
+"min": 11.0,
+"median": 11.0,
+"max": 11.0,
+"quelle": "Angebot 221822Dortmund.pdf"
+},
+{
+"kategorie": "Sonstiges",
+"text": "Gesonderte Speditionskosten",
+"einheit": "pschl.",
+"belege": 1,
+"min": 399.0,
+"median": 399.0,
+"max": 399.0,
+"quelle": "P2501056_ANG0010891 Wüstenroth Oberursel.pdf"
+},
+{
+"kategorie": "Sonstiges",
+"text": "Gestellung eines Baggers bis 5t",
+"einheit": "h",
+"belege": 1,
+"min": 35.0,
+"median": 35.0,
+"max": 35.0,
+"quelle": "Angebot 221852GeneralLV.pdf"
+},
+{
+"kategorie": "Sonstiges",
+"text": "Handover/Commissioning Standortübergabe",
+"einheit": "Stk",
+"belege": 1,
+"min": 165.5,
+"median": 165.5,
+"max": 165.5,
+"quelle": "Belegbearbeitung P2600151_ANG0010991_UTA Försterei Hasselbusch_rev1.0.pdf"
+},
+{
+"kategorie": "Sonstiges",
+"text": "Handover/Commissioning Standortübergabe",
+"einheit": "Stk.",
+"belege": 3,
+"min": 165.5,
+"median": 165.5,
+"max": 165.5,
+"quelle": "P2501046_ANG0010704_Duwensee_2AS.pdf"
+},
+{
+"kategorie": "Sonstiges",
+"text": "Helfer/-in sämtliche Kosten/Zuschläge",
+"einheit": "h",
+"belege": 1,
+"min": 60.5,
+"median": 60.5,
+"max": 60.5,
+"quelle": "Angebot 221822Dortmund.pdf"
+},
+{
+"kategorie": "Sonstiges",
+"text": "Hydraulikbagger Fahrer/-in 2-5t",
+"einheit": "h",
+"belege": 1,
+"min": 73.7,
+"median": 73.7,
+"max": 73.7,
+"quelle": "Angebot 221822Dortmund.pdf"
+},
+{
+"kategorie": "Sonstiges",
+"text": "Kabel- und Leitungsrecherche",
+"einheit": "Psch.",
+"belege": 1,
+"min": 90.0,
+"median": 90.0,
+"max": 90.0,
+"quelle": "Angebot 221852GeneralLV.pdf"
+},
+{
+"kategorie": "Sonstiges",
+"text": "Lieferkostenpauschale Spedition",
+"einheit": "Stk.",
+"belege": 1,
+"min": 249.0,
+"median": 249.0,
+"max": 249.0,
+"quelle": "P2500963_ANG0011009_Goldbeck_HQHamburg_rev2.0.pdf"
+},
+{
+"kategorie": "Sonstiges",
+"text": "Pflanzliche Bodendecke abräumen/aufnehmen/fördern auf LKW",
+"einheit": "m2",
+"belege": 1,
+"min": 8.5,
+"median": 8.5,
+"max": 8.5,
+"quelle": "Angebot 221822Dortmund.pdf"
+},
+{
+"kategorie": "Sonstiges",
+"text": "Projektierung von 1 bis 5 Ladepunkten",
+"einheit": "pschl.",
+"belege": 1,
+"min": 346.71,
+"median": 346.71,
+"max": 346.71,
+"quelle": "P2501056_ANG0010891 Wüstenroth Oberursel.pdf"
+},
+{
+"kategorie": "Sonstiges",
+"text": "Projektierung von 1-5 Ladepunkten",
+"einheit": "pschl",
+"belege": 1,
+"min": 346.71,
+"median": 346.71,
+"max": 346.71,
+"quelle": "Belegbearbeitung P2600151_ANG0010991_UTA Försterei Hasselbusch_rev1.0.pdf"
+},
+{
+"kategorie": "Sonstiges",
+"text": "Projektierung von 11 bis 20 Ladepunkten",
+"einheit": "pschl.",
+"belege": 1,
+"min": 997.71,
+"median": 997.71,
+"max": 997.71,
+"quelle": "P2500963_ANG0011009_Goldbeck_HQHamburg_rev2.0.pdf"
+},
+{
+"kategorie": "Sonstiges",
+"text": "Projektierung von 6 bis 10 Ladepunkten",
+"einheit": "pschl.",
+"belege": 2,
+"min": 665.99,
+"median": 666.75,
+"max": 667.51,
+"quelle": "P2500969_ANG0010877 APCOA Schillerplatz Stuttgart_rev1.0.pdf"
+},
+{
+"kategorie": "Sonstiges",
+"text": "Rasen ansäen Gebrauchsrasen RSM2.3 25g/m2",
+"einheit": "m2",
+"belege": 1,
+"min": 8.8,
+"median": 8.8,
+"max": 8.8,
+"quelle": "Angebot 221822Dortmund.pdf"
+},
+{
+"kategorie": "Sonstiges",
+"text": "Revisionsunterlagen je Liegenschaft",
+"einheit": "Stk",
+"belege": 3,
+"min": 391.5,
+"median": 391.5,
+"max": 391.5,
+"quelle": "P2501108_ANG0010847_Techem_BLB_WE1035_BlueBoxBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Sonstiges",
+"text": "Revisionsunterlagen je Liegenschaft",
+"einheit": "St",
+"belege": 2,
+"min": 391.5,
+"median": 391.5,
+"max": 391.5,
+"quelle": "P2501106_ANG0010839_Techem_BLB_WE1990_ErsatzparkhausBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Sonstiges",
+"text": "Schnittgut/Strauchgut entsorgen",
+"einheit": "St",
+"belege": 1,
+"min": 88.0,
+"median": 88.0,
+"max": 88.0,
+"quelle": "Angebot 221822Dortmund.pdf"
+},
+{
+"kategorie": "Sonstiges",
+"text": "Stellen eines Staplers zum Abladen/Aufstellen Power Unit",
+"einheit": "pschl.",
+"belege": 1,
+"min": 1574.0,
+"median": 1574.0,
+"max": 1574.0,
+"quelle": "P2501046_ANG0010704_Duwensee_2AS.pdf"
+},
+{
+"kategorie": "Sonstiges",
+"text": "Stundensatz Meister und Projektleiter",
+"einheit": "Std",
+"belege": 1,
+"min": 130.5,
+"median": 130.5,
+"max": 130.5,
+"quelle": "Belegbearbeitung P2600151_ANG0010991_UTA Försterei Hasselbusch_rev1.0.pdf"
+},
+{
+"kategorie": "Sonstiges",
+"text": "Stundensatz Meister und Projektleiter (bedarfsweise)",
+"einheit": "Std",
+"belege": 1,
+"min": 130.5,
+"median": 130.5,
+"max": 130.5,
+"quelle": "Belegbearbeitung P2600151_ANG0010991_UTA Försterei Hasselbusch_rev1.0.pdf"
+},
+{
+"kategorie": "Sonstiges",
+"text": "Stundensatz Servicetechniker (bedarfsweise)",
+"einheit": "Std",
+"belege": 1,
+"min": 84.0,
+"median": 84.0,
+"max": 84.0,
+"quelle": "Belegbearbeitung P2600151_ANG0010991_UTA Försterei Hasselbusch_rev1.0.pdf"
+},
+{
+"kategorie": "Sonstiges",
+"text": "Vegetationsschicht lockern",
+"einheit": "m2",
+"belege": 1,
+"min": 10.0,
+"median": 10.0,
+"max": 10.0,
+"quelle": "Angebot 221822Dortmund.pdf"
+},
+{
+"kategorie": "Sonstiges",
+"text": "Verkehrseinrichtung temporär Absperrschrankengitter RA2 L1200mm aufbauen",
+"einheit": "St",
+"belege": 1,
+"min": 44.0,
+"median": 44.0,
+"max": 44.0,
+"quelle": "Angebot 221822Dortmund.pdf"
+},
+{
+"kategorie": "Sonstiges",
+"text": "Verkehrssicherung beantragen",
+"einheit": "St",
+"belege": 1,
+"min": 225.83,
+"median": 225.83,
+"max": 225.83,
+"quelle": "Angebot 221852GeneralLV.pdf"
+},
+{
+"kategorie": "Sonstiges",
+"text": "Verkehrszeichen temp. Gefahrenzeichen 123 RA1 aufbauen/abbauen",
+"einheit": "St",
+"belege": 1,
+"min": 95.0,
+"median": 95.0,
+"max": 95.0,
+"quelle": "Angebot 221822Dortmund.pdf"
+},
+{
+"kategorie": "Sonstiges",
+"text": "Wanddurchbruch Durchmesser bis 55mm erstellen",
+"einheit": "Stk",
+"belege": 1,
+"min": 94.0,
+"median": 94.0,
+"max": 94.0,
+"quelle": "Belegbearbeitung P2600151_ANG0010991_UTA Försterei Hasselbusch_rev1.0.pdf"
+},
+{
+"kategorie": "Sonstiges",
+"text": "Wanddurchbruch fachgerecht verschließen/verdichten",
+"einheit": "Stk",
+"belege": 1,
+"min": 93.55,
+"median": 93.55,
+"max": 93.55,
+"quelle": "Belegbearbeitung P2600151_ANG0010991_UTA Försterei Hasselbusch_rev1.0.pdf"
+},
+{
+"kategorie": "Sonstiges",
+"text": "Warnleuchte WL1 aufbauen/abbauen",
+"einheit": "St",
+"belege": 1,
+"min": 33.0,
+"median": 33.0,
+"max": 33.0,
+"quelle": "Angebot 221822Dortmund.pdf"
+},
+{
+"kategorie": "Sonstiges",
+"text": "Wochenmiete Scherenbühne exkl. An-/Abtransport",
+"einheit": "Wo",
+"belege": 1,
+"min": 1039.5,
+"median": 1039.5,
+"max": 1039.5,
+"quelle": "P2501046_ANG0010704_Duwensee_2AS.pdf"
+},
+{
+"kategorie": "Sonstiges",
+"text": "Zusätzliche Abstimmungen mit dem Netzbetreiber",
+"einheit": "Stk.",
+"belege": 2,
+"min": 162.75,
+"median": 162.75,
+"max": 162.75,
+"quelle": "P2501046_ANG0010704_Duwensee_2AS.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Asphaltoberbau schneiden D10-15cm T80mm",
+"einheit": "m",
+"belege": 1,
+"min": 27.5,
+"median": 27.5,
+"max": 27.5,
+"quelle": "Angebot 221822Dortmund.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Aufwuchs entsorgen",
+"einheit": "t",
+"belege": 2,
+"min": 44.0,
+"median": 44.0,
+"max": 44.0,
+"quelle": "P2501107_ANG0010851_Techem_BLB_WE19902_LOKBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "BE Asphaltkolonne",
+"einheit": "St",
+"belege": 1,
+"min": 1562.5,
+"median": 1562.5,
+"max": 1562.5,
+"quelle": "Angebot 221822Dortmund.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Baugrube für Trägersystem herstellen",
+"einheit": "Stk.",
+"belege": 1,
+"min": 513.0,
+"median": 513.0,
+"max": 513.0,
+"quelle": "P2501046_ANG0010704_Duwensee_2AS.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Baugrubenaushub mit Böschung bis 2,00m Tiefe",
+"einheit": "m3",
+"belege": 1,
+"min": 41.26,
+"median": 41.26,
+"max": 41.26,
+"quelle": "Angebot 221852GeneralLV.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Baustelle einrichten räumen",
+"einheit": "Stk",
+"belege": 5,
+"min": 1650.0,
+"median": 1650.0,
+"max": 1650.0,
+"quelle": "P2501108_ANG0010847_Techem_BLB_WE1035_BlueBoxBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Bauzaun Stahlrohrrahmen verz., Vergitterung H 2m",
+"einheit": "m",
+"belege": 3,
+"min": 20.56,
+"median": 20.56,
+"max": 20.56,
+"quelle": "P2501108_ANG0010847_Techem_BLB_WE1035_BlueBoxBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Beschilderung Bauzaun",
+"einheit": "Stk",
+"belege": 3,
+"min": 26.5,
+"median": 26.5,
+"max": 26.5,
+"quelle": "P2501108_ANG0010847_Techem_BLB_WE1035_BlueBoxBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Betonbord TB8/20 Fundament Rückenstütze",
+"einheit": "m",
+"belege": 1,
+"min": 66.0,
+"median": 66.0,
+"max": 66.0,
+"quelle": "P2501109_ANG0010854_Techem_BLB_WE1639_PolizeipraesidiumBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Betonbord TB8/20 Fundament Rückenstütze 2seitig C12/15 D20cm",
+"einheit": "m",
+"belege": 1,
+"min": 66.0,
+"median": 66.0,
+"max": 66.0,
+"quelle": "Angebot 221822Dortmund.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Betonpflaster bis 10cm aufnehmen und lagern",
+"einheit": "m2",
+"belege": 1,
+"min": 24.55,
+"median": 24.55,
+"max": 24.55,
+"quelle": "Angebot 221852GeneralLV.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Betonplattenbelag 8cm 60/30 beige-grau Splittbett",
+"einheit": "m²",
+"belege": 1,
+"min": 82.5,
+"median": 82.5,
+"max": 82.5,
+"quelle": "P2501107_ANG0010851_Techem_BLB_WE19902_LOKBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Betonplattenbelag 8cm 60/30 beige-grau Splittbett",
+"einheit": "m2",
+"belege": 1,
+"min": 82.5,
+"median": 82.5,
+"max": 82.5,
+"quelle": "Angebot 221822Dortmund.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Betonsockelsteine für Rohrpfosten",
+"einheit": "Stk",
+"belege": 2,
+"min": 88.0,
+"median": 88.0,
+"max": 88.0,
+"quelle": "P2501108_ANG0010847_Techem_BLB_WE1035_BlueBoxBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Betonwabenverbundpflaster ausbauen lagern wieder verlegen",
+"einheit": "m²",
+"belege": 1,
+"min": 38.5,
+"median": 38.5,
+"max": 38.5,
+"quelle": "P2501108_ANG0010847_Techem_BLB_WE1035_BlueBoxBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Betonwabenverbundpflaster ausbauen wieder verlegen",
+"einheit": "m²",
+"belege": 1,
+"min": 38.5,
+"median": 38.5,
+"max": 38.5,
+"quelle": "P2501109_ANG0010854_Techem_BLB_WE1639_PolizeipraesidiumBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Beweissicherung durch AN",
+"einheit": "Stk",
+"belege": 3,
+"min": 135.0,
+"median": 135.0,
+"max": 135.0,
+"quelle": "P2501108_ANG0010847_Techem_BLB_WE1035_BlueBoxBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Bitumenhaltige Befestigung Fahrbahn abbrechen D10-20cm",
+"einheit": "t",
+"belege": 1,
+"min": 275.0,
+"median": 275.0,
+"max": 275.0,
+"quelle": "Angebot 221822Dortmund.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Bordstein Beton abbrechen TB8/25",
+"einheit": "m",
+"belege": 1,
+"min": 19.0,
+"median": 19.0,
+"max": 19.0,
+"quelle": "P2501109_ANG0010854_Techem_BLB_WE1639_PolizeipraesidiumBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Bordstein Beton abbrechen TB8/25 mit Fundament Rückenstütze",
+"einheit": "m",
+"belege": 1,
+"min": 19.0,
+"median": 19.0,
+"max": 19.0,
+"quelle": "Angebot 221822Dortmund.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Bordstein in Beton verlegt aufnehmen und lagern",
+"einheit": "m",
+"belege": 1,
+"min": 22.65,
+"median": 22.65,
+"max": 22.65,
+"quelle": "Angebot 221852GeneralLV.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Busch- und Strauchwerk roden H bis 2m",
+"einheit": "m²",
+"belege": 1,
+"min": 110.0,
+"median": 110.0,
+"max": 110.0,
+"quelle": "P2501109_ANG0010854_Techem_BLB_WE1639_PolizeipraesidiumBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Durchbruch Nassbohrung Tiefe bis 50cm, Durchmesser 55-150mm",
+"einheit": "Stk.",
+"belege": 1,
+"min": 449.0,
+"median": 449.0,
+"max": 449.0,
+"quelle": "P2500963_ANG0011009_Goldbeck_HQHamburg_rev2.0.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Durchbruch Nassbohrung d>60mm/<150mm, Tiefe <40cm",
+"einheit": "Stk.",
+"belege": 1,
+"min": 275.0,
+"median": 275.0,
+"max": 275.0,
+"quelle": "P2500969_ANG0010877 APCOA Schillerplatz Stuttgart_rev1.0.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Düngen Rasen organ. Dünger Langzeit-N",
+"einheit": "m²",
+"belege": 2,
+"min": 3.3,
+"median": 3.3,
+"max": 3.3,
+"quelle": "P2501107_ANG0010851_Techem_BLB_WE19902_LOKBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Einmessen/Abstecken durch Bauleitung des AN",
+"einheit": "Stk",
+"belege": 3,
+"min": 260.0,
+"median": 260.0,
+"max": 260.0,
+"quelle": "P2501108_ANG0010847_Techem_BLB_WE1035_BlueBoxBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Einzelstrauch roden H bis 1-2m",
+"einheit": "Stk",
+"belege": 1,
+"min": 60.0,
+"median": 60.0,
+"max": 60.0,
+"quelle": "P2501107_ANG0010851_Techem_BLB_WE19902_LOKBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Entsorgung Bodenaushub bis LAGA Z2",
+"einheit": "t",
+"belege": 1,
+"min": 75.44,
+"median": 75.44,
+"max": 75.44,
+"quelle": "Angebot 221822Dortmund.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Entsorgung Bodenmaterial, Kleinstmenge bis 3m³",
+"einheit": "m³",
+"belege": 1,
+"min": 337.5,
+"median": 337.5,
+"max": 337.5,
+"quelle": "P2501046_ANG0010704_Duwensee_2AS.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Erstellung Leitungsgraben Breite 0,4m Tiefe 0,8m",
+"einheit": "m",
+"belege": 1,
+"min": 45.21,
+"median": 45.21,
+"max": 45.21,
+"quelle": "Angebot 221852GeneralLV.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Facharbeiter/-in sämtl. Kosten/Zuschläge",
+"einheit": "h",
+"belege": 3,
+"min": 71.5,
+"median": 71.5,
+"max": 71.5,
+"quelle": "P2501108_ANG0010847_Techem_BLB_WE1035_BlueBoxBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Feinplanum für Rasenfläche",
+"einheit": "m²",
+"belege": 2,
+"min": 6.0,
+"median": 6.0,
+"max": 6.0,
+"quelle": "P2501107_ANG0010851_Techem_BLB_WE19902_LOKBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Fotodokumentation",
+"einheit": "Stk",
+"belege": 3,
+"min": 11.0,
+"median": 11.0,
+"max": 11.0,
+"quelle": "P2501108_ANG0010847_Techem_BLB_WE1035_BlueBoxBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Frostschutzschicht RC-1 d=30cm in Fahrbahnflächen liefern/herstellen",
+"einheit": "m2",
+"belege": 1,
+"min": 27.71,
+"median": 27.71,
+"max": 27.71,
+"quelle": "Angebot 221852GeneralLV.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Fundamente für DC Trägersystem herstellen",
+"einheit": "Stk.",
+"belege": 1,
+"min": 783.0,
+"median": 783.0,
+"max": 783.0,
+"quelle": "P2501046_ANG0010704_Duwensee_2AS.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Fundamentgrabenaushub",
+"einheit": "m³",
+"belege": 3,
+"min": 142.0,
+"median": 142.0,
+"max": 142.0,
+"quelle": "P2501108_ANG0010847_Techem_BLB_WE1035_BlueBoxBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Fundamentgrabenaushub",
+"einheit": "m3",
+"belege": 1,
+"min": 142.0,
+"median": 142.0,
+"max": 142.0,
+"quelle": "Angebot 221822Dortmund.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Graben für Stromkabel BK3-5 lösen und wieder einbauen 40x60cm tief",
+"einheit": "m3",
+"belege": 1,
+"min": 56.25,
+"median": 56.25,
+"max": 56.25,
+"quelle": "Angebot 221822Dortmund.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Graben für Stromkabel lösen und wieder einbauen",
+"einheit": "m³",
+"belege": 3,
+"min": 56.25,
+"median": 56.25,
+"max": 56.25,
+"quelle": "P2501108_ANG0010847_Techem_BLB_WE1035_BlueBoxBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Helfer/-in sämtl. Kosten/Zuschläge",
+"einheit": "h",
+"belege": 3,
+"min": 60.5,
+"median": 60.5,
+"max": 60.5,
+"quelle": "P2501108_ANG0010847_Techem_BLB_WE1035_BlueBoxBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Hydraulikbagger Fahrer/-in 2-5t",
+"einheit": "h",
+"belege": 3,
+"min": 73.7,
+"median": 73.7,
+"max": 73.7,
+"quelle": "P2501108_ANG0010847_Techem_BLB_WE1035_BlueBoxBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Hydraulikbagger Fahrer/-in 5-10t",
+"einheit": "h",
+"belege": 3,
+"min": 77.0,
+"median": 77.0,
+"max": 77.0,
+"quelle": "P2501108_ANG0010847_Techem_BLB_WE1035_BlueBoxBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Kleingeräte",
+"einheit": "h",
+"belege": 2,
+"min": 44.0,
+"median": 44.0,
+"max": 44.0,
+"quelle": "P2501108_ANG0010847_Techem_BLB_WE1035_BlueBoxBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Kopfloch 0,5x0,5x0,5m",
+"einheit": "Stk",
+"belege": 3,
+"min": 120.6,
+"median": 120.6,
+"max": 120.6,
+"quelle": "P2501108_ANG0010847_Techem_BLB_WE1035_BlueBoxBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Kopfloch 0,5x0,5x0,5m BK3-5",
+"einheit": "St",
+"belege": 1,
+"min": 120.6,
+"median": 120.6,
+"max": 120.6,
+"quelle": "Angebot 221822Dortmund.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Kreuzung mit best. Versorgungsleitung einfach",
+"einheit": "Stk",
+"belege": 2,
+"min": 112.0,
+"median": 112.0,
+"max": 112.0,
+"quelle": "P2501107_ANG0010851_Techem_BLB_WE19902_LOKBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Kreuzung mit best. Versorgungsleitung mehrere",
+"einheit": "Stk",
+"belege": 1,
+"min": 142.0,
+"median": 142.0,
+"max": 142.0,
+"quelle": "P2501109_ANG0010854_Techem_BLB_WE1639_PolizeipraesidiumBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Kreuzung mit bestehender Versorgungsleitung einfach",
+"einheit": "St",
+"belege": 1,
+"min": 112.0,
+"median": 112.0,
+"max": 112.0,
+"quelle": "Angebot 221822Dortmund.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Kreuzung mit bestehender Versorgungsleitung mehrere",
+"einheit": "St",
+"belege": 1,
+"min": 142.0,
+"median": 142.0,
+"max": 142.0,
+"quelle": "Angebot 221822Dortmund.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Kunststofffundament für Ladesäulen/Wallbox-Stelen",
+"einheit": "Stk",
+"belege": 2,
+"min": 362.5,
+"median": 362.5,
+"max": 362.5,
+"quelle": "P2501108_ANG0010847_Techem_BLB_WE1035_BlueBoxBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "LKW Fahrer/-in 8-12t",
+"einheit": "h",
+"belege": 2,
+"min": 71.5,
+"median": 71.5,
+"max": 71.5,
+"quelle": "P2501108_ANG0010847_Techem_BLB_WE1035_BlueBoxBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Meißelhammer",
+"einheit": "h",
+"belege": 2,
+"min": 88.0,
+"median": 88.0,
+"max": 88.0,
+"quelle": "P2501108_ANG0010847_Techem_BLB_WE1035_BlueBoxBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Mineralgemisch 0/32 liefern abladen",
+"einheit": "m³",
+"belege": 3,
+"min": 71.5,
+"median": 71.5,
+"max": 71.5,
+"quelle": "P2501108_ANG0010847_Techem_BLB_WE1035_BlueBoxBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Montage des Traversen-Systems mit Mittelstütze",
+"einheit": "Stk.",
+"belege": 1,
+"min": 31940.52,
+"median": 31940.52,
+"max": 31940.52,
+"quelle": "P2501046_ANG0010704_Duwensee_2AS.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Motorsäge Bedienungspersonal L bis 40cm",
+"einheit": "h",
+"belege": 2,
+"min": 71.5,
+"median": 71.5,
+"max": 71.5,
+"quelle": "P2501108_ANG0010847_Techem_BLB_WE1035_BlueBoxBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Ortbeton Auffüllung unbewehrt C12/15",
+"einheit": "m³",
+"belege": 3,
+"min": 38.5,
+"median": 38.5,
+"max": 38.5,
+"quelle": "P2501108_ANG0010847_Techem_BLB_WE1035_BlueBoxBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Parkplatzbegrenzung \"Parkstopp\" aus PE",
+"einheit": "Stk",
+"belege": 2,
+"min": 170.0,
+"median": 170.0,
+"max": 170.0,
+"quelle": "P2501108_ANG0010847_Techem_BLB_WE1035_BlueBoxBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Pflanzl.Bodendecke abräumen aufnehmen fördern",
+"einheit": "m²",
+"belege": 2,
+"min": 8.5,
+"median": 8.5,
+"max": 8.5,
+"quelle": "P2501107_ANG0010851_Techem_BLB_WE19902_LOKBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Pflaster an Kanten maschinell zuarbeiten/schneiden",
+"einheit": "m",
+"belege": 1,
+"min": 20.25,
+"median": 20.25,
+"max": 20.25,
+"quelle": "P2501046_ANG0010704_Duwensee_2AS.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Pflasterbelag Betonpflaster D80mm abbrechen inkl. Bettung",
+"einheit": "m2",
+"belege": 1,
+"min": 26.8,
+"median": 26.8,
+"max": 26.8,
+"quelle": "Angebot 221822Dortmund.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Pflasterbelag Betonpflaster abbrechen",
+"einheit": "m²",
+"belege": 2,
+"min": 26.8,
+"median": 26.8,
+"max": 26.8,
+"quelle": "P2501108_ANG0010847_Techem_BLB_WE1035_BlueBoxBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Pflasterfläche inkl. Tragschicht aufnehmen",
+"einheit": "m²",
+"belege": 1,
+"min": 22.95,
+"median": 22.95,
+"max": 22.95,
+"quelle": "P2501046_ANG0010704_Duwensee_2AS.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Planum Abweichung +/-2cm EV2 45MPa",
+"einheit": "m²",
+"belege": 2,
+"min": 3.5,
+"median": 3.5,
+"max": 3.5,
+"quelle": "P2501108_ANG0010847_Techem_BLB_WE1035_BlueBoxBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Planum Abweichung +/-2cm EV2 45MPa",
+"einheit": "m2",
+"belege": 1,
+"min": 3.5,
+"median": 3.5,
+"max": 3.5,
+"quelle": "Angebot 221822Dortmund.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Plattenbelag Betonplatten D5cm abbrechen",
+"einheit": "m2",
+"belege": 1,
+"min": 22.6,
+"median": 22.6,
+"max": 22.6,
+"quelle": "Angebot 221822Dortmund.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Rammschutzpoller D=150mm liefern und lagern",
+"einheit": "Stk.",
+"belege": 1,
+"min": 135.0,
+"median": 135.0,
+"max": 135.0,
+"quelle": "P2501046_ANG0010704_Duwensee_2AS.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Rammschutzpoller D=150mm montieren",
+"einheit": "Stk.",
+"belege": 1,
+"min": 195.75,
+"median": 195.75,
+"max": 195.75,
+"quelle": "P2501046_ANG0010704_Duwensee_2AS.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Rasen ansäen Gebrauchsrasen RSM2.3",
+"einheit": "m²",
+"belege": 2,
+"min": 8.8,
+"median": 8.8,
+"max": 8.8,
+"quelle": "P2501107_ANG0010851_Techem_BLB_WE19902_LOKBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Richtzeichen 314-10",
+"einheit": "Stk",
+"belege": 3,
+"min": 99.0,
+"median": 99.0,
+"max": 99.0,
+"quelle": "P2501107_ANG0010851_Techem_BLB_WE19902_LOKBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Richtzeichen 314-20",
+"einheit": "Stk",
+"belege": 3,
+"min": 99.0,
+"median": 99.0,
+"max": 99.0,
+"quelle": "P2501107_ANG0010851_Techem_BLB_WE19902_LOKBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Richtzeichen Gr.1 Richtzeichen 314-10",
+"einheit": "Stk",
+"belege": 1,
+"min": 99.0,
+"median": 99.0,
+"max": 99.0,
+"quelle": "P2501108_ANG0010847_Techem_BLB_WE1035_BlueBoxBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Richtzeichen Gr.1 Richtzeichen 314-20",
+"einheit": "Stk",
+"belege": 1,
+"min": 99.0,
+"median": 99.0,
+"max": 99.0,
+"quelle": "P2501108_ANG0010847_Techem_BLB_WE1035_BlueBoxBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Rohrpfosten Stahl verz. Durchm. 60,3mm",
+"einheit": "Stk",
+"belege": 3,
+"min": 104.5,
+"median": 104.5,
+"max": 104.5,
+"quelle": "P2501108_ANG0010847_Techem_BLB_WE1035_BlueBoxBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Sand 0/2 liefern abladen",
+"einheit": "m³",
+"belege": 3,
+"min": 33.0,
+"median": 33.0,
+"max": 33.0,
+"quelle": "P2501108_ANG0010847_Techem_BLB_WE1035_BlueBoxBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Sand Einbettung Rohr einbauen verdichten",
+"einheit": "m³",
+"belege": 3,
+"min": 27.5,
+"median": 27.5,
+"max": 27.5,
+"quelle": "P2501108_ANG0010847_Techem_BLB_WE1035_BlueBoxBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Sand Einbettung Rohr einbauen/verdichten D30-50cm",
+"einheit": "m3",
+"belege": 1,
+"min": 27.5,
+"median": 27.5,
+"max": 27.5,
+"quelle": "Angebot 221822Dortmund.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Stahlplatten Grabenquerung 2,00x2,50m 25-35mm",
+"einheit": "St",
+"belege": 1,
+"min": 770.0,
+"median": 770.0,
+"max": 770.0,
+"quelle": "Angebot 221822Dortmund.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Stahlplatten Grabenquerung 2x2,5m",
+"einheit": "Stk",
+"belege": 1,
+"min": 770.0,
+"median": 770.0,
+"max": 770.0,
+"quelle": "P2501109_ANG0010854_Techem_BLB_WE1639_PolizeipraesidiumBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Stammschutz Ummantelung Bohlen 0,5-1m",
+"einheit": "Stk",
+"belege": 1,
+"min": 121.0,
+"median": 121.0,
+"max": 121.0,
+"quelle": "P2501107_ANG0010851_Techem_BLB_WE19902_LOKBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Tragschicht Lava 2/8",
+"einheit": "m3",
+"belege": 1,
+"min": 140.0,
+"median": 140.0,
+"max": 140.0,
+"quelle": "Angebot 221822Dortmund.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Vegetationsschicht lockern",
+"einheit": "m²",
+"belege": 2,
+"min": 10.0,
+"median": 10.0,
+"max": 10.0,
+"quelle": "P2501107_ANG0010851_Techem_BLB_WE19902_LOKBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Verkehrszeichen temporär Gefahrenzeichen 123",
+"einheit": "Stk",
+"belege": 3,
+"min": 95.0,
+"median": 95.0,
+"max": 95.0,
+"quelle": "P2501108_ANG0010847_Techem_BLB_WE1035_BlueBoxBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Verschließen/Verdichtung des Wanddurchbruches",
+"einheit": "Stk.",
+"belege": 1,
+"min": 93.55,
+"median": 93.55,
+"max": 93.55,
+"quelle": "P2501056_ANG0010891 Wüstenroth Oberursel.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Wanddurchbruch Durchmesser bis 20mm",
+"einheit": "Stk.",
+"belege": 1,
+"min": 50.5,
+"median": 50.5,
+"max": 50.5,
+"quelle": "P2501056_ANG0010891 Wüstenroth Oberursel.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Warnleuchte WL1 aufbauen abbauen",
+"einheit": "Stk",
+"belege": 3,
+"min": 33.0,
+"median": 33.0,
+"max": 33.0,
+"quelle": "P2501108_ANG0010847_Techem_BLB_WE1035_BlueBoxBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Wiederherstellung Pflasterfläche inkl. Tragschicht",
+"einheit": "m²",
+"belege": 1,
+"min": 51.3,
+"median": 51.3,
+"max": 51.3,
+"quelle": "P2501046_ANG0010704_Duwensee_2AS.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Wiederherstellung der zuvor ausgebauten Pflasterfläche",
+"einheit": "m2",
+"belege": 1,
+"min": 35.4,
+"median": 35.4,
+"max": 35.4,
+"quelle": "Angebot 221822Dortmund.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Zulage Handarbeit",
+"einheit": "m³",
+"belege": 3,
+"min": 99.0,
+"median": 99.0,
+"max": 99.0,
+"quelle": "P2501108_ANG0010847_Techem_BLB_WE1035_BlueBoxBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Zulage Handarbeit",
+"einheit": "m3",
+"belege": 1,
+"min": 99.0,
+"median": 99.0,
+"max": 99.0,
+"quelle": "Angebot 221822Dortmund.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Zusatzzeichen 1050-32",
+"einheit": "Stk",
+"belege": 3,
+"min": 66.0,
+"median": 66.0,
+"max": 66.0,
+"quelle": "P2501107_ANG0010851_Techem_BLB_WE19902_LOKBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "Zusatzzeichen Gr.1 Zusatzzeichen 1050-32",
+"einheit": "Stk",
+"belege": 1,
+"min": 66.0,
+"median": 66.0,
+"max": 66.0,
+"quelle": "P2501108_ANG0010847_Techem_BLB_WE1035_BlueBoxBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "vorh. Betonteile abbrechen und entsorgen",
+"einheit": "m³",
+"belege": 1,
+"min": 71.5,
+"median": 71.5,
+"max": 71.5,
+"quelle": "P2501109_ANG0010854_Techem_BLB_WE1639_PolizeipraesidiumBielefeld_rev1.0.pdf"
+},
+{
+"kategorie": "Tiefbau",
+"text": "vorh. Stahlbetonteile abbrechen und entsorgen",
+"einheit": "m³",
+"belege": 1,
+"min": 132.0,
+"median": 132.0,
+"max": 132.0,
+"quelle": "P2501109_ANG0010854_Techem_BLB_WE1639_PolizeipraesidiumBielefeld_rev1.0.pdf"
+}
+]

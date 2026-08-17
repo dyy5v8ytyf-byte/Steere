@@ -1,0 +1,170 @@
+<%- include('partials/kopf') %>
+<div class="seitenkopf">
+  <div><h1><%= vorlage.name %></h1>
+    <div class="unter"><span class="pille"><%= vorlage.art %></span>
+      <% if (vorlage.ist_standard) { %> <span class="pille">Standard</span><% } %>
+      <% if (!vorlage.aktiv) { %> <span class="pille rot">stillgelegt</span><% } %>
+      · <%= vorlage.positionen.length %> Positionen</div></div>
+  <div class="reihe">
+    <form method="post" action="/vorlagen/<%= vorlage.id %>/kopieren"><button class="knopf leer" type="submit">Kopieren</button></form>
+    <a class="knopf leer" href="/vorlagen">Zurück</a>
+  </div>
+</div>
+
+<form method="post" action="/vorlagen/<%= vorlage.id %>">
+<div class="karte">
+  <h2>Textrahmen</h2>
+  <div class="felder3">
+    <div class="feld"><label>Name</label><input type="text" name="name" value="<%= vorlage.name %>"></div>
+    <div class="feld"><label>Art</label><select name="art">
+      <% ARTEN.forEach(function(a){ %><option <%= vorlage.art === a ? 'selected' : '' %>><%= a %></option><% }) %></select></div>
+    <div class="feld"><label>Gültigkeit in Tagen</label><input type="text" name="gueltigkeit_tage" value="<%= vorlage.gueltigkeit_tage %>"></div>
+  </div>
+  <div class="feld"><label>Kurzbeschreibung</label><input type="text" name="beschreibung" value="<%= vorlage.beschreibung || '' %>"></div>
+  <div class="feld"><label>Anrede (leer = aus Kundendaten)</label><input type="text" name="anrede" value="<%= vorlage.anrede || '' %>"></div>
+
+  <div class="feld"><label>Einleitung <span data-baustein="einleitung" data-ziel="f_einleitung"></span></label>
+    <textarea name="einleitung" id="f_einleitung" rows="3"><%= vorlage.einleitung || '' %></textarea></div>
+
+  <div class="feld"><label>Vorbemerkungen — steht vor den Positionen <span data-baustein="vorbemerkung" data-ziel="f_vorbemerkungen"></span></label>
+    <textarea name="vorbemerkungen" id="f_vorbemerkungen" rows="5"><%= vorlage.vorbemerkungen || '' %></textarea></div>
+
+  <div class="feld"><label>Hinweise und Vorbehalte — steht nach den Positionen <span data-baustein="hinweis" data-ziel="f_hinweise"></span></label>
+    <textarea name="hinweise" id="f_hinweise" rows="7"><%= vorlage.hinweise || '' %></textarea></div>
+
+  <div class="feld"><label>Schlusssatz <span data-baustein="schluss" data-ziel="f_schluss"></span></label>
+    <textarea name="schlusstext" id="f_schluss" rows="2"><%= vorlage.schlusstext || '' %></textarea></div>
+
+  <div class="haken"><input type="checkbox" id="vstd" name="ist_standard" <%= vorlage.ist_standard ? 'checked' : '' %>><label for="vstd">Standardvorlage — wird bei einem neuen Angebot vorgeschlagen</label></div>
+
+  <div class="reihe" style="margin-top:14px">
+    <button class="knopf" type="submit">Speichern</button>
+    <% if (vorlage.aktiv) { %>
+      <button class="knopf gefahr leer" type="submit" name="deaktivieren" value="1">Stilllegen</button>
+    <% } else { %>
+      <button class="knopf leer" type="submit" name="aktivieren" value="1">Wieder in Betrieb nehmen</button>
+    <% } %>
+  </div>
+</div>
+</form>
+
+<div class="karte" id="positionen">
+  <h2>Positionsgerüst</h2>
+  <div class="hinweis-klein" style="margin-bottom:10px">
+    Die Spalte <b>Menge</b> entscheidet, woher die Zahl beim Erzeugen kommt. Steht dort ein Wert aus der Begehung,
+    wird er beim Umwandeln automatisch eingesetzt. Preise sind Vorschläge und werden im Angebot ohnehin geprüft.
+  </div>
+  <% if (!vorlage.positionen.length) { %><div class="leer-hinweis">Noch keine Position.</div><% } else { %>
+  <div class="tab-scroll"><table>
+    <thead><tr><th style="width:44px">Nr.</th><th>Leistung</th><th>ME</th><th>Menge</th><th class="z">EP</th><th></th></tr></thead>
+    <tbody><% vorlage.positionen.forEach(function(p){ %>
+      <tr<%= p.ist_titel ? ' style="background:var(--bg3)"' : '' %>>
+        <td class="mono" style="font-size:12px"><%= p.lfd %></td>
+        <td>
+          <% if (p.ist_titel) { %><b><%= p.text %></b> <span class="pille">Titel</span>
+          <% } else { %><%= p.text %><% } %>
+          <% if (p.nur_bei_art) { %> <span class="pille">nur <%= p.nur_bei_art %></span><% } %>
+          <% if (p.langtext) { %><br><span style="font-size:11px;color:var(--ink3)"><%= p.langtext.length > 120 ? p.langtext.slice(0,120) + '…' : p.langtext %></span><% } %>
+          <% if (p.hinweis) { %><br><span style="font-size:11px;color:var(--brass)"><%= p.hinweis %></span><% } %>
+        </td>
+        <td><%= p.einheit || '—' %></td>
+        <td style="font-size:12px">
+          <% if (p.ist_titel) { %>—<% } else if (p.menge_quelle === 'fest') { %><%= zahl(p.menge_fest) %>
+          <% } else if (p.menge_quelle === 'offen') { %><span style="color:var(--ink3)">offen</span>
+          <% } else { %><span class="pille">aus Begehung</span><% } %>
+        </td>
+        <td class="z"><%= Number(p.einzelpreis) ? eur(p.einzelpreis) : '—' %></td>
+        <td class="z">
+          <details class="block" style="margin:0;border:none;background:none"><summary style="padding:3px 0">ändern</summary>
+            <div class="inhalt" style="padding:8px 0 0;min-width:320px;text-align:left">
+              <form method="post" action="/vorlagen/<%= vorlage.id %>/positionen/<%= p.id %>">
+                <div class="felder3">
+                  <div class="feld"><label>Nr.</label><input type="text" name="lfd" value="<%= p.lfd %>"></div>
+                  <div class="feld"><label>LV-Pos.</label><input type="text" name="pos" value="<%= p.pos || '' %>"></div>
+                  <div class="feld"><label>Einheit</label><input type="text" name="einheit" value="<%= p.einheit || '' %>"></div>
+                </div>
+                <div class="feld"><label>Leistungstext</label><input type="text" name="text" value="<%= p.text %>"></div>
+                <div class="feld"><label>Langtext</label><textarea name="langtext" rows="3"><%= p.langtext || '' %></textarea></div>
+                <div class="felder3">
+                  <div class="feld"><label>Menge kommt aus</label><select name="menge_quelle">
+                    <% QUELLEN.forEach(function(q){ %><option value="<%= q[0] %>" <%= p.menge_quelle === q[0] ? 'selected' : '' %>><%= q[1] %></option><% }) %></select></div>
+                  <div class="feld"><label>Feste Menge</label><input type="text" name="menge_fest" value="<%= p.menge_fest %>"></div>
+                  <div class="feld"><label>Einzelpreis netto</label><input type="text" name="einzelpreis" value="<%= p.einzelpreis %>"></div>
+                </div>
+                <div class="felder2">
+                  <div class="feld"><label>Nur bei Art</label><select name="nur_bei_art">
+                    <option value="">immer</option>
+                    <option value="AC" <%= p.nur_bei_art === 'AC' ? 'selected' : '' %>>nur AC</option>
+                    <option value="DC" <%= p.nur_bei_art === 'DC' ? 'selected' : '' %>>nur DC</option></select></div>
+                  <div class="feld"><label>Interner Hinweis</label><input type="text" name="hinweis" value="<%= p.hinweis || '' %>"></div>
+                </div>
+                <div class="haken"><input type="checkbox" id="ti<%= p.id %>" name="ist_titel" <%= p.ist_titel ? 'checked' : '' %>><label for="ti<%= p.id %>">Titelzeile (ohne Preis)</label></div>
+                <div class="reihe" style="margin-top:8px">
+                  <button class="knopf leer mini" type="submit">Speichern</button>
+                  <button class="knopf gefahr mini" type="submit" name="loeschen" value="1">Entfernen</button>
+                </div>
+              </form>
+            </div>
+          </details>
+        </td>
+      </tr>
+    <% }) %></tbody></table></div>
+  <% } %>
+
+  <details class="block" style="margin-top:14px">
+    <summary>Position ergänzen</summary>
+    <div class="inhalt">
+      <form method="post" action="/vorlagen/<%= vorlage.id %>/positionen">
+        <div class="felder3">
+          <div class="feld"><label>LV-Pos.</label><input type="text" name="pos"></div>
+          <div class="feld"><label>Einheit</label><input type="text" name="einheit" placeholder="Stk. / m / psch"></div>
+          <div class="feld"><label>Nur bei Art</label><select name="nur_bei_art">
+            <option value="">immer</option><option value="AC">nur AC</option><option value="DC">nur DC</option></select></div>
+        </div>
+        <div class="feld"><label>Leistungstext * <span data-baustein="position" data-ziel="np_text"></span></label>
+          <input type="text" name="text" id="np_text" required></div>
+        <div class="feld"><label>Langtext <span data-baustein="langtext" data-ziel="np_lang"></span></label>
+          <textarea name="langtext" id="np_lang" rows="3"></textarea></div>
+        <div class="felder3">
+          <div class="feld"><label>Menge kommt aus</label><select name="menge_quelle">
+            <% QUELLEN.forEach(function(q){ %><option value="<%= q[0] %>"><%= q[1] %></option><% }) %></select></div>
+          <div class="feld"><label>Feste Menge</label><input type="text" name="menge_fest" value="1"></div>
+          <div class="feld"><label>Einzelpreis netto</label><input type="text" name="einzelpreis" value="0"></div>
+        </div>
+        <div class="haken"><input type="checkbox" id="np_titel" name="ist_titel"><label for="np_titel">Titelzeile (ohne Preis)</label></div>
+        <div style="margin-top:8px"><button class="knopf mini" type="submit">Ergänzen</button></div>
+      </form>
+    </div>
+  </details>
+</div>
+
+<script>
+// Textbausteine: aus dem Bestand übernehmen statt neu tippen.
+(function () {
+  var vorrat = <%- JSON.stringify(texte) %>;
+  document.querySelectorAll('[data-baustein]').forEach(function (halter) {
+    var kat = halter.getAttribute('data-baustein');
+    var liste = vorrat[kat] || [];
+    if (!liste.length) return;
+    var s = document.createElement('select');
+    s.className = 'baustein-wahl';
+    s.innerHTML = '<option value="">Baustein übernehmen …</option>' +
+      liste.map(function (b, i) {
+        var k = b.text.length > 70 ? b.text.slice(0, 70) + '…' : b.text;
+        return '<option value="' + i + '">' + k.replace(/[<>&]/g, '') + '</option>';
+      }).join('');
+    s.addEventListener('change', function () {
+      if (s.value === '') return;
+      var ziel = document.getElementById(halter.getAttribute('data-ziel'));
+      if (ziel) {
+        var t = liste[Number(s.value)].text;
+        ziel.value = ziel.value.trim() ? ziel.value.replace(/\s*$/, '') + '\n\n' + t : t;
+        ziel.focus();
+      }
+      s.value = '';
+    });
+    halter.appendChild(s);
+  });
+})();
+</script>
+<%- include('partials/fuss') %>

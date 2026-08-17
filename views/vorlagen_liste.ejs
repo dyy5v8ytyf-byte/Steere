@@ -1,0 +1,48 @@
+<%- include('partials/kopf') %>
+<div class="seitenkopf">
+  <div><h1>Angebotsvorlagen</h1>
+    <div class="unter">Der Textrahmen eines Angebots. Die Mengen kommen aus der Begehung, die Sprache von hier.</div></div>
+  <a class="knopf leer" href="/vorlagen/bausteine">Textbausteine</a>
+</div>
+
+<div class="karte">
+  <% if (!vorlagen.length) { %><div class="leer-hinweis">Noch keine Vorlage angelegt.</div><% } else { %>
+  <div class="tab-scroll"><table>
+    <thead><tr><th>Vorlage</th><th>Art</th><th class="z">Positionen</th><th class="z">verwendet</th><th></th></tr></thead>
+    <tbody><% vorlagen.forEach(function(v){ %>
+      <tr<%= v.aktiv ? '' : ' style="opacity:.5"' %>>
+        <td>
+          <a href="/vorlagen/<%= v.id %>"><b><%= v.name %></b></a>
+          <% if (v.ist_standard) { %> <span class="pille">Standard</span><% } %>
+          <% if (!v.aktiv) { %> <span class="pille rot">stillgelegt</span><% } %>
+          <% if (v.beschreibung) { %><br><span style="font-size:12px;color:var(--ink3)"><%= v.beschreibung %></span><% } %>
+        </td>
+        <td><span class="pille"><%= v.art %></span></td>
+        <td class="z"><%= v.positionen %></td>
+        <td class="z"><%= v.verwendet %>&times;</td>
+        <td class="z"><a class="knopf leer mini" href="/vorlagen/<%= v.id %>">Öffnen</a></td>
+      </tr>
+    <% }) %></tbody></table></div>
+  <% } %>
+</div>
+
+<div class="karte">
+  <details class="block" style="border:none;background:none;margin:0">
+    <summary>Neue Vorlage anlegen</summary>
+    <div class="inhalt">
+      <form method="post" action="/vorlagen/neu">
+        <div class="felder2">
+          <div class="feld"><label>Name *</label><input type="text" name="name" required placeholder="z. B. AC — Tiefgarage Bestand"></div>
+          <div class="feld"><label>Art</label><select name="art">
+            <% ARTEN.forEach(function(a){ %><option><%= a %></option><% }) %></select></div>
+        </div>
+        <div class="feld"><label>Kurzbeschreibung</label><input type="text" name="beschreibung" placeholder="Wofür ist diese Vorlage gedacht?"></div>
+        <button class="knopf mini" type="submit">Anlegen</button>
+      </form>
+      <div class="hinweis-klein" style="margin-top:8px">
+        Schneller geht es meist über <b>Kopieren</b> einer bestehenden Vorlage — dann sind Texte und Positionen schon da.
+      </div>
+    </div>
+  </details>
+</div>
+<%- include('partials/fuss') %>

@@ -1,0 +1,50 @@
+<%- include('partials/kopf') %>
+<div class="seitenkopf"><div><h1>Projektassistent</h1>
+  <div class="unter">Vorbereitet, aber bewusst noch nicht aktiv</div></div>
+  <a class="knopf leer" href="/verwaltung">Zurück</a></div>
+
+<div class="spalten s21">
+  <div class="karte">
+    <h2>Status</h2><div class="marke-strich"></div>
+    <div class="tab-scroll"><table>
+      <tbody>
+        <tr><td>Assistent eingeschaltet</td><td class="z"><span class="pille <%= aktiv ? 'ok' : '' %>"><%= aktiv ? 'ja' : 'nein' %></span></td></tr>
+        <tr><td>API-Schlüssel hinterlegt (Variable <span class="mono">ANTHROPIC_API_KEY</span>)</td><td class="z"><span class="pille <%= schluesselVorhanden ? 'ok' : 'warn' %>"><%= schluesselVorhanden ? 'ja' : 'nein' %></span></td></tr>
+        <tr><td>Modell</td><td class="z mono" style="font-size:12.5px"><%= modell %></td></tr>
+        <tr><td>Vorschläge in der Ablage</td><td class="z"><%= vorschlaege.length %></td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="kasten" style="margin-top:18px">
+      <b>Was hier vorbereitet ist.</b> Die Datenbank hat eine Ablage für Vorschläge, die Oberfläche zeigt sie an, und die Einstellungen kennen den Schalter.
+      Was fehlt, ist ausschließlich der API-Schlüssel und Ihre Freigabe. Damit kostet der Assistent bis dahin nichts.<br><br>
+      <b>Wie er arbeiten wird.</b> Er liest Projektstand, Aktivitäten und Preiskatalog und schlägt vor: Zusammenfassung für den Wochenbericht, Textentwurf für Wiedervorlagen, passende Positionen zu einer Begehung.
+      <b>Ein Vorschlag ändert nie selbst etwas.</b> Er liegt in der Ablage, bis ein Mensch ihn übernimmt oder verwirft — deshalb kann der Assistent keine Daten überschreiben.<br><br>
+      <b>Bevor Sie einschalten.</b> Der Assistent sendet Projektdaten an einen externen Dienst. Das ist eine Auftragsverarbeitung und gehört ins Verarbeitungsverzeichnis. Klären Sie das, bevor der Schalter auf 1 geht.
+    </div>
+  </div>
+
+  <div class="karte">
+    <h2>Einschalten</h2><div class="marke-strich"></div>
+    <ol style="font-size:13.5px;color:var(--ink2);padding-left:20px;line-height:1.75">
+      <li>API-Schlüssel bei Anthropic erzeugen.</li>
+      <li>In Railway beim Dienst als Variable <span class="mono">ANTHROPIC_API_KEY</span> hinterlegen.</li>
+      <li>Unter Einstellungen <span class="mono">ki_aktiv</span> auf <b>1</b> setzen.</li>
+      <li>Datenschutzseite klären und dokumentieren.</li>
+    </ol>
+    <p style="font-size:13px;color:var(--ink3);margin-top:14px">Abrechnung erfolgt nach Nutzung über Anthropic und ist unabhängig von einem Claude-Abonnement.</p>
+  </div>
+</div>
+
+<% if (vorschlaege.length) { %>
+<div class="karte">
+  <h2>Vorschläge</h2>
+  <div class="tab-scroll"><table>
+    <thead><tr><th>Erstellt</th><th>Bereich</th><th>Anlass</th><th>Vorschlag</th><th>Status</th></tr></thead>
+    <tbody><% vorschlaege.forEach(function(v){ %>
+      <tr><td><%= datumZeit(v.erstellt_am) %></td><td><%= v.bereich %></td><td><%= v.anlass || '—' %></td>
+        <td style="max-width:520px"><%= v.vorschlag %></td><td><span class="pille"><%= v.status %></span></td></tr>
+    <% }) %></tbody></table></div>
+</div>
+<% } %>
+<%- include('partials/fuss') %>

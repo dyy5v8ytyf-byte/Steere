@@ -1,0 +1,107 @@
+<%- include('partials/kopf') %>
+<div class="seitenkopf">
+  <div><h1>Rechnung <%= rechnung.nummer %></h1>
+    <div class="unter"><%= rechnung.firma %> · <%= rechnung.festgeschrieben ? 'festgeschrieben am ' + datumZeit(rechnung.festgeschrieben_am) : 'Entwurf' %></div></div>
+  <div class="reihe">
+    <a class="knopf leer" href="/rechnungen/<%= rechnung.id %>/druck" target="_blank">Druckansicht</a>
+    <% if (!rechnung.festgeschrieben) { %>
+      <form method="post" action="/rechnungen/<%= rechnung.id %>/festschreiben"
+            onsubmit="return confirm('Festschreiben? Danach ist die Rechnung unveränderlich und erhält ihre endgültige Nummer.')">
+        <button class="knopf" type="submit">Festschreiben</button></form>
+    <% } else if (!rechnung.storniert_durch && rechnung.art !== 'storno') { %>
+      <details class="block" style="margin:0;border:none;background:none"><summary style="padding:9px 0">Stornieren</summary>
+        <div class="inhalt" style="padding:8px 0 0;min-width:260px">
+          <form method="post" action="/rechnungen/<%= rechnung.id %>/stornieren">
+            <div class="feld"><label>Grund</label><input type="text" name="grund" required></div>
+            <button class="knopf gefahr mini" type="submit">Storno erzeugen</button></form>
+        </div></details>
+    <% } %>
+  </div>
+</div>
+
+<% if (rechnung.festgeschrieben) { %>
+  <div class="melde"><b>Festgeschrieben.</b> Inhalt und Nummer sind unveränderlich — das erzwingt die Datenbank, nicht nur diese Oberfläche.
+    Korrekturen laufen über Storno und eine neue Rechnung. Prüfsumme: <code style="font-size:11px"><%= (rechnung.pruefsumme||'').slice(0,32) %>…</code></div>
+<% } %>
+<% if (rechnung.storno_nummer) { %><div class="melde warn">Diese Rechnung wurde storniert durch <b><%= rechnung.storno_nummer %></b>.</div><% } %>
+<% if (rechnung.original_nummer) { %><div class="melde warn">Storno zur Rechnung <b><%= rechnung.original_nummer %></b>.</div><% } %>
+
+<div class="spalten s21">
+  <div class="karte">
+    <h2>Positionen</h2>
+    <% positionen.forEach(function(p){ %>
+      <% if (rechnung.festgeschrieben) { %>
+        <div style="display:grid;grid-template-columns:46px 1fr 60px 80px 100px 104px;gap:8px;padding:8px 0;border-bottom:1px solid var(--linie2);font-size:13.5px">
+          <span style="color:var(--ink3)"><%= p.lfd %></span>
+          <span><b style="color:var(--ink)"><%= p.text %></b><% if (p.langtext) { %><br><span style="font-size:12px;color:var(--ink3)"><%= p.langtext %></span><% } %></span>
+          <span><%= p.einheit || '' %></span>
+          <span style="text-align:right"><%= zahl(p.menge) %></span>
+          <span style="text-align:right"><%= eur(p.einzelpreis) %></span>
+          <span style="text-align:right;color:var(--ink)"><b><%= eur(p.gesamtpreis) %></b></span>
+        </div>
+      <% } else { %>
+        <form method="post" action="/rechnungen/<%= rechnung.id %>/positionen/<%= p.id %>"
+              style="display:grid;grid-template-columns:52px 76px 1fr 70px 88px 104px 104px auto;gap:7px;align-items:center;padding:7px 0;border-bottom:1px solid var(--linie2)">
+          <input type="text" name="lfd" value="<%= p.lfd %>">
+          <input type="text" name="pos" value="<%= p.pos || '' %>">
+          <input type="text" name="text" value="<%= p.text %>">
+          <input type="text" name="einheit" value="<%= p.einheit || '' %>">
+          <input type="text" name="menge" value="<%= p.menge %>">
+          <input type="text" name="einzelpreis" value="<%= p.einzelpreis %>">
+          <div style="text-align:right;font-variant-numeric:tabular-nums;color:var(--ink)"><%= eur(p.gesamtpreis) %></div>
+          <div style="display:flex;gap:5px"><button class="knopf leer mini" type="submit">✓</button>
+            <button class="knopf gefahr mini" type="submit" name="loeschen" value="1">×</button></div>
+        </form>
+      <% } %>
+    <% }) %>
+
+    <div style="margin-top:16px;padding-top:12px;border-top:1px solid var(--linie);display:grid;gap:6px;max-width:330px;margin-left:auto;font-variant-numeric:tabular-nums">
+      <div style="display:flex;justify-content:space-between"><span style="color:var(--ink3)">Netto</span><b><%= eur(rechnung.netto) %></b></div>
+      <div style="display:flex;justify-content:space-between"><span style="color:var(--ink3)">zzgl. <%= rechnung.mwst_satz %> % USt.</span><b><%= eur(rechnung.mwst) %></b></div>
+      <div style="display:flex;justify-content:space-between;padding-top:8px;border-top:1px solid var(--linie)"><b>Rechnungsbetrag</b><b style="color:var(--akzent)"><%= eur(rechnung.brutto) %></b></div>
+    </div>
+
+    <% if (!rechnung.festgeschrieben) { %>
+    <details class="block"><summary>Position hinzufügen</summary><div class="inhalt">
+      <form method="post" action="/rechnungen/<%= rechnung.id %>/positionen">
+        <div class="felder3">
+          <div class="feld"><label>Position</label><input type="text" name="pos"></div>
+          <div class="feld"><label>Einheit</label><input type="text" name="einheit"></div>
+          <div class="feld"><label>Menge</label><input type="text" name="menge" value="1"></div>
+        </div>
+        <div class="feld"><label>Leistung *</label><input type="text" name="text" required></div>
+        <div class="feld"><label>Langtext</label><textarea name="langtext"></textarea></div>
+        <div class="feld"><label>Einzelpreis netto</label><input type="text" name="einzelpreis" value="0"></div>
+        <div class="haken"><input type="checkbox" id="ti" name="ist_titel"><label for="ti">Nur Zwischenüberschrift</label></div>
+        <button class="knopf mini" type="submit">Hinzufügen</button>
+      </form>
+    </div></details>
+    <% } %>
+  </div>
+
+  <div class="karte">
+    <h2><%= rechnung.festgeschrieben ? 'Zahlung' : 'Angaben' %></h2><div class="marke-strich"></div>
+    <form method="post" action="/rechnungen/<%= rechnung.id %>">
+      <% if (rechnung.festgeschrieben) { %>
+        <div class="feld"><label>Bezahlt am</label><input type="date" name="bezahlt_am" value="<%= fuerFeld(rechnung.bezahlt_am) %>"></div>
+        <div class="feld"><label>Betrag</label><input type="text" name="bezahlt_betrag" value="<%= rechnung.bezahlt_betrag || rechnung.brutto %>"></div>
+        <button class="knopf" type="submit">Zahlung speichern</button>
+        <div class="kasten" style="margin-top:16px">Nur die Zahlungserfassung ist nach der Festschreibung noch möglich. Alles andere ist gesperrt.</div>
+      <% } else { %>
+        <div class="feld"><label>Empfänger</label><textarea name="empfaenger"><%= rechnung.empfaenger || '' %></textarea></div>
+        <div class="feld"><label>Anrede</label><input type="text" name="anrede" value="<%= rechnung.anrede || '' %>"></div>
+        <div class="feld"><label>Betreff</label><input type="text" name="betreff" value="<%= rechnung.betreff || '' %>"></div>
+        <div class="feld"><label>Leistungszeitraum</label><input type="text" name="leistungszeitraum" value="<%= rechnung.leistungszeitraum || '' %>"></div>
+        <div class="felder2">
+          <div class="feld"><label>Datum</label><input type="date" name="datum" value="<%= fuerFeld(rechnung.datum) %>"></div>
+          <div class="feld"><label>Zahlungsziel Tage</label><input type="text" name="zahlungsziel_tage" value="<%= rechnung.zahlungsziel_tage %>"></div>
+        </div>
+        <div class="feld"><label>USt. %</label><input type="text" name="mwst_satz" value="<%= rechnung.mwst_satz %>"></div>
+        <div class="feld"><label>Einleitung</label><textarea name="einleitung"><%= rechnung.einleitung || '' %></textarea></div>
+        <div class="feld"><label>Fußtext</label><textarea name="hinweise"><%= rechnung.hinweise || '' %></textarea></div>
+        <button class="knopf" type="submit">Entwurf speichern</button>
+      <% } %>
+    </form>
+  </div>
+</div>
+<%- include('partials/fuss') %>

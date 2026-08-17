@@ -1,0 +1,56 @@
+<%- include('partials/kopf') %>
+<div class="seitenkopf">
+  <div><h1>Textbausteine</h1>
+    <div class="unter">Was einmal getippt wurde, steht beim nächsten Mal zur Auswahl. Häufig Benutztes rutscht nach oben.</div></div>
+  <a class="knopf leer" href="/vorlagen">Vorlagen</a>
+</div>
+
+<div class="karte">
+  <div class="reihe" style="flex-wrap:wrap;gap:6px">
+    <% KATEGORIEN.forEach(function(k){
+         var z = zaehler.find(function(x){ return x.kategorie === k[0]; }); %>
+      <a class="knopf <%= kategorie === k[0] ? '' : 'leer' %> mini" href="/vorlagen/bausteine?kategorie=<%= k[0] %>">
+        <%= k[1] %><%= z ? ' (' + z.n + ')' : '' %></a>
+    <% }) %>
+  </div>
+</div>
+
+<div class="karte">
+  <% if (!bausteine.length) { %>
+    <div class="leer-hinweis">In dieser Kategorie ist noch nichts gespeichert. Das füllt sich von selbst, sobald ihr Angebote schreibt.</div>
+  <% } else { %>
+  <div class="tab-scroll"><table>
+    <thead><tr><th>Text</th><th class="z" style="width:90px">benutzt</th><th style="width:120px"></th></tr></thead>
+    <tbody><% bausteine.forEach(function(b){ %>
+      <tr>
+        <td><%= b.text %>
+          <% if (b.von) { %><br><span style="font-size:11px;color:var(--ink3)">von <%= b.von %></span><% } %></td>
+        <td class="z"><%= b.verwendet %>&times;<% if (b.zuletzt_am) { %><br><span style="font-size:11px;color:var(--ink3)"><%= datum(b.zuletzt_am) %></span><% } %></td>
+        <td class="z">
+          <details class="block" style="margin:0;border:none;background:none"><summary style="padding:3px 0">ändern</summary>
+            <div class="inhalt" style="padding:8px 0 0;min-width:320px;text-align:left">
+              <form method="post" action="/vorlagen/bausteine/<%= b.id %>">
+                <div class="feld"><textarea name="text" rows="4"><%= b.text %></textarea></div>
+                <div class="reihe">
+                  <button class="knopf leer mini" type="submit">Speichern</button>
+                  <button class="knopf gefahr mini" type="submit" name="loeschen" value="1">Entfernen</button>
+                </div>
+              </form>
+            </div>
+          </details>
+        </td>
+      </tr>
+    <% }) %></tbody></table></div>
+  <% } %>
+</div>
+
+<div class="karte">
+  <h2>Baustein anlegen</h2>
+  <form method="post" action="/vorlagen/bausteine/neu">
+    <div class="feld"><label>Kategorie</label><select name="kategorie">
+      <% KATEGORIEN.forEach(function(k){ %><option value="<%= k[0] %>" <%= kategorie === k[0] ? 'selected' : '' %>><%= k[1] %></option><% }) %></select></div>
+    <div class="feld"><label>Text</label><textarea name="text" rows="4" required></textarea></div>
+    <button class="knopf mini" type="submit">Speichern</button>
+  </form>
+</div>
+<%- include('partials/fuss') %>

@@ -1,0 +1,35 @@
+<%- include('partials/kopf') %>
+<div class="seitenkopf"><div><h1>Begehung planen</h1>
+  <div class="unter">Der Strompfad wird passend zur Art automatisch vorbelegt — vom Netzanschluss bis zum Ladepunkt.</div></div></div>
+<form method="post" action="/begehungen/neu">
+<div class="spalten s2">
+  <div class="karte">
+    <h2>Objekt</h2><div class="marke-strich"></div>
+    <div class="feld"><label>Objektbezeichnung *</label><input type="text" name="objekt" required autofocus placeholder="Parkhaus Schillerplatz"></div>
+    <div class="feld"><label>Adresse</label><input type="text" name="adresse"></div>
+    <div class="felder2">
+      <div class="feld"><label>PLZ</label><input type="text" name="plz"></div>
+      <div class="feld"><label>Ort</label><input type="text" name="ort"></div>
+    </div>
+    <div class="felder2">
+      <div class="feld"><label>Art</label><select name="art"><option>AC</option><option>DC</option><option>AC+DC</option></select></div>
+      <div class="feld"><label>Nutzung</label><select name="nutzung"><option value="">—</option><option>Wohnen</option><option>Gewerbe</option><option>Parkraum</option><option>Logistik</option><option>Sonstiges</option></select></div>
+    </div>
+    <div class="kasten">Bei <b>AC</b> werden acht Abschnitte vorbelegt (bis Stromschiene und Abgangskasten), bei <b>DC</b> fünf. Alles lässt sich danach ändern.</div>
+  </div>
+  <div class="karte">
+    <h2>Termin &amp; Zuordnung</h2><div class="marke-strich"></div>
+    <div class="feld"><label>Kunde</label><select name="kunde_id"><option value="">— später zuordnen —</option>
+      <% kunden.forEach(function(k){ %><option value="<%= k.id %>" <%= vorgabeKunde===k.id?'selected':'' %>><%= k.firma %></option><% }) %></select></div>
+    <div class="feld"><label>Projekt</label><select name="projekt_id"><option value="">—</option>
+      <% projekte.forEach(function(p){ %><option value="<%= p.id %>"><%= p.firma %> — <%= p.bezeichnung %></option><% }) %></select></div>
+    <div class="feld"><label>Termin</label><input type="datetime-local" name="termin_am"></div>
+    <div class="feld"><label>Ansprechpartner vor Ort</label><input type="text" name="begleitung" placeholder="Name, Funktion, Telefon"></div>
+  </div>
+</div>
+<div class="reihe" style="margin-top:18px">
+  <button class="knopf" type="submit">Begehung anlegen</button>
+  <a class="knopf leer" href="/begehungen">Abbrechen</a>
+</div>
+</form>
+<%- include('partials/fuss') %>
