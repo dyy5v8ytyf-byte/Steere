@@ -382,10 +382,11 @@ Diesen Weg gibt es, weil von außen kein Zugriff auf die Datenbank besteht.
 Angebotssummen werden dabei **immer aus den Positionen gerechnet**, nie aus der
 Datei übernommen.
 
-> **Herkunft beachten.** Übernommene Projekte mit Nummern `P25-…` stammen aus
-> Angeboten, die bei der Service4Charger GmbH erstellt wurden. Übernommen werden
-> ausschließlich Kundenbeziehung, Standort und Größenordnung — als
-> Vertriebshistorie. Die dortigen Kalkulationen sind keine eigenen.
+> **Nur eigene Vorgänge.** Über diesen Weg gehören ausschließlich Angebote,
+> Rechnungen und Verträge der Westphal Wavetec GmbH bzw. STEER.E in die
+> Plattform. Unterlagen aus früheren Tätigkeiten für Dritte — insbesondere
+> Angebote und Kalkulationen der Service4Charger GmbH — gehören dort nicht
+> hinein, auch nicht als Historie.
 
 ---
 

@@ -30,11 +30,12 @@
     </div>
 
     <div class="melde warn" style="margin-top:14px">
-      <b>Herkunft der Altvorgänge.</b> Die übernommenen Projekte mit Nummern <span class="mono">P25-…</span>
-      stammen aus Angeboten, die bei der <b>Service4Charger GmbH</b> erstellt wurden. Übernommen werden
-      hier ausschließlich <b>Kundenbeziehung, Standort und Größenordnung</b> — als Vertriebshistorie.
-      Die dortigen Kalkulationen sind nicht Ihre eigenen und dürfen nicht als solche verwendet werden.
-      Wer eine Position daraus braucht, legt sie im Preiskatalog als eigene Position mit eigenem Preis an.
+      <b>Nur eigene Vorgänge.</b> Über diesen Weg gehören ausschließlich Angebote, Rechnungen und
+      Verträge der <b>Westphal Wavetec GmbH</b> beziehungsweise <b>STEER.E</b> in die Plattform.
+      Unterlagen aus früheren Tätigkeiten für Dritte — insbesondere Angebote und Kalkulationen der
+      Service4Charger GmbH — gehören hier nicht hinein, auch nicht als Historie. Wer eine
+      Leistungsposition daraus fachlich braucht, legt sie im Preiskatalog als eigene Position mit
+      eigenem, selbst kalkuliertem Preis an.
     </div>
   </div>
 
@@ -61,6 +62,7 @@
             <tr><td>Retainer<% if (bericht.retainer.bausteine) { %> <span style="font-size:11px;color:var(--ink3)">(<%= bericht.retainer.bausteine %> Bausteine)</span><% } %></td>
                 <td class="z"><b style="color:var(--akzent)"><%= bericht.retainer.neu %></b></td><td class="z"><%= bericht.retainer.vorhanden %></td></tr>
             <tr><td>Kunden</td><td class="z"><b style="color:var(--akzent)"><%= bericht.kunden.neu %></b></td><td class="z"><%= bericht.kunden.vorhanden %></td></tr>
+            <tr><td>Ansprechpartner</td><td class="z"><b style="color:var(--akzent)"><%= bericht.ansprechpartner.neu %></b></td><td class="z"><%= bericht.ansprechpartner.vorhanden %></td></tr>
             <tr><td>Projekte</td><td class="z"><b style="color:var(--akzent)"><%= bericht.projekte.neu %></b></td><td class="z"><%= bericht.projekte.vorhanden %></td></tr>
             <tr><td>Angebote<% if (bericht.angebote.positionen) { %> <span style="font-size:11px;color:var(--ink3)">(<%= bericht.angebote.positionen %> Positionen)</span><% } %></td>
                 <td class="z"><b style="color:var(--akzent)"><%= bericht.angebote.neu %></b></td><td class="z"><%= bericht.angebote.vorhanden %></td></tr>
@@ -94,7 +96,7 @@
         var daten = JSON.parse(text);
         inhalt.value = text;
         var teile = [];
-        ['organisationen','retainer','kunden','projekte','angebote','begehungen'].forEach(function (k) {
+        ['organisationen','retainer','kunden','ansprechpartner','projekte','angebote','begehungen'].forEach(function (k) {
           if (Array.isArray(daten[k]) && daten[k].length) teile.push(daten[k].length + ' ' + k);
         });
         status.textContent = f.name + ' gelesen — ' + (teile.join(', ') || 'keine Datensätze erkannt') + '.';
