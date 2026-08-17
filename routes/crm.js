@@ -8,6 +8,8 @@ const express = require('express');
 const db = require('../lib/db');
 const auth = require('../lib/auth');
 const h = require('../lib/helfer');
+const kal = require('../lib/kalender');
+const m365 = require('../lib/m365');
 const { allesPruefen } = require('../lib/automatik');
 
 const { schuetze } = require('../lib/kennungen');
@@ -327,12 +329,97 @@ r.post('/projekte/:id/partner', intern, async (req, res, next) => {
 r.get('/termine', intern, async (req, res, next) => {
   try {
     const termine = await db.all(`
-      SELECT t.*, k.firma, p.bezeichnung
+      SELECT t.*, k.firma, k.adresse, p.bezeichnung,
+             (SELECT a.email FROM ansprechpartner a
+               WHERE a.kunde_id = k.id AND a.email IS NOT NULL AND a.email <> ''
+               ORDER BY a.id LIMIT 1) AS kunde_email,
+             (SELECT a.name FROM ansprechpartner a
+               WHERE a.kunde_id = k.id AND a.email IS NOT NULL AND a.email <> ''
+               ORDER BY a.id LIMIT 1) AS kunde_ap
         FROM termine t JOIN kunden k ON k.id = t.kunde_id
         LEFT JOIN projekte p ON p.id = t.projekt_id
        ORDER BY t.datum DESC NULLS LAST, t.uhrzeit DESC NULLS LAST
     `);
-    res.render('termine', { titel: 'Termine', termine });
+
+    // Vorbereitete Mail je Termin — der Text entsteht hier, damit die
+    // Ansicht nur noch verlinken muss.
+    const e = await h.einstellungen();
+    for (const t of termine) {
+      if (!t.kunde_email) { t.mailto = null; continue; }
+      const wann = t.datum
+        ? new Date(t.datum).toLocaleDateString('de-DE', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' })
+        : 'noch abzustimmen';
+      t.mailto = kal.mailto({
+        an: t.kunde_email,
+        betreff: `Terminbestätigung — ${t.thema || t.typ} am ${t.datum ? new Date(t.datum).toLocaleDateString('de-DE') : ''}`.trim(),
+        text: [
+          kal.anrede({ name: t.kunde_ap }),
+          '',
+          `hiermit bestätigen wir unseren Termin am ${wann}${t.uhrzeit ? ', ' + t.uhrzeit + ' Uhr' : ''}.`,
+          t.ort ? `Ort: ${t.ort}` : null,
+          t.thema ? `Thema: ${t.thema}` : null,
+          '',
+          'Sollte Ihnen der Termin nicht passen, geben Sie uns bitte kurz Bescheid.',
+          kal.signatur(req.benutzer, e),
+        ].filter((z) => z !== null).join('\n'),
+      });
+    }
+
+    const verbindung = await m365.konto(req.benutzer.id);
+    res.render('termine', {
+      titel: 'Termine', termine,
+      m365Verbunden: !!verbindung,
+    });
+  } catch (e) { next(e); }
+});
+
+/**
+ * Termin als Kalenderdatei.
+ *
+ * Outlook, Apple Kalender und Thunderbird tragen die Datei beim Oeffnen ein.
+ * ?einladung=1 macht daraus eine Terminanfrage an den Ansprechpartner —
+ * Outlook zeigt sie dann als Einladung zum Versenden.
+ */
+r.get('/termine/:id/kalender.ics', intern, async (req, res, next) => {
+  try {
+    const id = Number(req.params.id);
+    const t = await db.one(`
+      SELECT t.*, k.firma, k.adresse,
+             (SELECT a.email FROM ansprechpartner a WHERE a.kunde_id = k.id
+               AND a.email IS NOT NULL AND a.email <> '' ORDER BY a.id LIMIT 1) AS ap_email,
+             (SELECT a.name FROM ansprechpartner a WHERE a.kunde_id = k.id
+               AND a.email IS NOT NULL AND a.email <> '' ORDER BY a.id LIMIT 1) AS ap_name
+        FROM termine t JOIN kunden k ON k.id = t.kunde_id WHERE t.id = $1`, [id]);
+    if (!t) return res.status(404).render('fehler', { titel: 'Termin nicht gefunden', text: '' });
+    if (!t.datum) {
+      res.melde('Dieser Termin hat kein Datum — ohne Datum lässt sich kein Kalendereintrag erzeugen.', 'warn');
+      return res.redirect('/termine');
+    }
+
+    const einladung = req.query.einladung === '1' && !!t.ap_email;
+    const e = await h.einstellungen();
+
+    const inhalt = kal.datei({
+      kennung: `termin-${t.id}@steere.wwtec.de`,
+      datum: t.datum,
+      uhrzeit: t.uhrzeit,
+      dauerMin: 60,
+      titel: `${t.typ}: ${t.firma}${t.thema ? ' — ' + t.thema : ''}`,
+      ort: t.ort || t.adresse || null,
+      beschreibung: [
+        t.thema ? `Thema: ${t.thema}` : null,
+        t.mit_wem ? `Mit: ${t.mit_wem}` : null,
+        `Kunde: ${t.firma}`,
+      ].filter(Boolean).join('\n'),
+      einladung,
+      organisator: einladung ? { name: req.benutzer.name, email: e.firma_mail || 'kontakt@wwtec.de' } : null,
+      teilnehmer: einladung ? [{ name: t.ap_name, email: t.ap_email }] : [],
+    });
+
+    res.setHeader('Content-Type', 'text/calendar; charset=utf-8; method=' + (einladung ? 'REQUEST' : 'PUBLISH'));
+    res.setHeader('Content-Disposition',
+      `attachment; filename="${kal.dateiname(t.firma + '_' + (t.thema || t.typ))}"`);
+    res.send(inhalt);
   } catch (e) { next(e); }
 });
 

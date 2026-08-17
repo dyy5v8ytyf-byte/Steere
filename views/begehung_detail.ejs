@@ -4,6 +4,16 @@
     <div class="unter"><%= begehung.objekt %><%= begehung.ort ? ' · ' + [begehung.plz,begehung.ort].filter(Boolean).join(' ') : '' %>
       · <span class="pille <%= begehung.status==='freigegeben'?'ok':begehung.status==='in Angebot'?'voll':'' %>"><%= begehung.status %></span></div></div>
   <div class="reihe">
+    <% if (begehung.termin_am && m365Verbunden) { %>
+      <form method="post" action="/m365/begehung/<%= begehung.id %>" style="display:inline">
+        <button class="knopf leer" type="submit"
+                title="Direkt in Ihren Outlook-Kalender"><%= begehung.m365_ereignis_id ? 'Outlook ↻' : 'In Outlook' %></button>
+      </form>
+    <% } %>
+    <% if (begehung.termin_am) { %>
+      <a class="knopf leer" href="/begehungen/<%= begehung.id %>/kalender.ics"
+         title="Termin als Kalenderdatei — Outlook trägt ihn beim Öffnen ein">Kalender</a>
+    <% } %>
     <a class="knopf leer" href="/begehungen/<%= begehung.id %>/stueckliste">Stückliste</a>
     <a class="knopf leer" href="/begehungen/<%= begehung.id %>/bericht" target="_blank">Bericht</a>
     <% if (begehung.status !== 'freigegeben' && begehung.status !== 'in Angebot') { %>

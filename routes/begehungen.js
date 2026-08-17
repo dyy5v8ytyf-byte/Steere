@@ -19,6 +19,8 @@ const h = require('../lib/helfer');
 const medien = require('../lib/medien');
 const vorlagen = require('../lib/vorlagen');
 const lernen = require('../lib/lernen');
+const kal = require('../lib/kalender');
+const m365 = require('../lib/m365');
 const { schuetze } = require('../lib/kennungen');
 
 const r = schuetze(express.Router(), ['id', 'pid', 'mid', 'rid']);
@@ -156,6 +158,7 @@ r.get('/:id', intern, async (req, res, next) => {
       fragen, rat,
       vorlagenListe: await vorlagen.liste(true),
       bausteine: await vorlagen.bausteineFuer(['feststellung', 'risiko', 'fazit']),
+      m365Verbunden: !!(await m365.konto(req.benutzer.id)),
     });
   } catch (e) { next(e); }
 });
@@ -387,6 +390,57 @@ r.post('/:id/fragen/:rid/zurueck', intern, async (req, res, next) => {
       [id, Number(req.params.rid)]);
     res.melde('Frage ist wieder offen.');
     res.redirect(`/begehungen/${id}#fragen`);
+  } catch (e) { next(e); }
+});
+
+// ===================== KALENDER =====================
+/**
+ * Begehungstermin als Kalenderdatei. Vorgabedauer 90 Minuten — eine
+ * Begehung entlang des ganzen Strompfades ist in einer Stunde nicht zu
+ * machen, und ein zu kurz geplanter Termin erzeugt Hetze vor Ort.
+ */
+r.get('/:id/kalender.ics', intern, async (req, res, next) => {
+  try {
+    const id = Number(req.params.id);
+    const b = await db.one(`
+      SELECT b.*, k.firma,
+             (SELECT a.email FROM ansprechpartner a WHERE a.kunde_id = k.id
+               AND a.email IS NOT NULL AND a.email <> '' ORDER BY a.id LIMIT 1) AS ap_email,
+             (SELECT a.name FROM ansprechpartner a WHERE a.kunde_id = k.id
+               AND a.email IS NOT NULL AND a.email <> '' ORDER BY a.id LIMIT 1) AS ap_name
+        FROM begehungen b LEFT JOIN kunden k ON k.id = b.kunde_id WHERE b.id = $1`, [id]);
+    if (!b) return res.status(404).render('fehler', { titel: 'Begehung nicht gefunden', text: '' });
+    if (!b.termin_am) {
+      res.melde('Diese Begehung hat noch keinen Termin. Bitte oben einen Termin eintragen.', 'warn');
+      return res.redirect(`/begehungen/${id}`);
+    }
+
+    const d = new Date(b.termin_am);
+    const uhrzeit = `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+    const einladung = req.query.einladung === '1' && !!b.ap_email;
+    const e = await h.einstellungen();
+
+    const inhalt = kal.datei({
+      kennung: `begehung-${b.id}@steere.wwtec.de`,
+      datum: d,
+      uhrzeit: (d.getHours() === 0 && d.getMinutes() === 0) ? null : uhrzeit,
+      dauerMin: 90,
+      titel: `Begehung ${b.nummer} — ${b.objekt}${b.firma ? ' (' + b.firma + ')' : ''}`,
+      ort: [b.adresse, [b.plz, b.ort].filter(Boolean).join(' ')].filter(Boolean).join(', ') || null,
+      beschreibung: [
+        `Aufnahme des Strompfades: von der Einspeisung bis zum Ladepunkt (${b.art}).`,
+        b.nutzung ? `Nutzung: ${b.nutzung}` : null,
+        b.begleitung ? `Begleitung: ${b.begleitung}` : null,
+        'Mitzubringen: Kamera, 360°-Kamera, Maßband, Zugang zu Technikräumen.',
+      ].filter(Boolean).join('\n'),
+      einladung,
+      organisator: einladung ? { name: req.benutzer.name, email: e.firma_mail || 'kontakt@wwtec.de' } : null,
+      teilnehmer: einladung ? [{ name: b.ap_name, email: b.ap_email }] : [],
+    });
+
+    res.setHeader('Content-Type', 'text/calendar; charset=utf-8; method=' + (einladung ? 'REQUEST' : 'PUBLISH'));
+    res.setHeader('Content-Disposition', `attachment; filename="${kal.dateiname('Begehung_' + b.nummer)}"`);
+    res.send(inhalt);
   } catch (e) { next(e); }
 });
 

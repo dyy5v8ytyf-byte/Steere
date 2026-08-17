@@ -1,0 +1,118 @@
+<%- include('partials/kopf') %>
+<div class="seitenkopf">
+  <div><h1>Microsoft 365</h1>
+    <div class="unter">Termine direkt in den Outlook-Kalender, Mails mit Anhang aus der Anwendung</div></div>
+  <a class="knopf leer" href="/verwaltung">Zurück</a>
+</div>
+
+<% if (!eingerichtet) { %>
+  <div class="melde warn">
+    <b>Noch nicht eingerichtet.</b> Es fehlen die Variablen <span class="mono">M365_CLIENT_ID</span>
+    und <span class="mono">M365_CLIENT_SECRET</span>. Die Anleitung dazu steht unten.
+    Bis dahin funktionieren die Kalenderdateien und die vorbereiteten Mails unverändert weiter.
+  </div>
+<% } %>
+
+<div class="spalten s21">
+  <div>
+    <div class="karte">
+      <h2>Ihre Verbindung</h2><div class="marke-strich"></div>
+      <% if (konto) { %>
+        <div class="tab-scroll"><table><tbody>
+          <tr><td>Konto</td><td><b><%= konto.konto_email || '—' %></b><%= konto.konto_name ? ' · ' + konto.konto_name : '' %></td></tr>
+          <tr><td>Verbunden seit</td><td><%= datumZeit(konto.verbunden_am) %></td></tr>
+          <tr><td>Zuletzt benutzt</td><td><%= konto.zuletzt_am ? datumZeit(konto.zuletzt_am) : 'noch nie' %></td></tr>
+          <tr><td>Zugriffstoken</td><td><%= konto.token_gueltig ? 'gültig' : 'abgelaufen — wird beim nächsten Zugriff erneuert' %></td></tr>
+        </tbody></table></div>
+        <% if (konto.letzter_fehler) { %>
+          <div class="melde fehler" style="margin-top:12px">
+            <b>Letzter Fehler:</b> <%= konto.letzter_fehler %><br>
+            Meist hilft: trennen und neu verbinden.
+          </div>
+        <% } %>
+        <div class="reihe" style="margin-top:14px">
+          <a class="knopf leer" href="/m365/verbinden">Neu verbinden</a>
+          <form method="post" action="/m365/trennen"><button class="knopf gefahr leer" type="submit">Trennen</button></form>
+        </div>
+      <% } else { %>
+        <div class="leer-hinweis">Ihr Konto ist noch nicht verbunden.</div>
+        <% if (eingerichtet) { %>
+          <a class="knopf" href="/m365/verbinden">Mit Microsoft 365 verbinden</a>
+        <% } %>
+      <% } %>
+
+      <div class="kasten" style="margin-top:16px">
+        <b>Die Verbindung gehört Ihnen, nicht der Anwendung.</b> Termine entstehen in Ihrem Kalender,
+        Mails gehen aus Ihrem Postfach und unter Ihrem Namen hinaus. Jeder im Team verbindet sich selbst.
+        Angefordert werden ausschließlich: <% bereiche.forEach(function(b,i){ %><span class="mono"><%= b %></span><%= i < bereiche.length-1 ? ' · ' : '' %><% }) %>.
+        <b>Postfächer werden nicht gelesen</b> — <span class="mono">Mail.Read</span> ist bewusst nicht dabei.
+      </div>
+    </div>
+
+    <% if (andere && andere.length) { %>
+      <div class="karte">
+        <h2>Verbundene Kollegen</h2><div class="marke-strich"></div>
+        <div class="tab-scroll"><table>
+          <thead><tr><th>Name</th><th>Konto</th><th>seit</th></tr></thead>
+          <tbody><% andere.forEach(function(a){ %>
+            <tr><td><%= a.name %></td><td><%= a.konto_email || '—' %></td><td><%= datum(a.verbunden_am) %></td></tr>
+          <% }) %></tbody></table></div>
+      </div>
+    <% } %>
+  </div>
+
+  <div class="karte">
+    <h2>Einrichtung</h2><div class="marke-strich"></div>
+    <p style="font-size:14px;color:var(--ink2)">
+      Einmalig, durch jemanden mit Administratorrechten im Microsoft-365-Konto der wwtec.
+    </p>
+
+    <h3 style="margin-top:16px">1. Anwendung registrieren</h3>
+    <ol style="font-size:14px;line-height:1.8">
+      <li><a href="https://entra.microsoft.com" target="_blank">entra.microsoft.com</a> öffnen</li>
+      <li><b>Identität → Anwendungen → App-Registrierungen → Neue Registrierung</b></li>
+      <li>Name: <span class="mono">STEER.E Plattform</span></li>
+      <li>Kontotypen: <b>Nur Konten in diesem Organisationsverzeichnis</b></li>
+      <li>Umleitungs-URI: Plattform <b>Web</b>, Adresse genau:<br>
+        <span class="mono" style="word-break:break-all"><%= rueckgabe %></span></li>
+      <li><b>Registrieren</b></li>
+    </ol>
+
+    <h3>2. Berechtigungen freigeben</h3>
+    <ol style="font-size:14px;line-height:1.8">
+      <li><b>API-Berechtigungen → Berechtigung hinzufügen → Microsoft Graph → Delegierte Berechtigungen</b></li>
+      <li>Auswählen: <% bereiche.filter(function(b){return b!=='offline_access'}).forEach(function(b,i){ %><span class="mono"><%= b %></span><%= i<2?' · ':'' %><% }) %> sowie <span class="mono">offline_access</span></li>
+      <li><b>Administratorzustimmung erteilen</b> — sonst muss jeder Benutzer einzeln zustimmen</li>
+    </ol>
+
+    <h3>3. Geheimnis erzeugen</h3>
+    <ol style="font-size:14px;line-height:1.8">
+      <li><b>Zertifikate &amp; Geheimnisse → Neuer geheimer Clientschlüssel</b></li>
+      <li>Gültigkeit wählen und den <b>Wert</b> sofort kopieren — er wird nur einmal angezeigt</li>
+    </ol>
+
+    <h3>4. In Railway eintragen</h3>
+    <div class="tab-scroll"><table>
+      <thead><tr><th>Variable</th><th>Wert</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">M365_CLIENT_ID</td><td>Anwendungs-ID (Client) aus der Übersicht</td></tr>
+        <tr><td class="mono">M365_CLIENT_SECRET</td><td>der eben kopierte Wert</td></tr>
+        <tr><td class="mono">M365_TENANT</td><td>Verzeichnis-ID (Mandant), oder <span class="mono">organizations</span></td></tr>
+      </tbody>
+    </table></div>
+    <div class="hinweis-klein" style="margin-top:8px">
+      Aktuell gesetzt: <span class="mono">M365_CLIENT_ID</span> <%= einstellungen.kennung ? 'ja' : 'nein' %> ·
+      <span class="mono">M365_CLIENT_SECRET</span> <%= einstellungen.geheimnis ? 'ja' : 'nein' %> ·
+      <span class="mono">M365_TENANT</span> = <span class="mono"><%= einstellungen.mandant %></span>
+    </div>
+
+    <div class="melde warn" style="margin-top:16px">
+      <b>Datenschutz.</b> Mit der Anbindung verlassen Termin- und Kundendaten die Plattform
+      Richtung Microsoft. Das ist eine Auftragsverarbeitung und gehört ins Verarbeitungsverzeichnis.
+      Der geheime Clientschlüssel läuft ab — notieren Sie sich das Datum, sonst bricht die Verbindung
+      unangekündigt ab. Die Zugangstoken liegen in der Datenbank; deren Sicherungen gehören
+      entsprechend geschützt.
+    </div>
+  </div>
+</div>
+<%- include('partials/fuss') %>

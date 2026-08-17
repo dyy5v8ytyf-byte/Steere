@@ -1,0 +1,112 @@
+<%- include('partials/kopf') %>
+<div class="seitenkopf">
+  <div><h1>Stammdaten übernehmen</h1>
+    <div class="unter">Verträge, Retainer, Vorgänge und Angebote aus einer vorbereiteten Datei</div></div>
+  <a class="knopf leer" href="/verwaltung">Zurück</a>
+</div>
+
+<div class="spalten s21">
+  <div class="karte">
+    <h2>Datei auswählen</h2><div class="marke-strich"></div>
+    <p style="color:var(--ink2);font-size:14px;margin-bottom:16px">
+      Erwartet wird <span class="mono">STEERE-stammdaten.json</span>. Enthalten sind Partnerorganisationen
+      mit Retainer und Aufbauplan, Kunden, Projekte, Angebote mit Positionen und geplante Begehungen.
+    </p>
+
+    <form method="post" action="/verwaltung/stammdaten" id="formular">
+      <div class="feld">
+        <label>Datei</label>
+        <input type="file" id="datei" accept=".json,application/json">
+      </div>
+      <textarea name="inhalt" id="inhalt" style="display:none"></textarea>
+      <div id="status" style="font-size:13px;color:var(--ink3);margin-bottom:14px"></div>
+      <button class="knopf" type="submit" id="senden">Übernehmen</button>
+    </form>
+
+    <div class="kasten" style="margin-top:18px">
+      <b>Mehrfaches Ausführen ist ungefährlich.</b> Ein Kunde, ein Projekt, ein Angebot oder ein Retainer,
+      den es schon gibt, wird übersprungen und nicht überschrieben. Was Sie in der Anwendung geändert
+      haben, bleibt erhalten — auch wenn dieselbe Datei erneut eingelesen wird.
+    </div>
+
+    <div class="melde warn" style="margin-top:14px">
+      <b>Herkunft der Altvorgänge.</b> Die übernommenen Projekte mit Nummern <span class="mono">P25-…</span>
+      stammen aus Angeboten, die bei der <b>Service4Charger GmbH</b> erstellt wurden. Übernommen werden
+      hier ausschließlich <b>Kundenbeziehung, Standort und Größenordnung</b> — als Vertriebshistorie.
+      Die dortigen Kalkulationen sind nicht Ihre eigenen und dürfen nicht als solche verwendet werden.
+      Wer eine Position daraus braucht, legt sie im Preiskatalog als eigene Position mit eigenem Preis an.
+    </div>
+  </div>
+
+  <div>
+    <div class="karte">
+      <h2>Stand</h2><div class="marke-strich"></div>
+      <div class="spalten s2">
+        <div class="kz"><div class="n"><%= zahlen.kunden %></div><div class="t">Kunden</div></div>
+        <div class="kz"><div class="n"><%= zahlen.projekte %></div><div class="t">Projekte</div></div>
+        <div class="kz"><div class="n"><%= zahlen.angebote %></div><div class="t">Angebote</div></div>
+        <div class="kz"><div class="n"><%= zahlen.begehungen %></div><div class="t">Begehungen</div></div>
+        <div class="kz"><div class="n"><%= zahlen.organisationen %></div><div class="t">Organisationen</div></div>
+        <div class="kz"><div class="n akz"><%= zahlen.retainer %></div><div class="t">aktive Retainer</div></div>
+      </div>
+    </div>
+
+    <% if (bericht) { %>
+      <div class="karte">
+        <h2>Letzte Übernahme</h2><div class="marke-strich"></div>
+        <div class="tab-scroll"><table>
+          <thead><tr><th>Bereich</th><th class="z">neu</th><th class="z">vorhanden</th></tr></thead>
+          <tbody>
+            <tr><td>Organisationen</td><td class="z"><b style="color:var(--akzent)"><%= bericht.organisationen.neu %></b></td><td class="z"><%= bericht.organisationen.vorhanden %></td></tr>
+            <tr><td>Retainer<% if (bericht.retainer.bausteine) { %> <span style="font-size:11px;color:var(--ink3)">(<%= bericht.retainer.bausteine %> Bausteine)</span><% } %></td>
+                <td class="z"><b style="color:var(--akzent)"><%= bericht.retainer.neu %></b></td><td class="z"><%= bericht.retainer.vorhanden %></td></tr>
+            <tr><td>Kunden</td><td class="z"><b style="color:var(--akzent)"><%= bericht.kunden.neu %></b></td><td class="z"><%= bericht.kunden.vorhanden %></td></tr>
+            <tr><td>Projekte</td><td class="z"><b style="color:var(--akzent)"><%= bericht.projekte.neu %></b></td><td class="z"><%= bericht.projekte.vorhanden %></td></tr>
+            <tr><td>Angebote<% if (bericht.angebote.positionen) { %> <span style="font-size:11px;color:var(--ink3)">(<%= bericht.angebote.positionen %> Positionen)</span><% } %></td>
+                <td class="z"><b style="color:var(--akzent)"><%= bericht.angebote.neu %></b></td><td class="z"><%= bericht.angebote.vorhanden %></td></tr>
+            <tr><td>Begehungen</td><td class="z"><b style="color:var(--akzent)"><%= bericht.begehungen.neu %></b></td><td class="z"><%= bericht.begehungen.vorhanden %></td></tr>
+          </tbody>
+        </table></div>
+        <% if (bericht.hinweise && bericht.hinweise.length) { %>
+          <div class="melde warn" style="margin-top:14px">
+            <b>Übersprungen:</b><br>
+            <% bericht.hinweise.forEach(function(x){ %><%= x %><br><% }) %>
+          </div>
+        <% } %>
+      </div>
+    <% } %>
+  </div>
+</div>
+
+<script>
+(function () {
+  var datei = document.getElementById('datei');
+  var inhalt = document.getElementById('inhalt');
+  var status = document.getElementById('status');
+
+  datei.addEventListener('change', function () {
+    var f = datei.files && datei.files[0];
+    if (!f) { inhalt.value = ''; status.textContent = ''; return; }
+    var leser = new FileReader();
+    leser.onload = function () {
+      var text = String(leser.result || '');
+      try {
+        var daten = JSON.parse(text);
+        inhalt.value = text;
+        var teile = [];
+        ['organisationen','retainer','kunden','projekte','angebote','begehungen'].forEach(function (k) {
+          if (Array.isArray(daten[k]) && daten[k].length) teile.push(daten[k].length + ' ' + k);
+        });
+        status.textContent = f.name + ' gelesen — ' + (teile.join(', ') || 'keine Datensätze erkannt') + '.';
+        status.style.color = 'var(--ok-hell)';
+      } catch (e) {
+        inhalt.value = '';
+        status.textContent = 'Diese Datei ist kein gültiges JSON.';
+        status.style.color = 'var(--rot)';
+      }
+    };
+    leser.readAsText(f, 'utf-8');
+  });
+})();
+</script>
+<%- include('partials/fuss') %>

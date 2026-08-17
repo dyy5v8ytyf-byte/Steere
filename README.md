@@ -1,6 +1,6 @@
 # STEER.E — Sales-, Kunden- und Angebotsplattform
 
-Westphal Wavetec GmbH · Version 3.0 · Nachfolger von „WWtec Salesmanagement v1"
+Westphal Wavetec GmbH · Version 3.2 · Nachfolger von „WWtec Salesmanagement v1"
 
 ---
 
@@ -309,6 +309,106 @@ Der Standort lässt sich mit einem Knopf vom Gerät übernehmen, die Kamera dire
 
 ---
 
+## Outlook: Termine und Mails
+
+Bewusst **ohne** Anbindung an Microsoft. Die Anwendung erzeugt eine
+Kalenderdatei und einen vorbereiteten Mailverweis; Outlook öffnet beides.
+Das kostet keine App-Registrierung, keine Anmeldung, keine Freigabe durch
+einen Administrator und keinen Eintrag ins Verarbeitungsverzeichnis — es
+verlässt die Anwendung nichts, was der Anwender nicht selbst abschickt.
+
+| Knopf | Wo | Was passiert |
+|---|---|---|
+| **Kalender** | Termine, Begehung | Lädt eine `.ics`-Datei. Outlook trägt den Termin beim Öffnen in den eigenen Kalender ein. |
+| **Einladung** | Termine | Dieselbe Datei als Terminanfrage (`METHOD:REQUEST`) mit dem Ansprechpartner als Teilnehmer. Outlook öffnet sie zum Versenden. |
+| **Mail** | Termine, Kunde, Angebot | Öffnet Outlook mit Empfänger, Betreff und fertigem Text. |
+
+Die Uhrzeit steht als Freitext in der Datenbank, weil im Alltag alles
+Mögliche getippt wird. Erkannt wird `14:00`, `14.30`, `9 Uhr`, `08h30` und
+Zeiträume wie `14:00-16:30` (daraus entsteht die Dauer). Was sich nicht
+sicher lesen lässt — etwa „nachmittags" — wird ein **Ganztagestermin**.
+Lieber ein Termin ohne Uhrzeit als einer zur falschen Stunde.
+Zeitzone Europe/Berlin wird in der Datei mitgeliefert, inklusive Sommerzeit.
+
+### Echte Anbindung an Microsoft 365
+
+Ist sie eingerichtet, kommen zu den Dateien echte Knöpfe hinzu: **In Outlook**
+schreibt den Termin unmittelbar in den Kalender (ein zweiter Klick aktualisiert
+ihn, statt einen zweiten anzulegen), **+ einladen** nimmt den Ansprechpartner als
+Teilnehmer auf, und ein Angebot lässt sich mit PDF-Anhang direkt versenden.
+Versendete Mails erscheinen beim Kunden in den Aktivitäten und unter dem Angebot.
+
+Einrichtung unter *Verwaltung → Microsoft 365*; die Klickanleitung steht dort auf
+der Seite. Nötig sind drei Variablen:
+
+| Variable | Wert |
+|---|---|
+| `M365_CLIENT_ID` | Anwendungs-ID aus der Entra-Registrierung |
+| `M365_CLIENT_SECRET` | geheimer Clientschlüssel |
+| `M365_TENANT` | Verzeichnis-ID, oder `organizations` |
+
+Entscheidungen, die dabei bewusst so getroffen sind:
+
+* **Die Verbindung gehört einem Benutzer, nicht der Anwendung.** Termine entstehen
+  in seinem Kalender, Mails gehen aus seinem Postfach und unter seinem Namen. Es
+  gibt keine anonyme Absenderidentität, und das Protokoll bleibt aussagekräftig.
+* **Nur delegierte Berechtigungen**, und nur vier: `offline_access`, `User.Read`,
+  `Calendars.ReadWrite`, `Mail.Send`. **`Mail.Read` ist nicht dabei** — die
+  Anwendung liest keine Postfächer. Damit kommt sie ausschließlich an das Konto
+  dessen, der sich angemeldet hat, nie an das der Organisation.
+* **Kein PDF-Renderer im Container.** Das Angebot wird aus der Druckansicht als
+  PDF gesichert und beim Versand ausgewählt; der Browser liest es und schickt es
+  mit. Ein Renderer nur für diesen Zweck wäre zu teuer erkauft. Grenze 3 MB.
+* **Ohne die Variablen ist die Anbindung schlicht aus.** Die Anwendung läuft
+  unverändert, die Kalenderdateien bleiben.
+
+Die Zugangstoken liegen in der Datenbank im Klartext. Eine Verschlüsselung wäre
+nur so stark wie der Schlüssel, der daneben in derselben Umgebung liegen müsste;
+wirksam schützt hier der Zugriffsschutz der Datenbank. `DATABASE_URL` ist damit
+ein Geheimnis, und Sicherungen gehören entsprechend behandelt. Der geheime
+Clientschlüssel läuft ab — das Datum notieren, sonst bricht die Verbindung
+unangekündigt ab.
+
+---
+
+## Stammdaten übernehmen
+
+*Verwaltung → Stammdaten übernehmen* liest eine vorbereitete JSON-Datei mit
+Partnerorganisationen und Retainern samt Aufbauplan, Kunden, Projekten, Angeboten
+mit Positionen und geplanten Begehungen. Wiederholbar: Vorhandenes wird
+übersprungen und nie überschrieben; was in der Anwendung geändert wurde, bleibt.
+
+Diesen Weg gibt es, weil von außen kein Zugriff auf die Datenbank besteht.
+Angebotssummen werden dabei **immer aus den Positionen gerechnet**, nie aus der
+Datei übernommen.
+
+> **Herkunft beachten.** Übernommene Projekte mit Nummern `P25-…` stammen aus
+> Angeboten, die bei der Service4Charger GmbH erstellt wurden. Übernommen werden
+> ausschließlich Kundenbeziehung, Standort und Größenordnung — als
+> Vertriebshistorie. Die dortigen Kalkulationen sind keine eigenen.
+
+---
+
+### Wo die Grenze liegt
+
+Es ist eine Einbahnstraße, und das bleibt es ohne echte Anbindung:
+
+* Was im Outlook-Kalender steht, sieht die Anwendung **nicht**.
+* Ein **Anhang** lässt sich so nicht mitgeben. Für ein Angebot heißt das:
+  erst Druckansicht öffnen und als PDF sichern, dann *Per Mail* drücken und
+  das PDF in Outlook anhängen. Der Ablauf steht als Hinweis über dem Angebot.
+* Der Schriftverkehr mit einem Kunden **erscheint nicht** in der Plattform.
+* `mailto` ist längenbegrenzt (Outlook schneidet oberhalb von etwa 2.000
+  Zeichen kommentarlos ab). Die Anwendung kürzt deshalb selbst und setzt
+  `[…]` ans Ende, statt eine halbe Mail zu erzeugen.
+
+Diese Grenzen gelten für den Datei-Weg. Mit eingerichteter Microsoft-Anbindung
+(siehe oben) fallen sie weg — dann schreibt die Anwendung direkt in den Kalender
+und versendet Mails mit Anhang. Was auch dann bleibt: Die Anwendung liest keine
+Postfächer; im Kunden erscheint nur, was aus ihr heraus versendet wurde.
+
+---
+
 ## Rechnungen (GoBD)
 
 Eine Rechnung ist bis zur **Festschreibung** änderbar und danach nicht mehr — das ist
@@ -371,6 +471,9 @@ lib/kennzahlen.js         Finanzkennzahlen für Übersicht und Finanzen
 lib/vorlagen.js           Angebotsvorlagen, Mengenherkunft, Textbausteine
 lib/lernen.js             Rückfragen, Stückliste, Erfahrungswerte
 lib/erststart.js          Selbsteinrichtung beim allerersten Start
+lib/kalender.js           Kalenderdateien (.ics) und vorbereitete Mails
+lib/m365.js               Microsoft Graph: Anmeldung, Kalender, Mailversand
+lib/stammdaten.js         Übernahme von Verträgen, Vorgängen und Angeboten
 lib/automatik.js          Wiedervorlage- und Informationsautomatik (täglich 06:00)
 lib/altdaten.js           Übernahme der Altkunden, wiederholbar
 migrations/               Nummerierte Schemadateien, additiv, nie löschend
@@ -382,6 +485,7 @@ migrations/               Nummerierte Schemadateien, additiv, nie löschend
   006_lernschleife        Prüfregeln, Erfahrungen, Stücklistenregeln
   007_pflichtfotos_regel  Korrektur an 006
   008_herkunftsschutz_... Herkunftsschutz per Trigger statt Einmal-Update
+  009_m365                Microsoft-Konten, Ereignis-Verknüpfung, Nachrichten
 routes/                   anmeldung · crm · angebote · preise · begehungen ·
                           rechnungen · kalkulator · finanzen · vorlagen ·
                           partner · verwaltung

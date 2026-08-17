@@ -106,6 +106,7 @@ app.use('/', require('./routes/crm'));
 app.use('/angebote', require('./routes/angebote'));
 app.use('/preise', require('./routes/preise'));
 app.use('/vorlagen', require('./routes/vorlagen'));
+app.use('/m365', require('./routes/m365'));
 app.use('/begehungen', require('./routes/begehungen'));
 app.use('/rechnungen', require('./routes/rechnungen'));
 app.use('/kalkulator', require('./routes/kalkulator'));

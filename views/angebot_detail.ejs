@@ -6,8 +6,55 @@
     <% if (angebot.begehung_id) { %><a class="knopf leer" href="/begehungen/<%= angebot.begehung_id %>">Zur Begehung</a><% } %>
     <a class="knopf leer" href="/preise?angebot=<%= angebot.id %>">Aus Preiskatalog übernehmen</a>
     <a class="knopf" href="/angebote/<%= angebot.id %>/druck" target="_blank">Druckansicht</a>
+    <% if (mailAnKunden) { %>
+      <a class="knopf leer" href="<%= mailAnKunden %>"
+         title="Outlook mit vorbereiteter Mail an <%= empfaengerMail %> öffnen">Per Mail</a>
+    <% } %>
   </div>
 </div>
+
+<% if (m365Verbunden && empfaengerMail) { %>
+  <div class="karte" style="margin-bottom:18px">
+    <h2>Angebot versenden</h2><div class="marke-strich"></div>
+    <div class="hinweis-klein" style="margin-bottom:12px">
+      Geht aus Ihrem Postfach und unter Ihrem Namen hinaus. Das PDF entsteht aus der
+      <a href="/angebote/<%= angebot.id %>/druck" target="_blank">Druckansicht</a> — dort im Druckdialog
+      „Als PDF sichern", danach hier auswählen.
+    </div>
+    <div class="felder2">
+      <div class="feld"><label>An</label><input type="text" id="m_an" value="<%= empfaengerMail %>"></div>
+      <div class="feld"><label>Kopie an</label><input type="text" id="m_kopie" placeholder="optional"></div>
+    </div>
+    <div class="feld"><label>Betreff</label><input type="text" id="m_betreff" value="<%= mailBetreff %>"></div>
+    <div class="feld"><label>Text</label><textarea id="m_text" style="min-height:150px"><%= mailText %></textarea></div>
+    <div class="feld"><label>PDF anhängen (optional)</label><input type="file" id="m_datei" accept="application/pdf,.pdf"></div>
+    <div class="reihe">
+      <button class="knopf" type="button" id="m_senden">Jetzt senden</button>
+      <span id="m_status" style="font-size:13px;color:var(--ink3)"></span>
+    </div>
+  </div>
+<% } %>
+
+<% if (versendet && versendet.length) { %>
+  <div class="karte" style="margin-bottom:18px">
+    <h2>Bereits versendet</h2><div class="marke-strich"></div>
+    <div class="tab-scroll"><table>
+      <thead><tr><th>Wann</th><th>An</th><th>Betreff</th><th>Anhang</th></tr></thead>
+      <tbody><% versendet.forEach(function(v){ %>
+        <tr><td><%= datumZeit(v.gesendet_am) %></td><td><%= v.an %></td>
+            <td><%= v.betreff %></td><td><%= v.anhang_name || '—' %></td></tr>
+      <% }) %></tbody></table></div>
+  </div>
+<% } %>
+
+<% if (mailAnKunden && !m365Verbunden) { %>
+  <div class="kasten" style="margin-bottom:18px">
+    <b>Angebot verschicken.</b> Erst <b>Druckansicht</b> öffnen und dort über den Druckdialog
+    „Als PDF sichern" wählen — dann <b>Per Mail</b> drücken. Outlook öffnet sich mit Empfänger,
+    Betreff und Text; das gesicherte PDF hängen Sie dort an.
+    Empfänger wäre <span class="mono"><%= empfaengerMail %></span>.
+  </div>
+<% } %>
 
 <div class="spalten s21">
   <div class="karte">
@@ -121,6 +168,57 @@
 </div>
 
 <script>
+// Angebot per Microsoft 365 versenden — der Anhang wird im Browser gelesen
+// und als Base64 mitgeschickt; die Anwendung erzeugt selbst kein PDF.
+(function () {
+  var knopf = document.getElementById('m_senden');
+  if (!knopf) return;
+  var status = document.getElementById('m_status');
+  function wert(id) { var e = document.getElementById(id); return e ? e.value.trim() : ''; }
+
+  knopf.addEventListener('click', function () {
+    var an = wert('m_an');
+    if (!an) { status.textContent = 'Ohne Empfänger geht es nicht.'; status.style.color = 'var(--rot)'; return; }
+    knopf.disabled = true;
+    status.style.color = 'var(--ink3)';
+    status.textContent = 'wird gesendet …';
+
+    var datei = document.getElementById('m_datei').files[0];
+    var senden = function (anhang) {
+      fetch('/m365/mail', {
+        method: 'POST', headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          an: an, kopie: wert('m_kopie'), betreff: wert('m_betreff'), text: wert('m_text'),
+          anhang: anhang, kunde_id: <%= angebot.kunde_id %>,
+          projekt_id: <%= angebot.projekt_id || 'null' %>, angebot_id: <%= angebot.id %>,
+        }),
+      }).then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
+        .then(function (x) {
+          if (x.ok && x.d.ok) {
+            status.style.color = 'var(--ok-hell)';
+            status.textContent = 'Gesendet an ' + x.d.an + '. Die Seite wird neu geladen …';
+            setTimeout(function () { location.reload(); }, 1400);
+          } else {
+            status.style.color = 'var(--rot)';
+            status.textContent = x.d.fehler || 'Senden fehlgeschlagen.';
+            knopf.disabled = false;
+          }
+        }).catch(function (e) {
+          status.style.color = 'var(--rot)';
+          status.textContent = 'Senden fehlgeschlagen: ' + e.message;
+          knopf.disabled = false;
+        });
+    };
+
+    if (!datei) return senden(null);
+    var leser = new FileReader();
+    leser.onload = function () {
+      var roh = String(leser.result || '');
+      senden({ name: datei.name, typ: datei.type || 'application/pdf', inhalt: roh.split(',')[1] });
+    };
+    leser.readAsDataURL(datei);
+  });
+})();
 (function () {
   var vorrat = <%- JSON.stringify(texte) %>;
   document.querySelectorAll('[data-baustein]').forEach(function (halter) {

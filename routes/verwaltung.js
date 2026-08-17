@@ -18,6 +18,8 @@ const auth = require('../lib/auth');
 const h = require('../lib/helfer');
 const { uebernehmen } = require('../lib/altdaten');
 const lernen = require('../lib/lernen');
+const stammdaten = require('../lib/stammdaten');
+const m365 = require('../lib/m365');
 
 const { schuetze } = require('../lib/kennungen');
 
@@ -457,6 +459,74 @@ r.post('/regeln/stueck/:id', admin, async (req, res, next) => {
     await auth.protokoll(req, 'stueckregel_geaendert', 'regel', id);
     res.redirect('/verwaltung/regeln#stueck');
   } catch (e) { next(e); }
+});
+
+// ===================== MICROSOFT 365 =====================
+r.get('/m365', auth.verlangt('admin', 'team'), async (req, res, next) => {
+  try {
+    res.render('verwaltung_m365', {
+      titel: 'Microsoft 365',
+      eingerichtet: m365.eingerichtet(),
+      einstellungen: m365.einstellungen(),
+      rueckgabe: m365.rueckgabeAdresse(req),
+      bereiche: m365.BEREICHE,
+      konto: await m365.konto(req.benutzer.id),
+      andere: await db.all(`SELECT u.name, k.konto_email, k.verbunden_am, k.zuletzt_am
+                              FROM m365_konten k JOIN benutzer u ON u.id = k.benutzer_id
+                             WHERE k.benutzer_id <> $1 ORDER BY u.name`, [req.benutzer.id]),
+    });
+  } catch (e) { next(e); }
+});
+
+// ===================== STAMMDATEN =====================
+/**
+ * Vertraege, Vorgaenge und Angebote aus einer vorbereiteten Datei einlesen.
+ * Von aussen gibt es keinen Datenbankzugriff — deshalb dieser Weg.
+ * Wiederholbar; Vorhandenes wird uebersprungen, nie ueberschrieben.
+ */
+r.get('/stammdaten', admin, async (req, res, next) => {
+  try {
+    const zahlen = await db.one(`
+      SELECT (SELECT COUNT(*)::int FROM kunden) AS kunden,
+             (SELECT COUNT(*)::int FROM projekte) AS projekte,
+             (SELECT COUNT(*)::int FROM angebote) AS angebote,
+             (SELECT COUNT(*)::int FROM organisationen) AS organisationen,
+             (SELECT COUNT(*)::int FROM retainer WHERE aktiv) AS retainer,
+             (SELECT COUNT(*)::int FROM begehungen) AS begehungen`);
+    res.render('verwaltung_stammdaten', {
+      titel: 'Stammdaten übernehmen', zahlen,
+      bericht: req.session.stammdatenBericht || null,
+    });
+    delete req.session.stammdatenBericht;
+  } catch (e) { next(e); }
+});
+
+r.post('/stammdaten', admin, express.json({ limit: '12mb' }), async (req, res, next) => {
+  try {
+    let paket = req.body && req.body.inhalt;
+    if (typeof paket === 'string') {
+      try { paket = JSON.parse(paket); }
+      catch (e) {
+        res.melde('Die Datei ist kein gültiges JSON.', 'warn');
+        return res.redirect('/verwaltung/stammdaten');
+      }
+    }
+    if (!paket) { res.melde('Es wurde keine Datei übergeben.', 'warn'); return res.redirect('/verwaltung/stammdaten'); }
+
+    const bericht = await stammdaten.uebernehmen(paket, req.benutzer.id);
+    await auth.protokoll(req, 'stammdaten_uebernommen', 'stammdaten', null, {
+      kunden: bericht.kunden.neu, projekte: bericht.projekte.neu,
+      angebote: bericht.angebote.neu, retainer: bericht.retainer.neu,
+    });
+    req.session.stammdatenBericht = bericht;
+    res.melde(`Übernommen: ${bericht.kunden.neu} Kunden, ${bericht.projekte.neu} Projekte, `
+      + `${bericht.angebote.neu} Angebote, ${bericht.retainer.neu} Retainer, ${bericht.begehungen.neu} Begehungen.`);
+    res.redirect('/verwaltung/stammdaten');
+  } catch (e) {
+    console.error('[STEER.E] Stammdatenübernahme:', e);
+    res.melde('Die Übernahme ist fehlgeschlagen — es wurde nichts gespeichert. ' + e.message, 'fehler');
+    res.redirect('/verwaltung/stammdaten');
+  }
 });
 
 // ===================== ERFAHRUNGEN =====================

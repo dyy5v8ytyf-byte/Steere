@@ -12,6 +12,8 @@ const auth = require('../lib/auth');
 const h = require('../lib/helfer');
 const vorlagen = require('../lib/vorlagen');
 const lernen = require('../lib/lernen');
+const kal = require('../lib/kalender');
+const m365 = require('../lib/m365');
 
 const { schuetze } = require('../lib/kennungen');
 
@@ -150,8 +152,46 @@ r.get('/:id', intern, async (req, res, next) => {
       ? await lernen.vorschlaege(angebot.begehung_id, positionen.map((p) => p.text))
       : [];
 
+    // Vorbereitete Mail an den Kunden. Ein Anhang laesst sich so nicht
+    // mitgeben — das PDF entsteht aus der Druckansicht und wird in Outlook
+    // von Hand angehaengt. Der Text sagt das dem Empfaenger nicht, er
+    // erwaehnt die Anlage; wer den Knopf drueckt, muss sie anhaengen.
+    const ap = await db.one(
+      `SELECT name, email FROM ansprechpartner WHERE kunde_id = $1
+        AND email IS NOT NULL AND email <> '' ORDER BY id LIMIT 1`, [angebot.kunde_id]
+    );
+    const eins = await h.einstellungen();
+    const mailAnKunden = ap ? kal.mailto({
+      an: ap.email,
+      betreff: `Angebot ${angebot.nummer}${angebot.bauvorhaben ? ' — ' + angebot.bauvorhaben : ''}`,
+      text: [
+        kal.anrede(ap),
+        '',
+        `anbei erhalten Sie unser Angebot ${angebot.nummer}${angebot.bauvorhaben ? ' für ' + angebot.bauvorhaben : ''}.`,
+        angebot.gueltig_bis
+          ? `Das Angebot ist bis zum ${new Date(angebot.gueltig_bis).toLocaleDateString('de-DE')} gültig.`
+          : null,
+        '',
+        'Für Rückfragen stehen wir Ihnen gern zur Verfügung.',
+        kal.signatur(req.benutzer, eins),
+      ].filter((z) => z !== null).join('\n'),
+    }) : null;
+
     res.render('angebot_detail', {
       titel: `Angebot ${angebot.nummer}`, angebot, positionen, STATUS,
+      mailAnKunden, empfaengerMail: ap ? ap.email : null,
+      m365Verbunden: !!(await m365.konto(req.benutzer.id)),
+      mailBetreff: `Angebot ${angebot.nummer}${angebot.bauvorhaben ? ' — ' + angebot.bauvorhaben : ''}`,
+      mailText: ap ? [
+        kal.anrede(ap), '',
+        `anbei erhalten Sie unser Angebot ${angebot.nummer}${angebot.bauvorhaben ? ' für ' + angebot.bauvorhaben : ''}.`,
+        angebot.gueltig_bis ? `Das Angebot ist bis zum ${new Date(angebot.gueltig_bis).toLocaleDateString('de-DE')} gültig.` : null,
+        '', 'Für Rückfragen stehen wir Ihnen gern zur Verfügung.',
+        kal.signatur(req.benutzer, eins),
+      ].filter((z) => z !== null).join('\n') : '',
+      versendet: await db.all(
+        `SELECT an, betreff, anhang_name, gesendet_am FROM m365_nachrichten
+          WHERE angebot_id = $1 ORDER BY gesendet_am DESC`, [id]),
       felder: await h.eigeneFelder('angebot', id),
       rat,
       texte: await vorlagen.bausteineFuer(['einleitung', 'vorbemerkung', 'hinweis', 'schluss', 'position', 'langtext']),

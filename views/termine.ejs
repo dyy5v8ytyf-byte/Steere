@@ -1,5 +1,13 @@
 <%- include('partials/kopf') %>
 <div class="seitenkopf"><div><h1>Termine</h1><div class="unter"><%= termine.length %> Termin(e)</div></div></div>
+<div class="kasten" style="margin-bottom:18px">
+  <b>Kalender</b> lädt eine Datei herunter — beim Öffnen trägt Outlook den Termin in Ihren eigenen Kalender ein.
+  <b>Einladung</b> erzeugt dieselbe Datei als Terminanfrage an den Kunden; Outlook öffnet sie zum Versenden.
+  <b>Mail</b> öffnet Outlook mit fertigem Empfänger, Betreff und Text.
+  Die Anwendung verschickt dabei nichts von sich aus — abgeschickt wird ausschließlich in Outlook.
+  <% if (m365Verbunden) { %><br><b>In Outlook</b> schreibt den Termin dagegen unmittelbar in Ihren Kalender,
+  ohne Datei und ohne Umweg — Ihre Microsoft-Verbindung steht.<% } %>
+</div>
 <div class="karte">
   <% if (!termine.length) { %><div class="leer-hinweis">Keine Termine erfasst.</div><% } else { %>
   <div class="tab-scroll"><table>
@@ -16,6 +24,33 @@
         <td><%= t.status %></td>
         <td><%= t.kunde_informiert ? 'ja' : (t.typ !== 'Kunde' && t.bestaetigt === 'ja' ? 'offen' : '—') %></td>
         <td class="z">
+          <div class="reihe" style="gap:5px;justify-content:flex-end;margin-bottom:5px">
+            <% if (t.datum) { %>
+              <a class="knopf leer mini" href="/termine/<%= t.id %>/kalender.ics"
+                 title="Kalenderdatei herunterladen — Outlook trägt den Termin beim Öffnen ein">Kalender</a>
+              <% if (t.kunde_email) { %>
+                <a class="knopf leer mini" href="/termine/<%= t.id %>/kalender.ics?einladung=1"
+                   title="Als Terminanfrage an <%= t.kunde_email %> — in Outlook öffnen und versenden">Einladung</a>
+              <% } %>
+            <% } %>
+            <% if (m365Verbunden && t.datum) { %>
+              <form method="post" action="/m365/termin/<%= t.id %>" style="display:inline">
+                <button class="knopf mini" type="submit"
+                        title="Direkt in Ihren Outlook-Kalender schreiben"><%= t.m365_ereignis_id ? 'Outlook ↻' : 'In Outlook' %></button>
+              </form>
+              <% if (t.kunde_email) { %>
+                <form method="post" action="/m365/termin/<%= t.id %>" style="display:inline">
+                  <input type="hidden" name="einladen" value="1">
+                  <button class="knopf leer mini" type="submit"
+                          title="Termin anlegen und Einladung an <%= t.kunde_email %> senden">+ einladen</button>
+                </form>
+              <% } %>
+            <% } %>
+            <% if (t.mailto) { %>
+              <a class="knopf leer mini" href="<%= t.mailto %>"
+                 title="Outlook mit vorbereiteter Mail an <%= t.kunde_email %> öffnen">Mail</a>
+            <% } %>
+          </div>
           <details class="block" style="margin:0;border:none;background:none">
             <summary style="padding:4px 0">bearbeiten</summary>
             <div class="inhalt" style="padding:10px 0 0;min-width:240px">

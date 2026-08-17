@@ -163,7 +163,16 @@
       <% ansprechpartner.forEach(function(a){ %>
         <div style="padding:9px 0;border-bottom:1px solid var(--linie2)">
           <b style="color:var(--ink)"><%= a.name || '—' %></b><% if (a.rolle) { %> <span class="pille"><%= a.rolle %></span><% } %>
-          <div style="font-size:13px;color:var(--ink2)"><%= a.telefon || '' %><%= a.telefon && a.email ? ' · ' : '' %><%= a.email || '' %></div>
+          <div style="font-size:13px;color:var(--ink2)">
+            <% if (a.telefon) { %><a href="tel:<%= a.telefon.replace(/[^+0-9]/g,'') %>"><%= a.telefon %></a><% } %>
+            <%= a.telefon && a.email ? ' · ' : '' %>
+            <% if (a.email) { %><a href="mailto:<%= a.email %>"><%= a.email %></a><% } %>
+          </div>
+          <% if (a.email) { %>
+            <a class="knopf leer mini" style="margin-top:6px"
+               href="mailto:<%= a.email %>?subject=<%= encodeURIComponent('STEER.E — ' + kunde.firma) %>&body=<%= encodeURIComponent((a.name ? 'Sehr geehrte(r) ' + a.name + ',' : 'Sehr geehrte Damen und Herren,') + '\n\n') %>"
+               title="Outlook mit vorbereiteter Mail öffnen">Mail schreiben</a>
+          <% } %>
         </div>
       <% }) %>
       <details class="block"><summary>Hinzufügen</summary><div class="inhalt">
