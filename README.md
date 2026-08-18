@@ -1,6 +1,6 @@
 # STEER.E — Sales-, Kunden- und Angebotsplattform
 
-Westphal Wavetec GmbH · Version 3.2 · Nachfolger von „WWtec Salesmanagement v1"
+Westphal Wavetec GmbH · Version 3.4 · Nachfolger von „WWtec Salesmanagement v1"
 
 ---
 
@@ -410,6 +410,54 @@ Postfächer; im Kunden erscheint nur, was aus ihr heraus versendet wurde.
 
 ---
 
+## Forecast — Soll, Ist, Abweichung
+
+*Forecast* zeigt Monat, Quartal und Jahr gegen die hinterlegten Ziele, dazu
+Mitarbeiterziele und den daraus errechneten Prämienstand.
+
+**Der Ist-Wert wird nie gespeichert, sondern immer aus den Belegen gerechnet:**
+Umsatz aus festgeschriebenen Rechnungen (Stornos negativ), Auftragseingang aus
+beauftragten Angeboten. Eine gespeicherte Ist-Zahl wäre binnen einer Woche
+falsch, und niemand wüsste, warum.
+
+**Ziele** unter *Forecast → Ziele und Prämien*. Feineres schlägt gröberes: Ein
+Monatsziel gilt; ein Quartalsziel wird nur auf die Monate ohne eigenes Ziel
+verteilt, ein Jahresziel entsprechend auf die verbleibenden.
+
+**Prämien** werden gerechnet, nicht eingetragen: Erreichung = Ist ÷ Ziel; unter
+der Schwelle nichts, ab der Schwelle Prämie × Erreichung, begrenzt auf den
+Deckel. Der Rechenweg steht daneben — eine Prämie, die niemand nachrechnen
+kann, erzeugt Streit statt Antrieb.
+
+**Die Hochrechnung sagt, woraus sie besteht:** Erreichtes plus gewichtete
+Pipeline. Die Gewichte stehen als `forecast_gewicht_versendet` und
+`forecast_gewicht_beauftragt` in den Einstellungen, nicht versteckt in einer
+Formel — es sind Schätzwerte, bis ihr aus den eigenen Zahlen Besseres wisst.
+
+### Zur Darstellung
+
+Die Diagramme entstehen serverseitig als SVG. Keine Diagrammbibliothek, kein
+CDN: Sie sollen im Ausdruck stehen, ohne Netz funktionieren und nicht davon
+abhängen, dass ein fremdes Skript lädt.
+
+Drei Entscheidungen, die bewusst gegen die Gewohnheit gehen:
+
+* **Das Ziel ist eine Marke über dem Balken, kein zweiter Balken daneben.** Zwei
+  ähnlich helle Balken nebeneinander sind schwerer zu vergleichen als ein Balken
+  gegen eine Linie.
+* **Die Abweichung nutzt Blau und Orange, nicht Grün und Rot.** Grün gegen Rot
+  ist für etwa jeden zwölften Mann nicht unterscheidbar; beide Varianten wurden
+  gegen die Simulation für Rotgrünschwäche geprüft und fielen durch. Richtung
+  des Balkens und Vorzeichen der Zahl tragen die Aussage ohnehin.
+* **Monate, die noch nicht gelaufen sind, stehen blass und ohne Abweichung.**
+  Ein offener Monat ist kein Rückstand.
+
+Alle Diagrammfarben sind gegen beide Modi geprüft: Helligkeitsband,
+Farbsättigung, Trennschärfe bei Farbfehlsichtigkeit und Kontrast zur Fläche.
+Zu jedem Diagramm gibt es dieselben Zahlen als Tabelle.
+
+---
+
 ## Rechnungen (GoBD)
 
 Eine Rechnung ist bis zur **Festschreibung** änderbar und danach nicht mehr — das ist
@@ -419,6 +467,32 @@ festgeschriebene Rechnung lässt sich auch mit direktem Datenbankzugriff nicht m
 
 Der Nummernkreis ist lückenlos, und zu jeder festgeschriebenen Rechnung wird eine
 SHA-256-Prüfsumme über ihren Inhalt gespeichert.
+
+**Korrektur in 3.4 — das Storno war vorher nicht ausführbar.** Der Stornobeleg wurde
+angelegt und im selben Zug festgeschrieben, und erst danach sollten seine Positionen
+hineingeschrieben werden. Genau das verbietet der Schutztrigger. Jeder Stornoversuch
+brach deshalb ab; auf der Oberfläche erschien eine Fehlerseite. Die Rechnungsnummer
+war zu diesem Zeitpunkt schon gezogen und fiel nicht mit zurück — jeder Versuch hat
+also eine Nummer verbraucht und eine Lücke hinterlassen.
+
+Drei Dinge sind daran geändert:
+
+1. Der Stornobeleg entsteht als Entwurf, bekommt seine Positionen und wird erst
+   danach festgeschrieben — mit eigener Prüfsumme, nach derselben Regel wie eine
+   normale Rechnung.
+2. Die Rechnungsnummer wird innerhalb derselben Transaktion gezogen. Bricht der
+   Vorgang ab, fällt die Nummer zurück. Das gilt jetzt auch für die Festschreibung.
+3. Die Positionen des Stornos werden 1:1 übernommen statt negiert. Der Kopf trug
+   ohnehin den positiven Betrag; die Umkehrung passiert überall über die Belegart.
+   Vorher widersprach der gedruckte Stornobeleg sich selbst: negative Zeilen, positiver
+   Gutschriftbetrag. Zusätzlich nimmt das Storno den Umsatz jetzt wieder aus dem
+   Projekt heraus.
+
+**Was das für bereits verbrauchte Nummern bedeutet.** Die Lücken lassen sich nicht
+rückwirkend schließen — vergebene Nummern sind vergeben. Für eine Prüfung genügt es,
+sie zu erklären: Datum, Nummer und Grund („technisch fehlgeschlagener Stornoversuch")
+gehören in die Verfahrensdokumentation. Welche Nummern betroffen sind, steht unter
+*Verwaltung → Protokoll* und ergibt sich aus dem Sprung in der Rechnungsliste.
 
 ---
 
@@ -475,6 +549,8 @@ lib/erststart.js          Selbsteinrichtung beim allerersten Start
 lib/kalender.js           Kalenderdateien (.ics) und vorbereitete Mails
 lib/m365.js               Microsoft Graph: Anmeldung, Kalender, Mailversand
 lib/stammdaten.js         Übernahme von Verträgen, Vorgängen und Angeboten
+lib/forecast.js           Soll/Ist, Abweichung, Hochrechnung, Prämien
+lib/diagramm.js           Diagramme als SVG, ohne Fremdbibliothek
 lib/automatik.js          Wiedervorlage- und Informationsautomatik (täglich 06:00)
 lib/altdaten.js           Übernahme der Altkunden, wiederholbar
 migrations/               Nummerierte Schemadateien, additiv, nie löschend
@@ -487,6 +563,7 @@ migrations/               Nummerierte Schemadateien, additiv, nie löschend
   007_pflichtfotos_regel  Korrektur an 006
   008_herkunftsschutz_... Herkunftsschutz per Trigger statt Einmal-Update
   009_m365                Microsoft-Konten, Ereignis-Verknüpfung, Nachrichten
+  010_ziele_praemien      Ziele, Prämienregeln, Forecast-Gewichte
 routes/                   anmeldung · crm · angebote · preise · begehungen ·
                           rechnungen · kalkulator · finanzen · vorlagen ·
                           partner · verwaltung

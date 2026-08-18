@@ -111,6 +111,7 @@ app.use('/begehungen', require('./routes/begehungen'));
 app.use('/rechnungen', require('./routes/rechnungen'));
 app.use('/kalkulator', require('./routes/kalkulator'));
 app.use('/finanzen', require('./routes/finanzen'));
+app.use('/forecast', require('./routes/forecast'));
 app.use('/partner', require('./routes/partner'));
 app.use('/verwaltung', require('./routes/verwaltung'));
 

@@ -36,10 +36,21 @@ async function summenNeuRechnen(id) {
   return { netto, mwst, brutto: netto + mwst };
 }
 
-/** Prüfsumme über den festgeschriebenen Inhalt — macht spätere Eingriffe erkennbar. */
-async function pruefsumme(id) {
-  const kopf = await db.one('SELECT nummer, datum, kunde_id, netto, mwst, brutto, mwst_satz FROM rechnungen WHERE id=$1', [id]);
-  const pos = await db.all('SELECT lfd, text, einheit, menge, einzelpreis, gesamtpreis FROM rechnung_positionen WHERE rechnung_id=$1 ORDER BY lfd, id', [id]);
+/**
+ * Prüfsumme über den festgeschriebenen Inhalt — macht spätere Eingriffe erkennbar.
+ *
+ * Der optionale Transaktions-Client ist kein Beiwerk: Wird die Prüfsumme
+ * innerhalb einer laufenden Transaktion gebildet (Storno), sieht ein zweiter
+ * Verbindungsweg die noch nicht bestätigten Zeilen nicht und würde über einen
+ * leeren Beleg hashen. Es gibt bewusst nur diese eine Berechnung, damit die
+ * Prüfsumme einer Rechnung und die eines Stornos nach derselben Regel entsteht.
+ */
+async function pruefsumme(id, c = null) {
+  const kopfSql = 'SELECT nummer, datum, kunde_id, netto, mwst, brutto, mwst_satz FROM rechnungen WHERE id=$1';
+  const posSql = `SELECT lfd, text, einheit, menge, einzelpreis, gesamtpreis FROM rechnung_positionen
+                   WHERE rechnung_id=$1 ORDER BY lfd, id`;
+  const kopf = c ? (await c.query(kopfSql, [id])).rows[0] : await db.one(kopfSql, [id]);
+  const pos = c ? (await c.query(posSql, [id])).rows : await db.all(posSql, [id]);
   return crypto.createHash('sha256').update(JSON.stringify({ kopf, pos })).digest('hex');
 }
 
@@ -260,22 +271,31 @@ r.post('/:id/festschreiben', intern, async (req, res, next) => {
     if (!rg.empfaenger) { res.melde('Ohne Empfängeranschrift ist die Rechnung nicht vollständig.', 'warn'); return res.redirect(`/rechnungen/${id}`); }
 
     await summenNeuRechnen(id);
-    const nummer = await h.naechsteNummer('RE');
-    await db.query('UPDATE rechnungen SET nummer=$1 WHERE id=$2', [nummer, id]);
-    const summe = await pruefsumme(id);
-    await db.query(
-      `UPDATE rechnungen SET festgeschrieben=TRUE, festgeschrieben_am=now(),
-              festgeschrieben_von=$1, pruefsumme=$2 WHERE id=$3`,
-      [req.benutzer.id, summe, id]
-    );
 
-    if (rg.projekt_id) {
-      const neu = await db.one('SELECT netto FROM rechnungen WHERE id=$1', [id]);
-      await db.query('UPDATE projekte SET rechnungsbetrag=COALESCE(rechnungsbetrag,0)+$1, letzte_aktivitaet=now() WHERE id=$2',
-        [neu.netto, rg.projekt_id]);
-    }
-    await auth.protokoll(req, 'rechnung_festgeschrieben', 'rechnung', id, { nummer, pruefsumme: summe });
-    res.melde(`Rechnung ${nummer} festgeschrieben. Sie ist ab jetzt unveränderlich.`);
+    // Nummernvergabe, Festschreibung und Projektfortschreibung gehoeren in
+    // einen Schritt. Scheitert eines davon, faellt auch die gezogene Nummer
+    // zurueck — sonst entstuende eine Luecke im Nummernkreis.
+    const fest = await db.tx(async (c) => {
+      const nr = await h.naechsteNummer('RE', c);
+      await c.query('UPDATE rechnungen SET nummer=$1 WHERE id=$2', [nr, id]);
+
+      const summe = await pruefsumme(id, c);
+      await c.query(
+        `UPDATE rechnungen SET festgeschrieben=TRUE, festgeschrieben_am=now(),
+                festgeschrieben_von=$1, pruefsumme=$2 WHERE id=$3`,
+        [req.benutzer.id, summe, id]
+      );
+      if (rg.projekt_id) {
+        const netto = (await c.query('SELECT netto FROM rechnungen WHERE id=$1', [id])).rows[0].netto;
+        await c.query(
+          'UPDATE projekte SET rechnungsbetrag=COALESCE(rechnungsbetrag,0)+$1, letzte_aktivitaet=now() WHERE id=$2',
+          [netto, rg.projekt_id]
+        );
+      }
+      return { nr, summe };
+    });
+    await auth.protokoll(req, 'rechnung_festgeschrieben', 'rechnung', id, { nummer: fest.nr, pruefsumme: fest.summe });
+    res.melde(`Rechnung ${fest.nr} festgeschrieben. Sie ist ab jetzt unveränderlich.`);
     res.redirect(`/rechnungen/${id}`);
   } catch (e) { next(e); }
 });
@@ -289,16 +309,36 @@ r.post('/:id/stornieren', intern, async (req, res, next) => {
     if (rg.storniert_durch) { res.melde('Diese Rechnung wurde bereits storniert.', 'warn'); return res.redirect(`/rechnungen/${id}`); }
 
     const grund = h.txt(req.body.grund) || 'Storno';
-    const nummer = await h.naechsteNummer('RE');
 
+    /*
+     * Reihenfolge innerhalb der Transaktion, und zwar genau so:
+     *
+     *  1. Nummer ziehen — mit dem Transaktions-Client, damit sie bei einem
+     *     Abbruch zurueckfaellt und keine Luecke in der Nummernfolge bleibt.
+     *  2. Stornokopf zunaechst OHNE Festschreibung anlegen. Der Trigger
+     *     rechnungsposition_unveraenderlich() verbietet jede Position an einer
+     *     festgeschriebenen Rechnung — also auch die erste. Wurde der Kopf
+     *     sofort festgeschrieben, scheiterte jeder Storno an der eigenen
+     *     Schutzregel.
+     *  3. Positionen schreiben.
+     *  4. Pruefsumme ueber den fertigen Beleg bilden — im selben Client,
+     *     sonst sieht sie die noch nicht sichtbaren Zeilen nicht.
+     *  5. Erst jetzt festschreiben.
+     *
+     * Die Positionen werden 1:1 uebernommen, nicht negiert. Der Kopf des
+     * Stornos traegt denselben positiven Betrag; die Umkehrung passiert
+     * ueberall im Haus ueber die Belegart ('storno' zaehlt negativ). Waeren
+     * die Positionen negativ und der Kopf positiv, widerspraeche der
+     * gedruckte Beleg sich selbst.
+     */
     const storno = await db.tx(async (c) => {
+      const nummer = await h.naechsteNummer('RE', c);
       const s = (await c.query(
         `INSERT INTO rechnungen (nummer, art, kunde_id, projekt_id, angebot_id, retainer_id, storno_zu,
                                  empfaenger, anrede, betreff, einleitung, hinweise, datum, faellig_am,
-                                 mwst_satz, netto, mwst, brutto, festgeschrieben, festgeschrieben_am,
-                                 festgeschrieben_von, erstellt_von)
+                                 mwst_satz, netto, mwst, brutto, festgeschrieben, erstellt_von)
          VALUES ($1,'storno',$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,CURRENT_DATE,CURRENT_DATE,$12,$13,$14,$15,
-                 TRUE, now(), $16, $16) RETURNING *`,
+                 FALSE, $16) RETURNING *`,
         [nummer, rg.kunde_id, rg.projekt_id, rg.angebot_id, rg.retainer_id, rg.id,
          rg.empfaenger, rg.anrede, `Storno zu Rechnung ${rg.nummer}`,
          `hiermit stornieren wir unsere Rechnung ${rg.nummer} vom ${new Date(rg.datum).toLocaleDateString('de-DE')} vollständig. Grund: ${grund}.`,
@@ -311,16 +351,31 @@ r.post('/:id/stornieren', intern, async (req, res, next) => {
           `INSERT INTO rechnung_positionen (rechnung_id, lfd, pos, text, langtext, einheit, menge, einzelpreis, gesamtpreis, ist_titel)
            VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)`,
           [s.id, p.lfd, p.pos, p.text, p.langtext, p.einheit,
-           p.ist_titel ? p.menge : -Math.abs(Number(p.menge)),
-           p.einzelpreis, p.ist_titel ? 0 : -Math.abs(Number(p.gesamtpreis)), p.ist_titel]
+           p.menge, p.einzelpreis, p.ist_titel ? 0 : p.gesamtpreis, p.ist_titel]
         );
       }
+
+      const summe = await pruefsumme(s.id, c);
+      await c.query(
+        `UPDATE rechnungen SET festgeschrieben=TRUE, festgeschrieben_am=now(),
+                festgeschrieben_von=$1, pruefsumme=$2 WHERE id=$3`,
+        [req.benutzer.id, summe, s.id]
+      );
       await c.query('UPDATE rechnungen SET storniert_durch=$1 WHERE id=$2', [s.id, rg.id]);
+
+      // Das Storno nimmt den Umsatz aus dem Projekt wieder heraus. Ohne diese
+      // Zeile bliebe der Rechnungsbetrag des Projekts auf dem alten Stand.
+      if (rg.projekt_id) {
+        await c.query(
+          'UPDATE projekte SET rechnungsbetrag=COALESCE(rechnungsbetrag,0)-$1, letzte_aktivitaet=now() WHERE id=$2',
+          [rg.netto, rg.projekt_id]
+        );
+      }
       return s;
     });
 
-    await auth.protokoll(req, 'rechnung_storniert', 'rechnung', id, { storno: nummer, grund });
-    res.melde(`Storno ${nummer} erzeugt. Für eine Korrektur legen Sie jetzt eine neue Rechnung an.`);
+    await auth.protokoll(req, 'rechnung_storniert', 'rechnung', id, { storno: storno.nummer, grund });
+    res.melde(`Storno ${storno.nummer} erzeugt. Für eine Korrektur legen Sie jetzt eine neue Rechnung an.`);
     res.redirect(`/rechnungen/${storno.id}`);
   } catch (e) { next(e); }
 });
