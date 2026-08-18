@@ -1,0 +1,302 @@
+<%- include('partials/kopf') %>
+<div class="seitenkopf">
+  <div><h1><%= kunde.firma %></h1>
+    <div class="unter"><%= kunde.branche || 'ohne Branche' %><%= kunde.quelle ? ' · Quelle: ' + kunde.quelle : '' %> · angelegt <%= datum(kunde.angelegt_am) %></div></div>
+  <div class="reihe">
+    <a class="knopf leer" href="/angebote/neu?kunde=<%= kunde.id %>">Angebot erstellen</a>
+    <a class="knopf leer" href="/kunden">Zur Liste</a>
+  </div>
+</div>
+
+<div class="spalten s21">
+  <div>
+    <!-- PROJEKTE -->
+    <div class="karte">
+      <h2>Projekte</h2>
+      <% if (!projekte.length) { %><div class="leer-hinweis">Noch kein Projekt angelegt.</div><% } %>
+      <% projekte.forEach(function(p){ %>
+        <details class="block">
+          <summary><%= p.bezeichnung %> — <%= p.phase %><%= p.gewerk ? ' · ' + p.gewerk : '' %><%= p.partner ? ' · Partner: ' + p.partner : '' %></summary>
+          <div class="inhalt">
+            <form method="post" action="/projekte/<%= p.id %>">
+              <div class="feld"><label>Bezeichnung</label><input type="text" name="bezeichnung" value="<%= p.bezeichnung %>"></div>
+              <div class="feld"><label>Beschreibung</label><textarea name="beschreibung"><%= p.beschreibung || '' %></textarea></div>
+              <div class="felder3">
+                <div class="feld"><label>Phase</label><select name="phase"><% phasen.forEach(function(x){ %><option <%= p.phase === x ? 'selected' : '' %>><%= x %></option><% }) %></select></div>
+                <div class="feld"><label>Gewerk</label><select name="gewerk"><option value=""></option><% ['AC','DC','AC+DC'].forEach(function(g){ %><option <%= p.gewerk === g ? 'selected' : '' %>><%= g %></option><% }) %></select></div>
+                <div class="feld"><label>Potenzial</label><select name="potential"><option value="">—</option><% [1,2,3].forEach(function(n){ %><option value="<%= n %>" <%= p.potential === n ? 'selected' : '' %>><%= n %></option><% }) %></select></div>
+              </div>
+              <div class="felder3">
+                <div class="feld"><label>Projektmanager</label><select name="projektmanager_id"><option value="">—</option><% mitarbeiter.forEach(function(m){ %><option value="<%= m.id %>" <%= p.projektmanager_id === m.id ? 'selected' : '' %>><%= m.name %></option><% }) %></select></div>
+                <div class="feld"><label>Baustelle</label><select name="baustellen_status"><option value="">—</option><% ['geplant','im_bau','beendet'].forEach(function(s){ %><option <%= p.baustellen_status === s ? 'selected' : '' %>><%= s %></option><% }) %></select></div>
+                <div class="feld"><label>Wiedervorlage</label><input type="date" name="wiedervorlage_am" value="<%= fuerFeld(p.wiedervorlage_am) %>"></div>
+              </div>
+              <div class="felder3">
+                <div class="feld"><label>Angebotssumme netto</label><input type="text" name="angebotssumme" value="<%= p.angebotssumme || '' %>"></div>
+                <div class="feld"><label>Beauftragt netto</label><input type="text" name="beauftragte_summe" value="<%= p.beauftragte_summe || '' %>"></div>
+                <div class="feld"><label>Rechnungsbetrag</label><input type="text" name="rechnungsbetrag" value="<%= p.rechnungsbetrag || '' %>"></div>
+              </div>
+              <button class="knopf mini" type="submit">Projekt speichern</button>
+            </form>
+
+            <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--linie2)">
+              <label>Partnerfreigabe</label>
+              <div class="hinweis-klein">Nur freigegebene Partner sehen dieses Projekt in ihrem Bereich — sonst nichts.</div>
+              <form method="post" action="/projekte/<%= p.id %>/partner" class="reihe">
+                <select name="organisation_id" style="max-width:260px"><option value="">Organisation wählen</option>
+                  <% organisationen.forEach(function(o){ %><option value="<%= o.id %>"><%= o.name %></option><% }) %></select>
+                <input type="text" name="rolle" placeholder="Rolle, z. B. Tiefbau" style="max-width:190px">
+                <button class="knopf leer mini" type="submit">freigeben</button>
+              </form>
+              <% if (p.partner) { %>
+                <div style="margin-top:8px;font-size:12.5px;color:var(--ink3)">Freigegeben für: <%= p.partner %></div>
+                <form method="post" action="/projekte/<%= p.id %>/partner" class="reihe" style="margin-top:6px">
+                  <select name="organisation_id" style="max-width:260px"><% organisationen.forEach(function(o){ %><option value="<%= o.id %>"><%= o.name %></option><% }) %></select>
+                  <input type="hidden" name="entfernen" value="1">
+                  <button class="knopf gefahr mini" type="submit">Freigabe entziehen</button>
+                </form>
+              <% } %>
+            </div>
+          </div>
+        </details>
+      <% }) %>
+
+      <details class="block">
+        <summary>Neues Projekt anlegen</summary>
+        <div class="inhalt">
+          <form method="post" action="/kunden/<%= kunde.id %>/projekte">
+            <div class="feld"><label>Bezeichnung *</label><input type="text" name="bezeichnung" required></div>
+            <div class="feld"><label>Beschreibung</label><textarea name="beschreibung"></textarea></div>
+            <div class="felder3">
+              <div class="feld"><label>Phase</label><select name="phase"><% phasen.forEach(function(x){ %><option><%= x %></option><% }) %></select></div>
+              <div class="feld"><label>Gewerk</label><select name="gewerk"><option value=""></option><option>AC</option><option>DC</option><option>AC+DC</option></select></div>
+              <div class="feld"><label>Potenzial</label><select name="potential"><option value="">—</option><option value="1">1</option><option value="2">2</option><option value="3">3</option></select></div>
+            </div>
+            <button class="knopf mini" type="submit">Projekt anlegen</button>
+          </form>
+        </div>
+      </details>
+    </div>
+
+    <!-- TERMINE -->
+    <div class="karte">
+      <h2>Termine</h2>
+      <% if (termine.length) { %>
+      <div class="tab-scroll"><table>
+        <thead><tr><th>Datum</th><th>Typ</th><th>Mit wem</th><th>Thema</th><th>Bestätigt</th><th>Status</th><th>Kunde informiert</th></tr></thead>
+        <tbody>
+        <% termine.forEach(function(t){ %>
+          <tr><td><%= datum(t.datum) %><%= t.uhrzeit ? ' ' + t.uhrzeit : '' %></td>
+            <td><span class="pille"><%= t.typ %></span></td>
+            <td><%= t.mit_wem || '—' %></td><td><%= t.thema || '—' %></td>
+            <td><span class="pille <%= t.bestaetigt === 'ja' ? 'ok' : t.bestaetigt === 'nein' ? 'rot' : '' %>"><%= t.bestaetigt %></span></td>
+            <td><%= t.status %></td>
+            <td><%= t.kunde_informiert ? 'ja' + (t.kunde_informiert_methode ? ' (' + t.kunde_informiert_methode + ')' : '') : 'nein' %></td>
+          </tr>
+        <% }) %>
+        </tbody></table></div>
+      <% } else { %><div class="leer-hinweis">Noch keine Termine.</div><% } %>
+
+      <details class="block">
+        <summary>Termin anlegen</summary>
+        <div class="inhalt">
+          <form method="post" action="/kunden/<%= kunde.id %>/termine">
+            <div class="felder3">
+              <div class="feld"><label>Projekt</label><select name="projekt_id"><option value="">—</option><% projekte.forEach(function(p){ %><option value="<%= p.id %>"><%= p.bezeichnung %></option><% }) %></select></div>
+              <div class="feld"><label>Typ</label><select name="typ"><option>Kunde</option><option>Elektriker</option><option>Tiefbau</option></select></div>
+              <div class="feld"><label>Mit wem</label><input type="text" name="mit_wem"></div>
+            </div>
+            <div class="felder3">
+              <div class="feld"><label>Datum</label><input type="date" name="datum"></div>
+              <div class="feld"><label>Uhrzeit</label><input type="text" name="uhrzeit" placeholder="11:00"></div>
+              <div class="feld"><label>Bestätigt</label><select name="bestaetigt"><option>offen</option><option>ja</option><option>nein</option></select></div>
+            </div>
+            <div class="feld"><label>Ort</label><input type="text" name="ort"></div>
+            <div class="feld"><label>Thema</label><input type="text" name="thema"></div>
+            <button class="knopf mini" type="submit">Termin anlegen</button>
+          </form>
+        </div>
+      </details>
+    </div>
+
+    <!-- ANGEBOTE -->
+    <div class="karte">
+      <h2>Angebote</h2>
+      <% if (angebote.length) { %>
+      <div class="tab-scroll"><table>
+        <thead><tr><th>Nummer</th><th>Datum</th><th>Bauvorhaben</th><th>Status</th><th class="z">Netto</th></tr></thead>
+        <tbody><% angebote.forEach(function(a){ %>
+          <tr><td><a href="/angebote/<%= a.id %>"><b><%= a.nummer %></b></a></td>
+            <td><%= datum(a.datum) %></td><td><%= a.bauvorhaben || '—' %></td>
+            <td><span class="pille <%= a.status === 'Beauftragt' ? 'ok' : a.status === 'Versendet' ? 'akz' : '' %>"><%= a.status %></span></td>
+            <td class="z"><%= eur(a.netto) %></td></tr>
+        <% }) %></tbody></table></div>
+      <% } else { %><div class="leer-hinweis">Noch kein Angebot. <a href="/angebote/neu?kunde=<%= kunde.id %>">Jetzt erstellen</a></div><% } %>
+    </div>
+  </div>
+
+  <div>
+    <div class="karte">
+      <h2>Stammdaten</h2><div class="marke-strich"></div>
+      <form method="post" action="/kunden/<%= kunde.id %>">
+        <div class="feld"><label>Firma</label><input type="text" name="firma" value="<%= kunde.firma %>"></div>
+        <div class="feld"><label>Branche</label><input type="text" name="branche" value="<%= kunde.branche || '' %>"></div>
+        <div class="feld"><label>Adresse</label><input type="text" name="adresse" value="<%= kunde.adresse || '' %>"></div>
+        <div class="feld"><label>Website</label><input type="text" name="website" value="<%= kunde.website || '' %>"></div>
+        <div class="feld"><label>Quelle</label><input type="text" name="quelle" value="<%= kunde.quelle || '' %>"></div>
+        <div class="feld"><label>Notiz</label><textarea name="notiz"><%= kunde.notiz || '' %></textarea></div>
+        <% felder.forEach(function(f){ %>
+          <div class="feld"><label><%= f.bezeichnung %></label>
+          <% if (f.typ === 'auswahl') { %>
+            <select name="feld_<%= f.id %>"><option value=""></option>
+            <% (f.optionen||'').split(',').map(function(s){return s.trim()}).filter(Boolean).forEach(function(o){ %><option <%= f.wert === o ? 'selected' : '' %>><%= o %></option><% }) %></select>
+          <% } else { %>
+            <input type="<%= f.typ === 'zahl' ? 'number' : f.typ === 'datum' ? 'date' : 'text' %>" name="feld_<%= f.id %>" value="<%= f.wert || '' %>" step="any">
+          <% } %></div>
+        <% }) %>
+        <button class="knopf mini" type="submit">Speichern</button>
+      </form>
+    </div>
+
+    <div class="karte">
+      <h2>Ansprechpartner</h2>
+      <% ansprechpartner.forEach(function(a){ %>
+        <div style="padding:9px 0;border-bottom:1px solid var(--linie2);<%= a.aktiv === false ? 'opacity:.55' : '' %>">
+          <b style="color:var(--ink)"><%= a.name || '—' %></b><% if (a.rolle) { %> <span class="pille"><%= a.rolle %></span><% } %>
+          <% if (a.aktiv === false) { %> <span class="ampel ampel-aus">nicht mehr aktiv</span><% } %>
+          <% if (a.position) { %><div style="font-size:12px;color:var(--ink3)"><%= a.position %></div><% } %>
+          <div style="font-size:13px;color:var(--ink2)">
+            <% if (a.telefon) { %><a href="tel:<%= a.telefon.replace(/[^+0-9]/g,'') %>"><%= a.telefon %></a><% } %>
+            <% if (a.mobil) { %><%= a.telefon ? ' · ' : '' %><a href="tel:<%= a.mobil.replace(/[^+0-9]/g,'') %>"><%= a.mobil %></a><% } %>
+            <%= (a.telefon || a.mobil) && a.email ? ' · ' : '' %>
+            <% if (a.email) { %><a href="mailto:<%= a.email %>"><%= a.email %></a><% } %>
+          </div>
+          <% if (a.bemerkung) { %><div style="font-size:12px;color:var(--ink3);margin-top:3px"><%= a.bemerkung %></div><% } %>
+
+          <div class="reihe" style="gap:6px;margin-top:6px">
+            <% if (a.email) { %>
+              <a class="knopf leer mini"
+                 href="mailto:<%= a.email %>?subject=<%= encodeURIComponent('STEER.E — ' + kunde.firma) %>&body=<%= encodeURIComponent((a.name ? 'Sehr geehrte(r) ' + a.name + ',' : 'Sehr geehrte Damen und Herren,') + '\n\n') %>"
+                 title="Outlook mit vorbereiteter Mail öffnen">Mail schreiben</a>
+            <% } %>
+          </div>
+
+          <details class="block" style="margin:6px 0 0;border:none;background:none">
+            <summary style="padding:3px 0;font-size:12.5px">ändern</summary>
+            <div class="inhalt" style="padding:8px 0 0">
+              <form method="post" action="/kunden/<%= kunde.id %>/ansprechpartner/<%= a.id %>">
+                <div class="felder2">
+                  <div class="feld"><label>Name</label><input type="text" name="name" value="<%= a.name || '' %>"></div>
+                  <div class="feld"><label>Funktion</label><input type="text" name="rolle" value="<%= a.rolle || '' %>"></div>
+                </div>
+                <div class="felder2">
+                  <div class="feld"><label>Telefon</label><input type="text" name="telefon" value="<%= a.telefon || '' %>"></div>
+                  <div class="feld"><label>Mobil</label><input type="text" name="mobil" value="<%= a.mobil || '' %>"></div>
+                </div>
+                <div class="feld"><label>E-Mail</label><input type="text" name="email" value="<%= a.email || '' %>"></div>
+                <div class="feld"><label>Position im Haus</label><input type="text" name="position" value="<%= a.position || '' %>"></div>
+                <div class="feld"><label>Bemerkung</label><input type="text" name="bemerkung" value="<%= a.bemerkung || '' %>"></div>
+                <div class="reihe" style="gap:8px">
+                  <button class="knopf mini" type="submit">Speichern</button>
+                  <% if (a.aktiv === false) { %>
+                    <button class="knopf leer mini" type="submit" name="aktivieren" value="1">Wieder aktiv</button>
+                  <% } else { %>
+                    <button class="knopf gefahr leer mini" type="submit" name="entfernen" value="1"
+                            onclick="return confirm('Ansprechpartner auf „nicht mehr aktiv“ setzen? Die Angaben bleiben für die Historie erhalten.')">Nicht mehr aktiv</button>
+                  <% } %>
+                </div>
+              </form>
+            </div>
+          </details>
+        </div>
+      <% }) %>
+      <details class="block"><summary>Hinzufügen</summary><div class="inhalt">
+        <form method="post" action="/kunden/<%= kunde.id %>/ansprechpartner">
+          <div class="felder2">
+            <div class="feld"><label>Name</label><input type="text" name="name"></div>
+            <div class="feld"><label>Funktion</label><input type="text" name="rolle"></div>
+          </div>
+          <div class="felder2">
+            <div class="feld"><label>Telefon</label><input type="text" name="telefon"></div>
+            <div class="feld"><label>Mobil</label><input type="text" name="mobil"></div>
+          </div>
+          <div class="feld"><label>E-Mail</label><input type="text" name="email"></div>
+          <div class="feld"><label>Position im Haus</label><input type="text" name="position"></div>
+          <button class="knopf mini" type="submit">Hinzufügen</button>
+        </form>
+      </div></details>
+    </div>
+
+    <div class="karte">
+      <h2>Aufgaben</h2>
+      <%
+        /* Erledigtes bleibt stehen — vorher verschwand es hier vollständig,
+           und damit auch der Nachweis, dass etwas getan wurde. Offene zuerst,
+           danach die erledigten, abgesetzt. */
+        var offeneA = aufgaben.filter(function(a){return !a.erledigt});
+        var fertigA = aufgaben.filter(function(a){return a.erledigt});
+      %>
+      <% offeneA.forEach(function(a){ %>
+        <div style="display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--linie2)">
+          <form method="post" action="/aufgaben/<%= a.id %>"><input type="hidden" name="umschalten" value="1">
+            <button class="knopf leer mini" type="submit" title="als erledigt markieren">✓</button></form>
+          <div style="flex:1;font-size:13.5px">
+            <div style="color:var(--ink)"><%= a.text %></div>
+            <div style="font-size:12px;color:var(--ink3)" class="<%= faellig(a.faellig_am, a.erledigt) %>">
+              <%= a.faellig_am ? 'fällig ' + datum(a.faellig_am) : 'ohne Frist' %><%= a.mitarbeiter ? ' · ' + a.mitarbeiter : '' %></div>
+          </div>
+        </div>
+      <% }) %>
+      <% if (!offeneA.length) { %><div class="leer-hinweis" style="padding:12px 0">Keine offene Aufgabe.</div><% } %>
+
+      <% if (fertigA.length) { %>
+        <div style="margin-top:10px;padding-top:9px;border-top:1px solid var(--linie)">
+          <div style="font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink3);margin-bottom:6px">
+            erledigt (<%= fertigA.length %>)</div>
+          <% fertigA.slice(0, 12).forEach(function(a){ %>
+            <div style="display:flex;gap:10px;align-items:flex-start;padding:6px 0;border-bottom:1px solid var(--linie2);border-left:2px solid var(--ok);padding-left:8px">
+              <form method="post" action="/aufgaben/<%= a.id %>"><input type="hidden" name="umschalten" value="1">
+                <button class="knopf leer mini" type="submit" title="wieder öffnen">↺</button></form>
+              <div style="flex:1;font-size:13px;color:var(--ink3)">
+                <div><%= a.text %></div>
+                <div style="font-size:11.5px">
+                  <%= a.erledigt_am ? 'erledigt ' + datum(a.erledigt_am) : 'erledigt' %><%= a.mitarbeiter ? ' · ' + a.mitarbeiter : '' %></div>
+              </div>
+            </div>
+          <% }) %>
+          <% if (fertigA.length > 12) { %>
+            <div style="font-size:12px;color:var(--ink3);padding-top:8px">
+              … und <%= fertigA.length - 12 %> weitere. <a href="/aufgaben?alle=1">Alle Aufgaben</a>
+            </div>
+          <% } %>
+        </div>
+      <% } %>
+      <details class="block"><summary>Aufgabe anlegen</summary><div class="inhalt">
+        <form method="post" action="/aufgaben/neu">
+          <input type="hidden" name="kunde_id" value="<%= kunde.id %>">
+          <div class="feld"><label>Aufgabe</label><input type="text" name="text" required></div>
+          <div class="feld"><label>Projekt</label><select name="projekt_id"><option value="">—</option><% projekte.forEach(function(p){ %><option value="<%= p.id %>"><%= p.bezeichnung %></option><% }) %></select></div>
+          <div class="feld"><label>Fällig am</label><input type="date" name="faellig_am"></div>
+          <div class="feld"><label>Zuständig</label><select name="mitarbeiter_id"><option value="">—</option><% mitarbeiter.forEach(function(m){ %><option value="<%= m.id %>"><%= m.name %></option><% }) %></select></div>
+          <button class="knopf mini" type="submit">Anlegen</button>
+        </form>
+      </div></details>
+    </div>
+
+    <div class="karte">
+      <h2>Verlauf</h2>
+      <form method="post" action="/kunden/<%= kunde.id %>/notiz" style="margin-bottom:14px">
+        <div class="feld"><label>Notiz hinzufügen</label><textarea name="text" style="min-height:64px" placeholder="Was ist passiert?"></textarea></div>
+        <div class="feld"><select name="projekt_id"><option value="">ohne Projektbezug</option><% projekte.forEach(function(p){ %><option value="<%= p.id %>"><%= p.bezeichnung %></option><% }) %></select></div>
+        <button class="knopf mini" type="submit">Notieren</button>
+      </form>
+      <% aktivitaeten.forEach(function(a){ %>
+        <div style="padding:8px 0;border-bottom:1px solid var(--linie2);font-size:13px">
+          <div style="color:var(--ink3);font-size:11.5px"><%= datumZeit(a.datum) %><%= a.automatisch ? ' · automatisch' : '' %></div>
+          <div><%= a.text %></div>
+        </div>
+      <% }) %>
+    </div>
+  </div>
+</div>
+<%- include('partials/fuss') %>

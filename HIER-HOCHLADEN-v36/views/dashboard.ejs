@@ -1,0 +1,187 @@
+<%- include('partials/kopf') %>
+<div class="seitenkopf">
+  <div>
+    <h1>Übersicht</h1>
+    <div class="unter">Stand <%= datumZeit(new Date()) %> · Automatik läuft täglich um 06:00 Uhr</div>
+  </div>
+  <div class="reihe">
+    <form method="post" action="/automatik"><button class="knopf leer mini" type="submit">Automatik jetzt laufen lassen</button></form>
+    <a class="knopf leer" href="/begehungen/neu">Begehung planen</a>
+    <a class="knopf leer" href="/finanzen">Finanzen</a>
+    <a class="knopf" href="/kunden/neu">Neuer Kunde</a>
+  </div>
+</div>
+
+<div class="spalten s4">
+  <div class="kachel"><div class="kopf"><span>Kunden</span></div>
+    <div class="wert"><%= kennzahlen.kunden %></div><div class="zusatz">im Bestand</div></div>
+  <div class="kachel"><div class="kopf"><span>Projekte</span></div>
+    <div class="wert"><%= kennzahlen.projekte_offen %></div><div class="zusatz">in Bearbeitung</div></div>
+  <div class="kachel"><div class="kopf"><span>Offene Aufgaben</span>
+      <% if (kennzahlen.aufgaben_ueberfaellig > 0) { %><span class="chip tief">▼ <%= kennzahlen.aufgaben_ueberfaellig %> überfällig</span><% } %></div>
+    <div class="wert"><%= kennzahlen.aufgaben_offen %></div>
+    <div class="zusatz"><a href="/aufgaben">zur Liste</a></div></div>
+  <div class="kachel"><div class="kopf"><span>Kommende Termine</span>
+      <% if (nachzufassen.length) { %><span class="chip tief">▼ <%= nachzufassen.length %> nachfassen</span><% } %></div>
+    <div class="wert"><%= kennzahlen.termine_kommend %></div>
+    <div class="zusatz"><a href="/termine">zur Liste</a></div></div>
+</div>
+
+<!-- ============ FORECAST-STAND ============
+     Dieselbe Rechnung wie im Forecast selbst — nicht eine zweite, ähnliche
+     Abfrage. Zwei Rechenwege für dieselbe Zahl driften auseinander, und
+     dann glaubt man beiden nicht mehr. -->
+<div class="spalten s21" style="margin-top:18px">
+  <div class="tafel">
+    <div class="tkopf"><h2>Forecast <%= forecast.jahr %></h2>
+      <div class="neben">Umsatz, netto · <a href="/finanzen/forecast">ganzer Bericht</a></div></div>
+    <div class="marke-strich"></div>
+    <%- forecast.svgMonat %>
+    <div class="dia-legende">
+      <span><i style="background:var(--dia-ist)"></i> Ist</span>
+      <span><span class="dia-strich"></span> Ziel</span>
+      <% if (forecast.laufend) { %><span><i style="background:var(--dia-ist);opacity:.42"></i> noch nicht gelaufen</span><% } %>
+    </div>
+  </div>
+
+  <div class="spalten" style="gap:14px">
+    <div class="kachel">
+      <div class="kopf"><span>Ist <%= forecast.jahr %></span>
+        <% if (forecast.zielBisher) { %>
+          <span class="chip <%= forecast.abweichung >= 0 ? 'hoch' : 'tief' %>">
+            <%= forecast.abweichung >= 0 ? '▲' : '▼' %>
+            <%= forecast.erfuellung != null ? Math.round(forecast.erfuellung * 100) + ' %' : '' %></span>
+        <% } %>
+      </div>
+      <div class="wert"><%= eur(forecast.ist) %></div>
+      <div class="zusatz">
+        <% if (forecast.zielBisher) { %>
+          Ziel bis heute <%= eur(forecast.zielBisher) %> —
+          <%= forecast.abweichung >= 0 ? '+' : '−' %><%= eur(Math.abs(forecast.abweichung)) %>
+        <% } else { %>kein Ziel hinterlegt<% } %>
+      </div>
+      <div class="verlauf"><%- forecast.svgSpark %></div>
+    </div>
+
+    <div class="kachel">
+      <div class="kopf"><span>Hochrechnung Jahresende</span>
+        <% if (forecast.laufend && forecast.hochrechnungErfuellung != null) { %>
+          <span class="chip <%= forecast.hochrechnungErfuellung >= 1 ? 'hoch' : 'tief' %>">
+            <%= forecast.hochrechnungErfuellung >= 1 ? '▲' : '▼' %> <%= Math.round(forecast.hochrechnungErfuellung * 100) %> %</span>
+        <% } %>
+      </div>
+      <div class="wert"><%= forecast.laufend ? eur(forecast.hochrechnung) : eur(forecast.ist) %></div>
+      <div class="zusatz">
+        <%= forecast.ziel ? 'Jahresziel ' + eur(forecast.ziel) : 'ohne Jahresziel' %> ·
+        Ist plus gewichtete Pipeline, eine Annahme
+      </div>
+    </div>
+  </div>
+</div>
+
+<% if (nachzufassen.length) { %>
+<div class="tafel" style="margin-top:18px">
+  <div class="tkopf"><h2>Termine zum Nachfassen</h2>
+    <div class="neben">vorbei und noch ohne Ergebnis</div></div>
+  <div class="marke-strich"></div>
+  <div class="hinweis-klein">
+    Diese Termine liegen in der Vergangenheit und stehen weiterhin auf „geplant". Ob sie
+    stattgefunden haben, kann die Anwendung nicht wissen — das trägt ein Mensch ein.
+  </div>
+  <div class="tab-scroll"><table>
+    <thead><tr><th>Stand</th><th>Datum</th><th>Kunde</th><th>Art</th><th>Thema</th></tr></thead>
+    <tbody><% nachzufassen.forEach(function(t){ var a = terminAmpel(t); %>
+      <tr class="spaet">
+        <td><span class="ampel <%= a.klasse %>"><%= a.wort %></span></td>
+        <td style="white-space:nowrap"><%= datum(t.datum) %></td>
+        <td><a href="/kunden/<%= t.kunde_id %>"><%= t.firma %></a></td>
+        <td><span class="pille"><%= t.typ %></span></td>
+        <td><%= t.thema || '—' %></td>
+      </tr>
+    <% }) %></tbody>
+  </table></div>
+  <div style="margin-top:10px"><a class="knopf leer mini" href="/termine?f=spaet">Alle nachzufassenden Termine</a></div>
+</div>
+<% } %>
+
+<div class="spalten s3" style="margin-top:18px">
+  <div class="kachel"><div class="kopf"><span>In Angeboten</span></div>
+    <div class="wert"><%= eur(kennzahlen.summe_angebot) %></div><div class="zusatz">Projekte in der Phase Angebot</div></div>
+  <div class="kachel"><div class="kopf"><span>Beauftragt</span></div>
+    <div class="wert"><%= eur(kennzahlen.summe_beauftragt) %></div><div class="zusatz">in Beauftragung, Terminierung, Umsetzung</div></div>
+  <div class="kachel"><div class="kopf"><span>Abgerechnet</span></div>
+    <div class="wert"><%= eur(kennzahlen.summe_abgerechnet) %></div><div class="zusatz">abgeschlossene Projekte</div></div>
+</div>
+
+<div class="spalten s21" style="margin-top:18px">
+  <div>
+    <div class="karte">
+      <h2>Trichter</h2>
+      <div class="hinweis-klein">Alle Projekte nach Phase. Die Summe zeigt die hinterlegte Angebotssumme.</div>
+      <div class="tab-scroll"><table>
+        <thead><tr><th>Phase</th><th class="z">Projekte</th><th class="z">Angebotssumme</th></tr></thead>
+        <tbody>
+        <% phasen.forEach(function(ph){ var t = trichter.find(function(x){return x.phase === ph}); %>
+          <tr>
+            <td><a href="/kunden?phase=<%= encodeURIComponent(ph) %>"><%= ph %></a></td>
+            <td class="z"><%= t ? t.anzahl : 0 %></td>
+            <td class="z"><%= t && Number(t.summe) > 0 ? eur(t.summe) : '—' %></td>
+          </tr>
+        <% }) %>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="karte">
+      <h2>Offene Aufgaben</h2>
+      <% if (!offeneAufgaben.length) { %><div class="leer-hinweis">Nichts offen.</div><% } else { %>
+      <div class="tab-scroll"><table>
+        <thead><tr><th>Aufgabe</th><th>Kunde</th><th>Zuständig</th><th>Fällig</th><th></th></tr></thead>
+        <tbody>
+        <% offeneAufgaben.forEach(function(a){ %>
+          <tr>
+            <td><b><%= a.text %></b><% if (a.notiz) { %><br><span style="font-size:12px;color:var(--ink3)"><%= a.notiz %></span><% } %></td>
+            <td><% if (a.kunde_id) { %><a href="/kunden/<%= a.kunde_id %>"><%= a.firma %></a><% } else { %>—<% } %></td>
+            <td><%= a.mitarbeiter || '—' %></td>
+            <td class="<%= faellig(a.faellig_am, a.erledigt) %>"><%= datum(a.faellig_am) %></td>
+            <td class="z"><form method="post" action="/aufgaben/<%= a.id %>"><input type="hidden" name="umschalten" value="1"><button class="knopf leer mini" type="submit">erledigt</button></form></td>
+          </tr>
+        <% }) %>
+        </tbody>
+      </table></div>
+      <% } %>
+    </div>
+  </div>
+
+  <div>
+    <div class="karte">
+      <h2>Nächste Termine</h2>
+      <% if (!naechsteTermine.length) { %><div class="leer-hinweis">Keine Termine geplant.</div><% } else { %>
+        <% naechsteTermine.forEach(function(t){ %>
+          <div style="padding:11px 0;border-bottom:1px solid var(--linie2)">
+            <div style="display:flex;justify-content:space-between;gap:10px;align-items:baseline">
+              <b style="color:var(--ink)"><%= datum(t.datum) %><%= t.uhrzeit ? ' · ' + t.uhrzeit : '' %></b>
+              <span class="pille <%= t.bestaetigt === 'ja' ? 'ok' : t.bestaetigt === 'nein' ? 'rot' : '' %>"><%= t.typ %></span>
+            </div>
+            <div style="font-size:13.5px;margin-top:3px"><a href="/kunden/<%= t.kunde_id %>"><%= t.firma %></a><%= t.thema ? ' — ' + t.thema : '' %></div>
+            <% if (t.ort) { %><div style="font-size:12px;color:var(--ink3)"><%= t.ort %></div><% } %>
+          </div>
+        <% }) %>
+      <% } %>
+    </div>
+
+    <div class="karte">
+      <h2>Zuletzt passiert</h2>
+      <% if (!letzteAktivitaeten.length) { %><div class="leer-hinweis">Noch nichts protokolliert.</div><% } else { %>
+        <% letzteAktivitaeten.forEach(function(a){ %>
+          <div style="padding:9px 0;border-bottom:1px solid var(--linie2);font-size:13px">
+            <div style="color:var(--ink3);font-size:11.5px"><%= datumZeit(a.datum) %><%= a.automatisch ? ' · automatisch' : '' %></div>
+            <div style="margin-top:2px"><%= a.text %></div>
+            <% if (a.kunde_id) { %><div style="font-size:12px"><a href="/kunden/<%= a.kunde_id %>"><%= a.firma %></a></div><% } %>
+          </div>
+        <% }) %>
+      <% } %>
+    </div>
+  </div>
+</div>
+<%- include('partials/fuss') %>

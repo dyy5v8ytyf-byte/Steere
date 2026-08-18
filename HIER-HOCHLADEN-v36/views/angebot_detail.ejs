@@ -1,0 +1,273 @@
+<%- include('partials/kopf') %>
+<div class="seitenkopf">
+  <div><h1>Angebot <%= angebot.nummer %></h1>
+    <div class="unter"><%= angebot.firma %><%= angebot.projekt ? ' · ' + angebot.projekt : '' %> · <%= angebot.status %></div></div>
+  <div class="reihe">
+    <% if (angebot.begehung_id) { %><a class="knopf leer" href="/begehungen/<%= angebot.begehung_id %>">Zur Begehung</a><% } %>
+    <a class="knopf leer" href="/preise?angebot=<%= angebot.id %>">Aus Preiskatalog übernehmen</a>
+    <a class="knopf" href="/angebote/<%= angebot.id %>/druck" target="_blank">Druckansicht</a>
+    <% if (mailAnKunden) { %>
+      <a class="knopf leer" href="<%= mailAnKunden %>"
+         title="Outlook mit vorbereiteter Mail an <%= empfaengerMail %> öffnen">Per Mail</a>
+    <% } %>
+
+    <% if (angebot.status === 'Entwurf') { %>
+      <form method="post" action="/angebote/<%= angebot.id %>/loeschen"
+            onsubmit="return confirm('Diesen Entwurf endgültig löschen? Er war nie beim Kunden — der Vorgang bleibt im Änderungsprotokoll.')">
+        <button class="knopf gefahr leer" type="submit">Entwurf löschen</button></form>
+    <% } else if (angebot.status !== 'Zurückgezogen') { %>
+      <details class="block" style="margin:0;border:none;background:none">
+        <summary style="padding:9px 0">Zurückziehen</summary>
+        <div class="inhalt" style="padding:8px 0 0;min-width:280px;text-align:left">
+          <div class="hinweis-klein">
+            Dieses Angebot ist beim Kunden. Es wird nicht gelöscht, sondern mit Grund und
+            Zeitpunkt zurückgezogen — sonst behauptet die Akte hinterher, es habe nie existiert.
+          </div>
+          <form method="post" action="/angebote/<%= angebot.id %>/loeschen">
+            <div class="feld"><label>Grund *</label><input type="text" name="grund" required
+              placeholder="z. B. Leistungsumfang geändert, Neuangebot folgt"></div>
+            <button class="knopf gefahr mini" type="submit">Zurückziehen</button>
+          </form>
+        </div>
+      </details>
+    <% } %>
+  </div>
+</div>
+
+<% if (angebot.status === 'Zurückgezogen') { %>
+  <div class="melde warn"><b>Zurückgezogen<%= angebot.zurueckgezogen_am ? ' am ' + datum(angebot.zurueckgezogen_am) : '' %>.</b>
+    <%= angebot.zurueckgezogen_grund ? 'Grund: ' + angebot.zurueckgezogen_grund : '' %></div>
+<% } %>
+
+<% if (m365Verbunden && empfaengerMail) { %>
+  <div class="karte" style="margin-bottom:18px">
+    <h2>Angebot versenden</h2><div class="marke-strich"></div>
+    <div class="hinweis-klein" style="margin-bottom:12px">
+      Geht aus Ihrem Postfach und unter Ihrem Namen hinaus. Das PDF entsteht aus der
+      <a href="/angebote/<%= angebot.id %>/druck" target="_blank">Druckansicht</a> — dort im Druckdialog
+      „Als PDF sichern", danach hier auswählen.
+    </div>
+    <div class="felder2">
+      <div class="feld"><label>An</label><input type="text" id="m_an" value="<%= empfaengerMail %>"></div>
+      <div class="feld"><label>Kopie an</label><input type="text" id="m_kopie" placeholder="optional"></div>
+    </div>
+    <div class="feld"><label>Betreff</label><input type="text" id="m_betreff" value="<%= mailBetreff %>"></div>
+    <div class="feld"><label>Text</label><textarea id="m_text" style="min-height:150px"><%= mailText %></textarea></div>
+    <div class="feld"><label>PDF anhängen (optional)</label><input type="file" id="m_datei" accept="application/pdf,.pdf"></div>
+    <div class="reihe">
+      <button class="knopf" type="button" id="m_senden">Jetzt senden</button>
+      <span id="m_status" style="font-size:13px;color:var(--ink3)"></span>
+    </div>
+  </div>
+<% } %>
+
+<% if (versendet && versendet.length) { %>
+  <div class="karte" style="margin-bottom:18px">
+    <h2>Bereits versendet</h2><div class="marke-strich"></div>
+    <div class="tab-scroll"><table>
+      <thead><tr><th>Wann</th><th>An</th><th>Betreff</th><th>Anhang</th></tr></thead>
+      <tbody><% versendet.forEach(function(v){ %>
+        <tr><td><%= datumZeit(v.gesendet_am) %></td><td><%= v.an %></td>
+            <td><%= v.betreff %></td><td><%= v.anhang_name || '—' %></td></tr>
+      <% }) %></tbody></table></div>
+  </div>
+<% } %>
+
+<% if (mailAnKunden && !m365Verbunden) { %>
+  <div class="kasten" style="margin-bottom:18px">
+    <b>Angebot verschicken.</b> Erst <b>Druckansicht</b> öffnen und dort über den Druckdialog
+    „Als PDF sichern" wählen — dann <b>Per Mail</b> drücken. Outlook öffnet sich mit Empfänger,
+    Betreff und Text; das gesicherte PDF hängen Sie dort an.
+    Empfänger wäre <span class="mono"><%= empfaengerMail %></span>.
+  </div>
+<% } %>
+
+<div class="spalten s21">
+  <div class="karte">
+    <h2>Positionen</h2>
+    <div class="hinweis-klein">Die Summen unten werden immer aus diesen Zeilen gerechnet — eine abweichende Gesamtsumme ist nicht möglich.</div>
+
+    <% if (rat && rat.length) { %>
+      <details class="block" style="margin-top:12px">
+        <summary>Bei vergleichbaren Objekten war außerdem dabei (<%= rat.length %>)</summary>
+        <div class="inhalt">
+          <div class="hinweis-klein" style="margin-bottom:10px">
+            Aus den eigenen <b>beauftragten</b> Angeboten gezählt — kein Vorschlag von außen. Wer eine Zeile übernimmt, setzt den Preis selbst.
+          </div>
+          <% rat.forEach(function(v, i){ %>
+            <form method="post" action="/angebote/<%= angebot.id %>/positionen" class="frage" style="margin-bottom:8px">
+              <input type="hidden" name="frei" value="1">
+              <input type="hidden" name="text" value="<%= v.text %>">
+              <input type="hidden" name="einheit" value="<%= v.einheit || '' %>">
+              <div class="was"><%= v.text %><%= v.einheit ? ' · ' + v.einheit : '' %></div>
+              <div class="warum"><%= v.begruendung %></div>
+              <div class="reihe" style="margin-top:7px;align-items:flex-end">
+                <div class="feld" style="margin:0;max-width:110px"><label>Menge</label><input type="text" name="menge" value="1"></div>
+                <div class="feld" style="margin:0;max-width:130px"><label>EP netto</label><input type="text" name="einzelpreis" value="0"></div>
+                <button class="knopf leer mini" type="submit">Übernehmen</button>
+              </div>
+            </form>
+          <% }) %>
+        </div>
+      </details>
+    <% } %>
+    <% if (!positionen.length) { %><div class="leer-hinweis">Noch keine Position. Über „Aus Preiskatalog übernehmen" oder unten frei hinzufügen.</div><% } %>
+    <% positionen.forEach(function(p){ %>
+      <form method="post" action="/angebote/<%= angebot.id %>/positionen/<%= p.id %>"
+            style="display:grid;grid-template-columns:56px 76px 1fr 74px 92px 108px 104px auto;gap:8px;align-items:start;padding:9px 0;border-bottom:1px solid var(--linie2)">
+        <input type="text" name="lfd" value="<%= p.lfd %>" title="Reihenfolge">
+        <input type="text" name="pos" value="<%= p.pos || '' %>" title="LV-Position">
+        <div>
+          <input type="text" name="text" value="<%= p.text %>">
+          <% if (p.langtext) { %><textarea name="langtext" style="min-height:44px;margin-top:5px;font-size:12.5px"><%= p.langtext %></textarea><% } else { %><input type="hidden" name="langtext" value=""><% } %>
+        </div>
+        <input type="text" name="einheit" value="<%= p.einheit || '' %>" title="Einheit">
+        <input type="text" name="menge" value="<%= p.menge %>" title="Menge">
+        <input type="text" name="einzelpreis" value="<%= p.einzelpreis %>" title="Einheitspreis netto">
+        <div style="text-align:right;padding-top:9px;font-variant-numeric:tabular-nums;color:var(--ink)"><%= eur(p.gesamtpreis) %></div>
+        <div style="display:flex;gap:5px">
+          <button class="knopf leer mini" type="submit">✓</button>
+          <button class="knopf gefahr mini" type="submit" name="loeschen" value="1" title="Position entfernen">×</button>
+        </div>
+      </form>
+    <% }) %>
+
+    <div style="margin-top:18px;padding-top:14px;border-top:1px solid var(--linie);display:grid;gap:6px;max-width:340px;margin-left:auto;font-variant-numeric:tabular-nums">
+      <div style="display:flex;justify-content:space-between"><span style="color:var(--ink3)">Nettosumme</span><b><%= eur(angebot.netto) %></b></div>
+      <div style="display:flex;justify-content:space-between"><span style="color:var(--ink3)">zzgl. <%= angebot.mwst_satz %> % MwSt.</span><b><%= eur(angebot.mwst) %></b></div>
+      <div style="display:flex;justify-content:space-between;padding-top:8px;border-top:1px solid var(--linie)"><b>Angebotssumme brutto</b><b style="color:var(--akzent)"><%= eur(angebot.brutto) %></b></div>
+    </div>
+
+    <details class="block">
+      <summary>Freie Position hinzufügen</summary>
+      <div class="inhalt">
+        <form method="post" action="/angebote/<%= angebot.id %>/positionen">
+          <input type="hidden" name="frei" value="1">
+          <div class="felder3">
+            <div class="feld"><label>LV-Position</label><input type="text" name="pos"></div>
+            <div class="feld"><label>Einheit</label><input type="text" name="einheit" placeholder="Stk., m, psch"></div>
+            <div class="feld"><label>Menge</label><input type="text" name="menge" value="1"></div>
+          </div>
+          <div class="feld"><label>Kurztext *</label><input type="text" name="text" required></div>
+          <div class="feld"><label>Langtext</label><textarea name="langtext"></textarea></div>
+          <div class="feld"><label>Einheitspreis netto</label><input type="text" name="einzelpreis" value="0"></div>
+          <div class="haken"><input type="checkbox" id="ti" name="ist_titel"><label for="ti">Nur Zwischenüberschrift (zählt nicht in die Summe)</label></div>
+          <button class="knopf mini" type="submit">Hinzufügen</button>
+        </form>
+      </div>
+    </details>
+  </div>
+
+  <div class="karte">
+    <h2>Angaben</h2><div class="marke-strich"></div>
+    <form method="post" action="/angebote/<%= angebot.id %>">
+      <div class="felder2">
+        <div class="feld"><label>Status</label><select name="status"><% STATUS.forEach(function(s){ %><option <%= angebot.status === s ? 'selected' : '' %>><%= s %></option><% }) %></select></div>
+        <div class="feld"><label>MwSt. %</label><input type="text" name="mwst_satz" value="<%= angebot.mwst_satz %>"></div>
+      </div>
+      <div class="felder2">
+        <div class="feld"><label>Angebotsdatum</label><input type="date" name="datum" value="<%= fuerFeld(angebot.datum) %>"></div>
+        <div class="feld"><label>Gültig bis</label><input type="date" name="gueltig_bis" value="<%= fuerFeld(angebot.gueltig_bis) %>"></div>
+      </div>
+      <div class="feld"><label>Empfänger</label><textarea name="empfaenger"><%= angebot.empfaenger || '' %></textarea></div>
+      <div class="feld"><label>Anrede</label><input type="text" name="anrede" value="<%= angebot.anrede || '' %>"></div>
+      <div class="feld"><label>Bauvorhaben</label><input type="text" name="bauvorhaben" value="<%= angebot.bauvorhaben || '' %>"></div>
+      <div class="feld"><label>Gewerk</label><input type="text" name="gewerk" value="<%= angebot.gewerk || '' %>"></div>
+      <div class="feld"><label>Einleitung <span data-baustein="einleitung" data-ziel="a_einleitung"></span></label>
+        <textarea name="einleitung" id="a_einleitung"><%= angebot.einleitung || '' %></textarea></div>
+      <div class="feld"><label>Vorbemerkungen (vor den Positionen) <span data-baustein="vorbemerkung" data-ziel="a_vorbem"></span></label>
+        <textarea name="vorbemerkungen" id="a_vorbem" style="min-height:110px"><%= angebot.vorbemerkungen || '' %></textarea></div>
+      <div class="feld"><label>Konditionen und Hinweise <span data-baustein="hinweis" data-ziel="a_hinweise"></span></label>
+        <textarea name="hinweise" id="a_hinweise" style="min-height:150px"><%= angebot.hinweise || '' %></textarea></div>
+      <div class="feld"><label>Schlusssatz <span data-baustein="schluss" data-ziel="a_schluss"></span></label>
+        <textarea name="schlusstext" id="a_schluss" style="min-height:56px"><%= angebot.schlusstext || '' %></textarea></div>
+      <% felder.forEach(function(f){ %>
+        <div class="feld"><label><%= f.bezeichnung %></label>
+        <input type="<%= f.typ === 'zahl' ? 'number' : f.typ === 'datum' ? 'date' : 'text' %>" name="feld_<%= f.id %>" value="<%= f.wert || '' %>" step="any"></div>
+      <% }) %>
+      <button class="knopf" type="submit">Speichern</button>
+    </form>
+    <div class="kasten" style="margin-top:16px">
+      Status <b>Versendet</b> schreibt die Nettosumme als Angebotssumme ins Projekt, Status <b>Beauftragt</b> als beauftragte Summe. So bleiben Trichter und Angebot ohne Doppelpflege synchron.
+    </div>
+  </div>
+</div>
+
+<script>
+// Angebot per Microsoft 365 versenden — der Anhang wird im Browser gelesen
+// und als Base64 mitgeschickt; die Anwendung erzeugt selbst kein PDF.
+(function () {
+  var knopf = document.getElementById('m_senden');
+  if (!knopf) return;
+  var status = document.getElementById('m_status');
+  function wert(id) { var e = document.getElementById(id); return e ? e.value.trim() : ''; }
+
+  knopf.addEventListener('click', function () {
+    var an = wert('m_an');
+    if (!an) { status.textContent = 'Ohne Empfänger geht es nicht.'; status.style.color = 'var(--rot)'; return; }
+    knopf.disabled = true;
+    status.style.color = 'var(--ink3)';
+    status.textContent = 'wird gesendet …';
+
+    var datei = document.getElementById('m_datei').files[0];
+    var senden = function (anhang) {
+      fetch('/m365/mail', {
+        method: 'POST', headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          an: an, kopie: wert('m_kopie'), betreff: wert('m_betreff'), text: wert('m_text'),
+          anhang: anhang, kunde_id: <%= angebot.kunde_id %>,
+          projekt_id: <%= angebot.projekt_id || 'null' %>, angebot_id: <%= angebot.id %>,
+        }),
+      }).then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
+        .then(function (x) {
+          if (x.ok && x.d.ok) {
+            status.style.color = 'var(--ok-hell)';
+            status.textContent = 'Gesendet an ' + x.d.an + '. Die Seite wird neu geladen …';
+            setTimeout(function () { location.reload(); }, 1400);
+          } else {
+            status.style.color = 'var(--rot)';
+            status.textContent = x.d.fehler || 'Senden fehlgeschlagen.';
+            knopf.disabled = false;
+          }
+        }).catch(function (e) {
+          status.style.color = 'var(--rot)';
+          status.textContent = 'Senden fehlgeschlagen: ' + e.message;
+          knopf.disabled = false;
+        });
+    };
+
+    if (!datei) return senden(null);
+    var leser = new FileReader();
+    leser.onload = function () {
+      var roh = String(leser.result || '');
+      senden({ name: datei.name, typ: datei.type || 'application/pdf', inhalt: roh.split(',')[1] });
+    };
+    leser.readAsDataURL(datei);
+  });
+})();
+(function () {
+  var vorrat = <%- JSON.stringify(texte) %>;
+  document.querySelectorAll('[data-baustein]').forEach(function (halter) {
+    var liste = vorrat[halter.getAttribute('data-baustein')] || [];
+    if (!liste.length) return;
+    var s = document.createElement('select');
+    s.className = 'baustein-wahl';
+    s.innerHTML = '<option value="">Baustein übernehmen …</option>' + liste.map(function (b, i) {
+      var k = b.text.length > 70 ? b.text.slice(0, 70) + '…' : b.text;
+      return '<option value="' + i + '">' + k.replace(/[<>&]/g, '') + '</option>';
+    }).join('');
+    s.addEventListener('change', function () {
+      if (s.value === '') return;
+      var ziel = document.getElementById(halter.getAttribute('data-ziel'));
+      if (ziel) {
+        var t = liste[Number(s.value)].text;
+        ziel.value = ziel.value.trim() ? ziel.value.replace(/\s*$/, '') + '\n\n' + t : t;
+        ziel.focus();
+      }
+      s.value = '';
+    });
+    halter.appendChild(s);
+  });
+})();
+</script>
+<%- include('partials/fuss') %>

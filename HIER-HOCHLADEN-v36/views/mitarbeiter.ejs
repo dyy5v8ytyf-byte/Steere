@@ -1,0 +1,91 @@
+<%- include('partials/kopf') %>
+<div class="seitenkopf">
+  <div><h1>Mitarbeiter</h1>
+    <div class="unter"><%= liste.filter(function(m){return m.aktiv}).length %> aktiv · Grundlage für Projektleitung und Aufgabenzuweisung</div></div>
+</div>
+
+<div class="kasten" style="margin-bottom:18px">
+  <b>Wozu diese Liste da ist.</b> Ohne gepflegte Mitarbeiter lässt sich weder eine Aufgabe
+  zuweisen noch ein Projektmanager benennen — die Auswahlfelder bleiben leer. Wer hier steht,
+  taucht dort auf.
+  <br><br>
+  <b>Mitarbeiter ist nicht dasselbe wie Anmeldekonto.</b> Ein Mitarbeiter kann Aufgaben bekommen,
+  ohne sich jemals anzumelden — etwa ein Monteur. Ein Anmeldekonto legen Sie unter
+  <a href="/verwaltung">Verwaltung → Benutzer</a> an. Wo beides dieselbe Person ist, verbinden Sie
+  die zwei über das Feld <i>Anmeldekonto</i>; dann führt niemand zwei Personallisten nebeneinander.
+</div>
+
+<div class="spalten s21">
+  <div class="karte">
+    <h2>Vorhandene</h2><div class="marke-strich"></div>
+    <% if (!liste.length) { %>
+      <div class="leer-hinweis">Noch niemand angelegt.</div>
+    <% } %>
+    <% liste.forEach(function(m){ %>
+      <details class="block" style="<%= m.aktiv ? '' : 'opacity:.6' %>">
+        <summary>
+          <b><%= m.name %></b>
+          <span class="pille"><%= m.rolle %></span>
+          <% if (!m.aktiv) { %><span class="ampel ampel-aus">inaktiv</span><% } %>
+          <span style="font-size:12px;color:var(--ink3);margin-left:8px">
+            <%= m.projekte %> Projekt(e) · <%= m.offene %> offene Aufgabe(n)</span>
+        </summary>
+        <div class="inhalt">
+          <form method="post" action="/mitarbeiter">
+            <input type="hidden" name="id" value="<%= m.id %>">
+            <div class="felder3">
+              <div class="feld"><label>Name</label><input type="text" name="name" value="<%= m.name %>" required></div>
+              <div class="feld"><label>Rolle</label><select name="rolle">
+                <% rollen.forEach(function(r){ %><option <%= m.rolle === r ? 'selected' : '' %>><%= r %></option><% }) %>
+                <% if (!rollen.includes(m.rolle)) { %><option selected><%= m.rolle %></option><% } %></select></div>
+              <div class="feld"><label>Kürzel</label><input type="text" name="kuerzel" value="<%= m.kuerzel || '' %>" maxlength="6"></div>
+            </div>
+            <div class="felder3">
+              <div class="feld"><label>E-Mail</label><input type="text" name="email" value="<%= m.email || '' %>"></div>
+              <div class="feld"><label>Telefon</label><input type="text" name="telefon" value="<%= m.telefon || '' %>"></div>
+              <div class="feld"><label>Mobil</label><input type="text" name="mobil" value="<%= m.mobil || '' %>"></div>
+            </div>
+            <div class="felder3">
+              <div class="feld"><label>Funktion</label><input type="text" name="funktion" value="<%= m.funktion || '' %>" placeholder="z. B. Projektleitung Ladeinfrastruktur"></div>
+              <div class="feld"><label>Im Haus seit</label><input type="date" name="eintritt_am" value="<%= fuerFeld(m.eintritt_am) %>"></div>
+              <div class="feld"><label>Anmeldekonto</label><select name="benutzer_id">
+                <option value="">— keins —</option>
+                <% if (m.benutzer_id) { %><option value="<%= m.benutzer_id %>" selected><%= m.konto_email || 'verbunden' %></option><% } %>
+                <% konten.forEach(function(k){ %><option value="<%= k.id %>"><%= k.name %> (<%= k.email %>)</option><% }) %>
+              </select></div>
+            </div>
+            <div class="feld"><label>Bemerkung</label><input type="text" name="bemerkung" value="<%= m.bemerkung || '' %>"></div>
+            <div class="haken"><input type="checkbox" id="ak<%= m.id %>" name="aktiv" <%= m.aktiv ? 'checked' : '' %>>
+              <label for="ak<%= m.id %>">aktiv — nur aktive stehen in den Auswahlfeldern</label></div>
+            <button class="knopf mini" type="submit">Speichern</button>
+          </form>
+        </div>
+      </details>
+    <% }) %>
+  </div>
+
+  <div class="karte">
+    <h2>Neu anlegen</h2><div class="marke-strich"></div>
+    <form method="post" action="/mitarbeiter">
+      <div class="feld"><label>Name *</label><input type="text" name="name" required></div>
+      <div class="feld"><label>Rolle</label><select name="rolle">
+        <% rollen.forEach(function(r){ %><option><%= r %></option><% }) %></select></div>
+      <div class="feld"><label>Funktion</label><input type="text" name="funktion"></div>
+      <div class="feld"><label>E-Mail</label><input type="text" name="email"></div>
+      <div class="feld"><label>Telefon</label><input type="text" name="telefon"></div>
+      <div class="feld"><label>Mobil</label><input type="text" name="mobil"></div>
+      <div class="feld"><label>Anmeldekonto</label><select name="benutzer_id">
+        <option value="">— keins —</option>
+        <% konten.forEach(function(k){ %><option value="<%= k.id %>"><%= k.name %> (<%= k.email %>)</option><% }) %>
+      </select>
+      <% if (konten.length) { %>
+        <div class="hinweis-klein" style="margin-top:6px">
+          Diese Anmeldekonten sind noch keinem Mitarbeiter zugeordnet.
+        </div>
+      <% } %>
+      </div>
+      <button class="knopf" type="submit">Anlegen</button>
+    </form>
+  </div>
+</div>
+<%- include('partials/fuss') %>

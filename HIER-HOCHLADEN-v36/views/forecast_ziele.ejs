@@ -1,0 +1,153 @@
+<%- include('partials/kopf') %>
+<div class="seitenkopf">
+  <div><h1>Ziele und Prämien <%= jahr %></h1>
+    <div class="unter">Soll-Werte für Unternehmen und Mitarbeiter</div></div>
+  <a class="knopf leer" href="/finanzen/forecast?jahr=<%= jahr %>">Zum Forecast</a>
+</div>
+
+<div class="kasten" style="margin-bottom:18px">
+  <b>Wie die Ziele zusammenwirken.</b> Feineres schlägt gröberes: Ein Monatsziel gilt immer.
+  Ein Quartalsziel wird nur auf die Monate verteilt, die selbst keines haben — ein Jahresziel
+  entsprechend auf die verbleibenden. So können Sie grob mit einer Jahreszahl anfangen und einzelne
+  Monate später schärfen, ohne alles neu einzutragen.
+</div>
+
+<div class="spalten s2">
+  <!-- ============ ZIEL ANLEGEN ============ -->
+  <div class="karte">
+    <h2>Ziel setzen</h2><div class="marke-strich"></div>
+    <form method="post" action="/finanzen/forecast/ziele">
+      <input type="hidden" name="jahr" value="<%= jahr %>">
+      <div class="felder2">
+        <div class="feld"><label>Kennzahl</label><select name="art">
+          <% ARTEN.forEach(function(a){ %><option value="<%= a[0] %>"><%= a[1] %></option><% }) %></select></div>
+        <div class="feld"><label>Gilt für</label><select name="benutzer_id">
+          <option value="">das Unternehmen</option>
+          <% benutzer.forEach(function(u){ %><option value="<%= u.id %>"><%= u.name %></option><% }) %></select></div>
+      </div>
+      <div class="felder3">
+        <div class="feld"><label>Zeitraum</label><select name="periode" id="periode">
+          <option value="monat">Monat</option><option value="quartal">Quartal</option><option value="jahr">ganzes Jahr</option></select></div>
+        <div class="feld"><label>Nummer</label><input type="text" name="periode_nr" value="1" id="nr"
+          title="Monat 1–12, Quartal 1–4, beim Jahr ohne Bedeutung"></div>
+        <div class="feld"><label>Wert netto</label><input type="text" name="wert" placeholder="z. B. 45000"></div>
+      </div>
+      <div class="feld"><label>Hinweis</label><input type="text" name="hinweis"></div>
+      <button class="knopf mini" type="submit">Speichern</button>
+    </form>
+
+    <details class="block">
+      <summary>Jahreszahl gleichmäßig auf zwölf Monate verteilen</summary>
+      <div class="inhalt">
+        <form method="post" action="/finanzen/forecast/ziele/verteilen">
+          <input type="hidden" name="jahr" value="<%= jahr %>">
+          <div class="felder3">
+            <div class="feld"><label>Kennzahl</label><select name="art">
+              <% ARTEN.forEach(function(a){ %><option value="<%= a[0] %>"><%= a[1] %></option><% }) %></select></div>
+            <div class="feld"><label>Gilt für</label><select name="benutzer_id">
+              <option value="">das Unternehmen</option>
+              <% benutzer.forEach(function(u){ %><option value="<%= u.id %>"><%= u.name %></option><% }) %></select></div>
+            <div class="feld"><label>Jahressumme netto</label><input type="text" name="summe" placeholder="540000"></div>
+          </div>
+          <button class="knopf leer mini" type="submit">Verteilen</button>
+          <div class="hinweis-klein" style="margin-top:8px">
+            Überschreibt vorhandene Monatsziele dieses Jahres. Einzelne Monate lassen sich danach anpassen.
+          </div>
+        </form>
+      </div>
+    </details>
+  </div>
+
+  <!-- ============ PRÄMIE ANLEGEN ============ -->
+  <div class="karte">
+    <h2>Prämienregel</h2><div class="marke-strich"></div>
+    <form method="post" action="/finanzen/forecast/praemien">
+      <input type="hidden" name="jahr" value="<%= jahr %>">
+      <div class="felder2">
+        <div class="feld"><label>Mitarbeiter *</label><select name="benutzer_id" required>
+          <option value="">bitte wählen</option>
+          <% benutzer.forEach(function(u){ %><option value="<%= u.id %>"><%= u.name %></option><% }) %></select></div>
+        <div class="feld"><label>Kennzahl</label><select name="art">
+          <% ARTEN.forEach(function(a){ %><option value="<%= a[0] %>"><%= a[1] %></option><% }) %></select></div>
+      </div>
+      <div class="felder2">
+        <div class="feld"><label>Zeitraum</label><select name="periode">
+          <option value="quartal">Quartal</option><option value="jahr">ganzes Jahr</option><option value="monat">Monat</option></select></div>
+        <div class="feld"><label>Nummer (Quartal 1–4)</label><input type="text" name="periode_nr" value="1"></div>
+      </div>
+      <div class="felder2">
+        <div class="feld"><label>Ziel netto</label><input type="text" name="ziel_wert" placeholder="120000"></div>
+        <div class="feld"><label>Prämie bei 100 %</label><input type="text" name="praemie_voll" placeholder="5000"></div>
+      </div>
+      <div class="felder2">
+        <div class="feld"><label>Schwelle in %</label><input type="text" name="schwelle_pct" value="80"></div>
+        <div class="feld"><label>Deckel in %</label><input type="text" name="deckel_pct" value="120"></div>
+      </div>
+      <div class="feld"><label>Hinweis</label><input type="text" name="hinweis"></div>
+      <button class="knopf mini" type="submit">Speichern</button>
+    </form>
+
+    <div class="kasten" style="margin-top:14px">
+      <b>So rechnet die Prämie.</b> Erreichung = Ist geteilt durch Ziel.
+      Unter der Schwelle gibt es nichts. Ab der Schwelle: Prämie bei 100 % × Erreichung,
+      begrenzt auf den Deckel.<br>
+      <span style="font-size:12.5px;color:var(--ink3)">Beispiel: Ziel 120.000 €, Prämie 5.000 €, Schwelle 80 %, Deckel 120 %.
+      Bei 114.000 € Umsatz sind das 95 % → 4.750 €. Bei 160.000 € greift der Deckel bei 120 % → 6.000 €.</span>
+    </div>
+  </div>
+</div>
+
+<!-- ============ VORHANDENE ZIELE ============ -->
+<div class="karte">
+  <h2>Hinterlegte Ziele <%= jahr %></h2><div class="marke-strich"></div>
+  <% if (!ziele.length) { %><div class="leer-hinweis">Noch keine Ziele für <%= jahr %>.</div><% } else { %>
+  <div class="tab-scroll"><table>
+    <thead><tr><th>Kennzahl</th><th>Gilt für</th><th>Zeitraum</th><th class="z">Wert</th><th>Hinweis</th><th></th></tr></thead>
+    <tbody><% ziele.forEach(function(z){ %>
+      <tr>
+        <td><span class="pille"><%= z.art === 'umsatz' ? 'Umsatz' : 'Auftragseingang' %></span></td>
+        <td><%= z.benutzer || 'Unternehmen' %></td>
+        <td><%= z.periode === 'jahr' ? 'ganzes Jahr' : (z.periode === 'quartal' ? 'Q' + z.periode_nr : MONATE[z.periode_nr - 1]) %></td>
+        <td class="z"><%= eur(z.wert) %></td>
+        <td style="font-size:12px;color:var(--ink3)"><%= z.hinweis || '' %></td>
+        <td class="z"><form method="post" action="/finanzen/forecast/ziele/<%= z.id %>/loeschen">
+          <button class="knopf gefahr mini" type="submit">×</button></form></td>
+      </tr>
+    <% }) %></tbody>
+  </table></div>
+  <% } %>
+</div>
+
+<!-- ============ VORHANDENE PRÄMIEN ============ -->
+<div class="karte">
+  <h2>Prämienregeln <%= jahr %></h2><div class="marke-strich"></div>
+  <% if (!praemien.length) { %><div class="leer-hinweis">Noch keine Prämienregeln für <%= jahr %>.</div><% } else { %>
+  <div class="tab-scroll"><table>
+    <thead><tr><th>Mitarbeiter</th><th>Zeitraum</th><th class="z">Ziel</th><th class="z">Prämie 100 %</th>
+      <th class="z">Schwelle</th><th class="z">Deckel</th><th></th></tr></thead>
+    <tbody><% praemien.forEach(function(p){ %>
+      <tr>
+        <td><b><%= p.benutzer %></b></td>
+        <td><%= p.periode === 'jahr' ? 'Jahr' : (p.periode === 'quartal' ? 'Q' + p.periode_nr : MONATE[p.periode_nr - 1]) %></td>
+        <td class="z"><%= eur(p.ziel_wert) %></td>
+        <td class="z"><%= eur(p.praemie_voll) %></td>
+        <td class="z"><%= p.schwelle_pct %> %</td>
+        <td class="z"><%= p.deckel_pct %> %</td>
+        <td class="z"><form method="post" action="/finanzen/forecast/praemien/<%= p.id %>/loeschen">
+          <button class="knopf gefahr mini" type="submit">×</button></form></td>
+      </tr>
+    <% }) %></tbody>
+  </table></div>
+  <% } %>
+</div>
+
+<script>
+// Bei „ganzes Jahr" ist die Nummer bedeutungslos — dann ausblenden.
+(function () {
+  var p = document.getElementById('periode'), nr = document.getElementById('nr');
+  if (!p || !nr) return;
+  function pruefe() { nr.closest('.feld').style.opacity = p.value === 'jahr' ? '.35' : '1'; nr.disabled = p.value === 'jahr'; }
+  p.addEventListener('change', pruefe); pruefe();
+})();
+</script>
+<%- include('partials/fuss') %>

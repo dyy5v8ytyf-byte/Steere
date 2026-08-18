@@ -1,0 +1,79 @@
+<%- include('partials/kopf') %>
+<div class="seitenkopf">
+  <div><h1>Aufgaben</h1>
+    <div class="unter"><%= aufgaben.filter(function(a){return !a.erledigt}).length %> offen ·
+      <%= aufgaben.filter(function(a){return a.erledigt}).length %> erledigt sichtbar</div></div>
+  <div class="reihe">
+    <% if (!alle && aelterAnzahl) { %>
+      <a class="knopf leer" href="/aufgaben?alle=1">Ältere einblenden (<%= aelterAnzahl %>)</a>
+    <% } else if (alle) { %>
+      <a class="knopf leer" href="/aufgaben">Nur die letzten 30 Tage</a>
+    <% } %>
+  </div>
+</div>
+
+<div class="kasten" style="margin-bottom:18px">
+  <b>Erledigtes bleibt stehen.</b> Abgehakte Aufgaben verschwinden nicht mehr aus der Liste und
+  auch nicht aus dem Kundenprofil — sie stehen abgesetzt, mit Zeitpunkt und Namen. Wer nachweisen
+  will, dass eine Zusage eingehalten wurde, findet es hier. Nach 30 Tagen rutschen sie aus der
+  Vorgabeansicht, löschen lässt sich weiterhin nur einzeln.
+</div>
+
+<div class="karte">
+  <h2>Neue Aufgabe</h2><div class="marke-strich"></div>
+  <form method="post" action="/aufgaben/neu">
+    <div class="felder3">
+      <div class="feld"><label>Aufgabe</label><input type="text" name="text" required></div>
+      <div class="feld"><label>Fällig am</label><input type="date" name="faellig_am"></div>
+      <div class="feld"><label>Zuständig</label>
+        <select name="mitarbeiter_id">
+          <option value="">—</option>
+          <% mitarbeiter.forEach(function(m){ %><option value="<%= m.id %>"><%= m.name %></option><% }) %>
+        </select>
+        <% if (!mitarbeiter.length) { %>
+          <div class="hinweis-klein" style="margin-top:6px;color:var(--warn)">
+            Noch keine Mitarbeiter gepflegt — ohne sie lässt sich niemand zuständig machen.
+            <a href="/mitarbeiter">Jetzt anlegen</a>.
+          </div>
+        <% } %>
+      </div>
+    </div>
+    <button class="knopf mini" type="submit">Anlegen</button>
+  </form>
+</div>
+
+<div class="karte">
+  <% if (!aufgaben.length) { %><div class="leer-hinweis">Nichts vorhanden.</div><% } else { %>
+  <div class="tab-scroll"><table>
+    <thead><tr><th></th><th>Aufgabe</th><th>Kunde / Projekt</th><th>Zuständig</th>
+      <th>Fällig</th><th>Stand</th><th></th></tr></thead>
+    <tbody><% aufgaben.forEach(function(a){ %>
+      <tr class="<%= a.erledigt ? 'erledigt' : '' %>">
+        <td><form method="post" action="/aufgaben/<%= a.id %>"><input type="hidden" name="umschalten" value="1">
+          <button class="knopf leer mini" type="submit" title="<%= a.erledigt ? 'Wieder öffnen' : 'Als erledigt abhaken' %>"><%= a.erledigt ? '↺' : '✓' %></button></form></td>
+        <td><b style="<%= a.erledigt ? 'font-weight:500' : '' %>"><%= a.text %></b>
+          <% if (a.notiz) { %><br><span style="font-size:12px;color:var(--ink3)"><%= a.notiz %></span><% } %></td>
+        <td><% if (a.kunde_id) { %><a href="/kunden/<%= a.kunde_id %>"><%= a.firma %></a><% } else { %>—<% } %>
+          <% if (a.bezeichnung) { %><br><span style="font-size:12px;color:var(--ink3)"><%= a.bezeichnung %></span><% } %></td>
+        <td><%= a.mitarbeiter || '—' %></td>
+        <td class="<%= a.erledigt ? '' : faellig(a.faellig_am, a.erledigt) %>"><%= datum(a.faellig_am) %></td>
+        <td>
+          <% if (a.erledigt) { %>
+            <span class="ampel ampel-gut">erledigt</span>
+            <% if (a.erledigt_am) { %><br><span style="font-size:11px;color:var(--ink3)"><%= datum(a.erledigt_am) %><%= a.erledigt_von_name ? ' · ' + a.erledigt_von_name : '' %></span><% } %>
+          <% } else if (a.status === 'in Arbeit') { %>
+            <span class="ampel ampel-jetzt">in Arbeit</span>
+          <% } else { %>
+            <span class="ampel ampel-offen">offen</span>
+          <% } %>
+        </td>
+        <td class="z">
+          <form method="post" action="/aufgaben/<%= a.id %>/loeschen"
+                onsubmit="return confirm('Aufgabe endgültig löschen? Zum bloßen Abhaken den Haken links benutzen — dann bleibt sie sichtbar.')">
+            <button class="knopf gefahr leer mini" type="submit" title="Endgültig löschen">×</button></form>
+        </td>
+      </tr>
+    <% }) %></tbody></table></div>
+  <% } %>
+</div>
+<%- include('partials/fuss') %>

@@ -1,0 +1,258 @@
+<%- include('partials/kopf') %>
+<div class="seitenkopf">
+  <div><h1>Forecast <%= jahr %></h1>
+    <div class="unter"><%= art === 'umsatz' ? 'Umsatz aus festgeschriebenen Rechnungen' : 'Auftragseingang aus beauftragten Angeboten' %><%
+      %><%= d.laufend ? ' · Stand ' + d.monate[d.bisMonat - 1] : ' · abgeschlossenes Jahr' %></div></div>
+  <div class="reihe">
+    <% if (benutzer.rolle === 'admin') { %><a class="knopf leer" href="/finanzen/forecast/ziele?jahr=<%= jahr %>">Ziele und Prämien</a><% } %>
+    <button class="knopf leer nicht-drucken" type="button" onclick="window.print()">Drucken</button>
+  </div>
+</div>
+
+<div class="reiter nicht-drucken">
+  <a href="/finanzen">Übersicht</a>
+  <a href="/finanzen/forecast" class="an">Forecast</a>
+  <a href="/rechnungen">Rechnungen</a>
+</div>
+
+<!-- ============ FILTERLEISTE ============ -->
+<form method="get" action="/finanzen/forecast" class="filterleiste nicht-drucken">
+  <div class="feld"><label>Jahr</label><select name="jahr" onchange="this.form.submit()">
+    <% jahre.forEach(function(j){ %><option value="<%= j.j %>" <%= jahr === j.j ? 'selected' : '' %>><%= j.j %></option><% }) %></select></div>
+  <div class="feld"><label>Kennzahl</label><select name="art" onchange="this.form.submit()">
+    <% ARTEN.forEach(function(a){ %><option value="<%= a[0] %>" <%= art === a[0] ? 'selected' : '' %>><%= a[1] %></option><% }) %></select></div>
+  <div class="feld"><label>Anteile nach</label><select name="nach" onchange="this.form.submit()">
+    <option value="kunde" <%= nach === 'kunde' ? 'selected' : '' %>>Kunde</option>
+    <option value="gewerk" <%= nach === 'gewerk' ? 'selected' : '' %>>Gewerk</option></select></div>
+  <div class="rand">
+    <%= d.laufend ? 'Stand ' + d.monate[d.bisMonat - 1] + ' ' + jahr : 'abgeschlossenes Jahr' %>
+  </div>
+</form>
+
+<!-- ============ KENNZAHLEN ============
+     Vier Kacheln, immer dieselbe Ordnung: was ist, was sollte, wie weit
+     auseinander, wo endet es. Die Abweichung trägt Pfeil und Vorzeichen —
+     nicht nur Farbe. -->
+<div class="spalten s4">
+  <div class="kachel">
+    <div class="kopf"><span>Ist <%= jahr %></span></div>
+    <div class="wert"><%= eur(d.istSumme) %></div>
+    <div class="zusatz"><%= art === 'umsatz' ? 'festgeschriebene Rechnungen' : 'beauftragte Angebote' %></div>
+    <div class="verlauf"><%- svgSpark %></div>
+  </div>
+
+  <div class="kachel">
+    <div class="kopf"><span>Jahresziel</span></div>
+    <div class="wert"><%= d.sollSumme ? eur(d.sollSumme) : '—' %></div>
+    <div class="zusatz">
+      <% if (d.sollSumme) { %>
+        davon bis <%= d.laufend ? d.monate[d.bisMonat - 1] : 'Dezember' %>: <%= eur(d.sollBisher) %>
+      <% } else { %>kein Ziel hinterlegt<% } %>
+    </div>
+  </div>
+
+  <div class="kachel">
+    <div class="kopf"><span>gegen Ziel bis heute</span>
+      <% if (d.sollBisher) { %>
+        <span class="chip <%= d.abweichungBisher >= 0 ? 'hoch' : 'tief' %>">
+          <%= d.abweichungBisher >= 0 ? '▲' : '▼' %>
+          <%= d.erfuellungBisher != null ? Math.round(d.erfuellungBisher * 100) + ' %' : '' %></span>
+      <% } %>
+    </div>
+    <div class="wert"><%= d.sollBisher ? (d.abweichungBisher >= 0 ? '+' : '−') + eur(Math.abs(d.abweichungBisher)) : '—' %></div>
+    <div class="zusatz">
+      <% if (d.sollBisher) { %>
+        <%= d.abweichungBisher >= 0 ? 'über' : 'unter' %> dem anteiligen Ziel von <%= eur(d.sollBisher) %>
+      <% } else { %>ohne Ziel keine Abweichung<% } %>
+    </div>
+  </div>
+
+  <div class="kachel">
+    <div class="kopf"><span>Hochrechnung Jahresende</span>
+      <% if (d.laufend && d.hochrechnungErfuellung != null) { %>
+        <span class="chip <%= d.hochrechnungErfuellung >= 1 ? 'hoch' : 'tief' %>">
+          <%= d.hochrechnungErfuellung >= 1 ? '▲' : '▼' %> <%= Math.round(d.hochrechnungErfuellung * 100) %> %</span>
+      <% } %>
+    </div>
+    <div class="wert"><%= d.laufend ? eur(d.hochrechnung) : eur(d.istSumme) %></div>
+    <div class="zusatz"><%= d.laufend ? 'Ist plus gewichtete Pipeline — eine Annahme' : 'Jahr abgeschlossen' %></div>
+  </div>
+</div>
+
+<% if (!d.sollSumme) { %>
+  <div class="melde warn" style="margin-top:18px">
+    <b>Für <%= jahr %> ist kein Ziel hinterlegt.</b> Ohne Ziel gibt es keine Abweichung —
+    die Diagramme zeigen dann nur den Ist-Verlauf.
+    <% if (benutzer.rolle === 'admin') { %>Ziele setzen Sie unter <a href="/finanzen/forecast/ziele?jahr=<%= jahr %>">Ziele und Prämien</a>.<% } %>
+  </div>
+<% } %>
+
+<!-- ============ MONATE UND ABWEICHUNG ============
+     Nebeneinander statt untereinander: In zwei Spalten fuellt jede
+     Zeichenflaeche ihre Tafel, statt auf einem breiten Bildschirm mit
+     halbleerer rechter Haelfte zu stehen. Und der Bericht wird halb so
+     lang — was man im Ganzen sieht, liest man auch. -->
+<div class="spalten s2" style="margin-top:18px">
+<div class="tafel">
+  <div class="tkopf"><h2>Monate — Ist gegen Ziel</h2>
+    <div class="neben"><%= art === 'umsatz' ? 'Umsatz' : 'Auftragseingang' %>, netto</div></div>
+  <div class="marke-strich"></div>
+  <%- svgMonat %>
+  <div class="dia-legende">
+    <span><i style="background:var(--dia-ist)"></i> Ist</span>
+    <span><span class="dia-strich"></span> Ziel</span>
+    <% if (d.laufend) { %><span><i style="background:var(--dia-ist);opacity:.42"></i> noch nicht gelaufen</span><% } %>
+  </div>
+  <div class="hinweis-klein" style="margin-top:10px">
+    Das Ziel steht als Marke über dem Balken, nicht als zweiter Balken daneben — so ist auf einen Blick
+    erkennbar, ob der Balken sie erreicht. Monate nach <%= d.laufend ? d.monate[d.bisMonat - 1] : 'Dezember' %>
+    sind blass: Ein Monat, der noch nicht gelaufen ist, ist kein Rückstand.
+  </div>
+</div>
+
+<div class="tafel">
+  <div class="tkopf"><h2>Abweichung zum Monatsziel</h2>
+    <div class="neben">Ist minus Ziel, je Monat</div></div>
+  <div class="marke-strich"></div>
+  <%- svgAbwMonat %>
+  <div class="dia-legende">
+    <span><i style="background:var(--dia-ueber)"></i> über Ziel</span>
+    <span><i style="background:var(--dia-unter)"></i> unter Ziel</span>
+  </div>
+  <div class="hinweis-klein" style="margin-top:10px">
+    Blau und Orange statt Grün und Rot: Grün gegen Rot ist für etwa jeden zwölften Mann nicht
+    unterscheidbar. Die Richtung des Balkens und das Vorzeichen der Zahl tragen die Aussage ohnehin.
+  </div>
+</div>
+</div>
+
+<!-- ============ QUARTALE UND ANTEILE ============ -->
+<div class="spalten s21" style="margin-top:18px">
+  <div class="tafel">
+    <div class="tkopf"><h2>Quartale</h2><div class="neben">Ist gegen Ziel und Abweichung</div></div>
+    <div class="marke-strich"></div>
+    <%- svgQuartal %>
+    <div style="margin-top:14px"><%- svgAbwQuartal %></div>
+    <div class="tab-scroll" style="margin-top:12px"><table>
+      <thead><tr><th>Quartal</th><th class="z">Ist</th><th class="z">Ziel</th><th class="z">Abweichung</th><th class="z">Erfüllung</th></tr></thead>
+      <tbody><% [0,1,2,3].forEach(function(q){
+        var ist = d.istQuartal[q], soll = d.sollQuartal[q], ab = d.abweichungQuartal[q];
+        var kuenftig = quartalKuenftig[q]; %>
+        <tr<%= kuenftig ? ' style="opacity:.5"' : '' %>>
+          <td>Q<%= q+1 %><% if (kuenftig) { %> <span style="font-size:11px;color:var(--ink3)">(offen)</span><% } %></td>
+          <td class="z"><%= eur(ist) %></td>
+          <td class="z"><%= soll ? eur(soll) : '—' %></td>
+          <td class="z"><%= soll && !kuenftig ? (ab >= 0 ? '+' : '−') + eur(Math.abs(ab)) : '—' %></td>
+          <td class="z"><%= soll && !kuenftig ? Math.round(ist/soll*100) + ' %' : '—' %></td>
+        </tr>
+      <% }) %></tbody>
+      <tfoot><tr>
+        <td><b>Jahr</b></td><td class="z"><b><%= eur(d.istSumme) %></b></td>
+        <td class="z"><b><%= d.sollSumme ? eur(d.sollSumme) : '—' %></b></td>
+        <td class="z"><b><%= d.sollSumme ? ((d.istSumme - d.sollSumme) >= 0 ? '+' : '−') + eur(Math.abs(d.istSumme - d.sollSumme)) : '—' %></b></td>
+        <td class="z"><b><%= d.erfuellungJahr != null ? Math.round(d.erfuellungJahr*100) + ' %' : '—' %></b></td>
+      </tr></tfoot>
+    </table></div>
+  </div>
+
+  <div class="tafel">
+    <div class="tkopf"><h2>Anteile nach <%= nach === 'gewerk' ? 'Gewerk' : 'Kunde' %></h2>
+      <div class="neben">Top 5, <%= jahr %></div></div>
+    <div class="marke-strich"></div>
+    <%- svgRing %>
+    <div class="dia-legende" style="flex-direction:column;gap:7px">
+      <% var summe = anteile.reduce(function(s,a){return s+a.wert},0); %>
+      <% anteile.forEach(function(a,i){ %>
+        <span style="width:100%;justify-content:space-between">
+          <span style="display:flex;align-items:center;gap:7px">
+            <i style="background:var(--dia-s<%= (i%5)+1 %>)"></i><%= a.name.length > 26 ? a.name.slice(0,26)+'…' : a.name %>
+          </span>
+          <b><%= eur(a.wert) %> · <%= summe ? (a.wert/summe*100).toFixed(1).replace('.',',') : '0' %> %</b>
+        </span>
+      <% }) %>
+      <% if (!anteile.length) { %><span>Noch keine festgeschriebenen Rechnungen in <%= jahr %>.</span><% } %>
+    </div>
+  </div>
+</div>
+
+<!-- ============ MONATSTABELLE ============ -->
+<div class="karte">
+  <h2>Monate im Einzelnen</h2><div class="marke-strich"></div>
+  <div class="tab-scroll"><table>
+    <thead><tr><th>Monat</th><th class="z">Ist</th><th class="z">Ziel</th><th class="z">Abweichung</th><th class="z">Erfüllung</th></tr></thead>
+    <tbody><% d.monate.forEach(function(m,i){
+      var kuenftig = d.laufend && i >= d.bisMonat; %>
+      <tr<%= kuenftig ? ' style="opacity:.5"' : '' %>>
+        <td><%= m %><% if (kuenftig) { %> <span style="font-size:11px;color:var(--ink3)">(offen)</span><% } %></td>
+        <td class="z"><%= eur(d.ist[i]) %></td>
+        <td class="z"><%= d.soll[i] ? eur(d.soll[i]) : '—' %></td>
+        <td class="z"><%= d.soll[i] && !kuenftig ? ((d.abweichung[i] >= 0 ? '+' : '−') + eur(Math.abs(d.abweichung[i]))) : '—' %></td>
+        <td class="z"><%= d.soll[i] && !kuenftig ? Math.round(d.ist[i]/d.soll[i]*100) + ' %' : '—' %></td>
+      </tr>
+    <% }) %></tbody>
+  </table></div>
+</div>
+
+<!-- ============ HOCHRECHNUNG ============ -->
+<% if (d.laufend) { %>
+<div class="karte">
+  <h2>Woraus die Hochrechnung besteht</h2><div class="marke-strich"></div>
+  <div class="tab-scroll"><table><tbody>
+    <tr><td>Bereits erreicht (<%= art === 'umsatz' ? 'festgeschriebene Rechnungen' : 'beauftragte Angebote' %>)</td>
+        <td class="z"><b><%= eur(d.istSumme) %></b></td></tr>
+    <tr><td>Beauftragt, noch nicht berechnet — zu <%= Math.round(d.gewichte.beauftragt*100) %> % angesetzt
+        <br><span style="font-size:11.5px;color:var(--ink3)"><%= eur(d.pipeline.beauftragtOffen) %> offen</span></td>
+        <td class="z"><%= eur(d.pipeline.beauftragtOffen * d.gewichte.beauftragt) %></td></tr>
+    <tr><td>Versendete Angebote — zu <%= Math.round(d.gewichte.versendet*100) %> % angesetzt
+        <br><span style="font-size:11.5px;color:var(--ink3)"><%= eur(d.pipeline.versendet) %> in der Pipeline</span></td>
+        <td class="z"><%= eur(d.pipeline.versendet * d.gewichte.versendet) %></td></tr>
+    <tr><td><b>Hochrechnung Jahresende</b></td><td class="z"><b style="color:var(--akzent)"><%= eur(d.hochrechnung) %></b></td></tr>
+  </tbody></table></div>
+  <div class="kasten" style="margin-top:12px">
+    <b>Das ist eine Annahme, keine Zusage.</b> Die beiden Prozentsätze stehen in den Einstellungen unter
+    <span class="mono">forecast_gewicht_versendet</span> und <span class="mono">forecast_gewicht_beauftragt</span>
+    und lassen sich ändern, sobald ihr aus den eigenen Zahlen wisst, wie viel von versendeten Angeboten
+    tatsächlich kommt. Bis dahin sind es Schätzwerte — deshalb stehen sie hier offen und nicht versteckt in einer Formel.
+  </div>
+</div>
+<% } %>
+
+<!-- ============ MITARBEITER ============ -->
+<div class="karte">
+  <h2>Mitarbeiterziele und Prämien</h2><div class="marke-strich"></div>
+  <% if (!praemien.length) { %>
+    <div class="leer-hinweis">Für <%= jahr %> sind keine Prämienregeln hinterlegt.<%
+      %><% if (benutzer.rolle === 'admin') { %> Anzulegen unter <a href="/finanzen/forecast/ziele?jahr=<%= jahr %>">Ziele und Prämien</a>.<% } %></div>
+  <% } else { %>
+    <div class="tab-scroll"><table>
+      <thead><tr><th>Mitarbeiter</th><th>Zeitraum</th><th class="z">Ist</th><th class="z">Ziel</th>
+        <th style="width:200px">Erreichung</th><th class="z">Prämie</th></tr></thead>
+      <tbody><% praemien.forEach(function(p){ %>
+        <tr>
+          <td><b><%= p.name %></b><br><span style="font-size:11.5px;color:var(--ink3)"><%= p.art === 'umsatz' ? 'Umsatz' : 'Auftragseingang' %></span></td>
+          <td><%= p.bezeichnung %></td>
+          <td class="z"><%= eur(p.ist) %></td>
+          <td class="z"><%= eur(p.ziel) %></td>
+          <td>
+            <%- messlatte(p.ist, p.ziel, p.schwelle) %>
+            <span style="font-size:12px;color:var(--ink2)"><%= p.erreichtPct.toFixed(1).replace('.',',') %> %<%
+              %><%= p.amDeckel ? ' · am Deckel' : '' %><%= p.unterSchwelle ? ' · unter Schwelle' : '' %></span>
+          </td>
+          <td class="z"><b style="<%= p.praemie > 0 ? 'color:var(--akzent)' : 'color:var(--ink3)' %>"><%= eur(p.praemie) %></b></td>
+        </tr>
+        <tr><td colspan="6" style="padding-top:0;border-bottom:1px solid var(--linie2);font-size:11.5px;color:var(--ink3)">
+          Rechenweg: <%= p.rechnung %></td></tr>
+      <% }) %></tbody>
+      <tfoot><tr>
+        <td colspan="5"><b>Prämien gesamt</b></td>
+        <td class="z"><b><%= eur(praemien.reduce(function(s,p){return s+p.praemie},0)) %></b></td>
+      </tr></tfoot>
+    </table></div>
+    <div class="hinweis-klein" style="margin-top:10px">
+      Die Prämie wird aus dem Ist gerechnet, nicht eingetragen — sie ändert sich mit jeder festgeschriebenen
+      Rechnung. Der Rechenweg steht in der letzten Spalte, damit sie nachvollziehbar bleibt.
+      Die gestrichelte Linie in der Leiste ist die Schwelle, ab der überhaupt eine Prämie entsteht.
+    </div>
+  <% } %>
+</div>
+<%- include('partials/fuss') %>
