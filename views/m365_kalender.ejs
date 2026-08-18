@@ -1,0 +1,114 @@
+<%- include('partials/kopf') %>
+<div class="seitenkopf">
+  <div><h1>Kalenderabgleich</h1>
+    <div class="unter">STEER.E und Outlook in beide Richtungen</div></div>
+  <div class="reihe">
+    <a class="knopf leer" href="/verwaltung/m365">Verbindung</a>
+    <% if (eingerichtet && konto) { %>
+      <form method="post" action="/m365/kalender/jetzt">
+        <button class="knopf" type="submit">Jetzt abgleichen</button></form>
+    <% } %>
+  </div>
+</div>
+
+<% if (!eingerichtet) { %>
+  <div class="melde warn"><b>Microsoft 365 ist nicht eingerichtet.</b>
+    Es fehlen die Variablen <code>M365_CLIENT_ID</code> und <code>M365_CLIENT_SECRET</code>.
+    Bis dahin bleibt der Abgleich aus; die Kalenderdatei-Knöpfe an den Terminen funktionieren weiter.</div>
+<% } else if (!konto) { %>
+  <div class="melde warn"><b>Ihr Konto ist noch nicht verbunden.</b>
+    <a href="/m365/verbinden?zurueck=/m365/kalender">Jetzt mit Microsoft 365 verbinden</a>.</div>
+<% } %>
+
+<div class="kasten" style="margin-bottom:18px">
+  <b>Was abgeglichen wird — und was nicht.</b><br>
+  Hinaus geht jeder Termin mit Datum im Zeitfenster. Zurück kommen
+  <b>ausschließlich Termine aus STEER.E</b>, erkennbar an der Kategorie „STEER.E" im Kalender.
+  Ihr übriger Kalender bleibt außen vor: Arzttermine und Privates haben in einer
+  Vertriebsdatenbank nichts verloren, und später ließe sich das nicht mehr sauber trennen.
+  <br><br>
+  <b>Bei einem Konflikt gewinnt die jüngere Änderung.</b> Die unterlegene Fassung geht nicht
+  still verloren — sie steht unten im Verlauf.
+  <br><br>
+  <b>Eine Absage in Outlook löscht hier nichts.</b> Der Termin wird auf „abgesagt" gesetzt.
+  Löschen bleibt Ihre Entscheidung.
+</div>
+
+<div class="spalten s2">
+  <div class="karte">
+    <h2>Einstellung</h2><div class="marke-strich"></div>
+    <form method="post" action="/m365/kalender/einstellung">
+      <div class="feld">
+        <label><input type="checkbox" name="aktiv" <%= (!zustand || zustand.aktiv) ? 'checked' : '' %>>
+          Automatisch abgleichen</label>
+      </div>
+      <div class="feld"><label>Richtung</label>
+        <select name="richtung">
+          <option value="beide" <%= (!zustand || zustand.richtung === 'beide') ? 'selected' : '' %>>in beide Richtungen</option>
+          <option value="raus" <%= zustand && zustand.richtung === 'raus' ? 'selected' : '' %>>nur nach Outlook schreiben</option>
+          <option value="rein" <%= zustand && zustand.richtung === 'rein' ? 'selected' : '' %>>nur aus Outlook übernehmen</option>
+        </select>
+      </div>
+      <button class="knopf mini" type="submit">Speichern</button>
+    </form>
+  </div>
+
+  <div class="karte">
+    <h2>Stand</h2><div class="marke-strich"></div>
+    <table>
+      <tr><td>Verbundenes Konto</td><td class="z"><%= konto ? (konto.konto_email || konto.konto_name || '—') : 'nicht verbunden' %></td></tr>
+      <tr><td>Letzter Lauf</td><td class="z"><%= zustand && zustand.zuletzt_am ? datumZeit(zustand.zuletzt_am) : 'noch keiner' %></td></tr>
+      <tr><td>Ergebnis</td><td class="z"><%= zustand && zustand.letzter_lauf ? zustand.letzter_lauf : '—' %></td></tr>
+      <tr><td>Termine im Fenster</td><td class="z"><%= offen ? offen.n : 0 %></td></tr>
+      <tr><td>Insgesamt hinaus</td><td class="z"><%= zustand ? zustand.anz_raus : 0 %></td></tr>
+      <tr><td>Insgesamt herein</td><td class="z"><%= zustand ? zustand.anz_rein : 0 %></td></tr>
+    </table>
+    <% if (zustand && zustand.letzter_fehler) { %>
+      <div class="melde fehler" style="margin-top:12px"><b>Letzter Fehler:</b> <%= zustand.letzter_fehler %></div>
+    <% } %>
+  </div>
+</div>
+
+<% if (abgekoppelt && abgekoppelt.length) { %>
+<div class="karte">
+  <h2>Nicht mehr abgeglichen</h2><div class="marke-strich"></div>
+  <div class="hinweis-klein" style="margin-bottom:10px">
+    Bei diesen Terminen wurde im Kalender die Kategorie „STEER.E" entfernt. Sie werden
+    weder geschrieben noch übernommen — bis Sie sie hier wieder aufnehmen.
+  </div>
+  <div class="tab-scroll"><table>
+    <thead><tr><th>Datum</th><th>Kunde</th><th>Art</th><th>Thema</th><th></th></tr></thead>
+    <tbody><% abgekoppelt.forEach(function(t){ %>
+      <tr>
+        <td><%= t.datum ? datum(t.datum) : '—' %></td>
+        <td><%= t.firma %></td>
+        <td><span class="pille"><%= t.typ %></span></td>
+        <td style="font-size:12.5px;color:var(--ink3)"><%= t.thema || '' %></td>
+        <td class="z"><form method="post" action="/m365/kalender/<%= t.id %>/wieder">
+          <button class="knopf leer mini" type="submit">Wieder abgleichen</button></form></td>
+      </tr>
+    <% }) %></tbody>
+  </table></div>
+</div>
+<% } %>
+
+<div class="karte">
+  <h2>Verlauf</h2><div class="marke-strich"></div>
+  <% if (!vorgaenge.length) { %>
+    <div class="leer-hinweis">Noch nichts abgeglichen.</div>
+  <% } else { %>
+  <div class="tab-scroll"><table>
+    <thead><tr><th>Zeitpunkt</th><th>Richtung</th><th>Vorgang</th><th>Termin</th><th>Hinweis</th></tr></thead>
+    <tbody><% vorgaenge.forEach(function(v){ %>
+      <tr>
+        <td style="white-space:nowrap"><%= datumZeit(v.am) %></td>
+        <td><span class="pille"><%= v.richtung === 'rein' ? 'aus Outlook' : 'nach Outlook' %></span></td>
+        <td><%= v.vorgang %></td>
+        <td><%= v.firma || '—' %><%= v.thema ? ' · ' + v.thema : '' %></td>
+        <td style="font-size:12px;color:var(--ink3)"><%= v.hinweis || '' %></td>
+      </tr>
+    <% }) %></tbody>
+  </table></div>
+  <% } %>
+</div>
+<%- include('partials/fuss') %>

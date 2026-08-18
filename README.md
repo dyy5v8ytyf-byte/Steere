@@ -1,6 +1,6 @@
 # STEER.E — Sales-, Kunden- und Angebotsplattform
 
-Westphal Wavetec GmbH · Version 3.4 · Nachfolger von „WWtec Salesmanagement v1"
+Westphal Wavetec GmbH · Version 3.5 · Nachfolger von „WWtec Salesmanagement v1"
 
 ---
 
@@ -338,6 +338,63 @@ ihn, statt einen zweiten anzulegen), **+ einladen** nimmt den Ansprechpartner al
 Teilnehmer auf, und ein Angebot lässt sich mit PDF-Anhang direkt versenden.
 Versendete Mails erscheinen beim Kunden in den Aktivitäten und unter dem Angebot.
 
+### Kalenderabgleich in beide Richtungen (3.5)
+
+Bis 3.4 gab es nur den Hinweg: ein Knopf schrieb den Termin nach Outlook. Wurde er
+dort verschoben oder abgesagt, erfuhr STEER.E davon nichts — und damit stimmte genau
+die Information nicht mehr, wegen der man in die Anwendung schaut.
+
+Unter *Verwaltung → Kalenderabgleich mit Outlook* läuft der Abgleich jetzt in beide
+Richtungen, automatisch alle 15 Minuten (einstellbar) und auf Knopfdruck.
+
+**Was zurückkommt — und was nicht.** Hinaus geht jeder Termin mit Datum im Zeitfenster
+(Vorgabe: 30 Tage zurück, 365 voraus). Zurück kommen **ausschließlich Termine aus
+STEER.E**, erkennbar an der Kategorie `STEER.E` im Kalender. Der übrige Kalender bleibt
+außen vor. Das ist keine Bequemlichkeit: Ein Postfach enthält Arzttermine und Privates,
+und was einmal in einer Vertriebsdatenbank steht, die gesichert, exportiert und von
+Kollegen eingesehen wird, lässt sich später nicht mehr sauber heraustrennen. Einen
+Schalter dafür gibt es nicht.
+
+**Bei einem Konflikt gewinnt die jüngere Änderung** — `termine.geaendert_am` gegen
+`lastModifiedDateTime` aus Graph. Die unterlegene Fassung geht nicht still verloren,
+sie steht im Verlauf auf derselben Seite.
+
+**Eine Absage in Outlook löscht hier nichts.** Der Termin wird auf „abgesagt" gesetzt
+und der Zeitpunkt festgehalten. Löschen bleibt eine Entscheidung des Anwenders.
+
+**Die Kategorie entfernen heißt: nicht mehr abgleichen.** Nimmt jemand im Kalender die
+Kategorie `STEER.E` weg, koppelt sich der Termin ab und wird auch nicht neu angelegt.
+Zurücknehmen lässt sich das auf derselben Seite.
+
+Geschrieben wird nur, wenn sich wirklich etwas geändert hat — dafür merkt sich die
+Zuordnung einen Fingerabdruck des zuletzt Gesendeten. Sonst bekäme jeder Teilnehmer
+bei jedem Lauf eine Änderungsbenachrichtigung.
+
+### Planner und Teams (3.5)
+
+Unter *Verwaltung → Planner und Teams*: Aufgaben werden als Planner-Aufgaben
+gespiegelt, und ausgewählte Ereignisse melden sich in einem Teams-Kanal.
+
+**Planner ist ein Spiegel, kein zweiter Speicher.** Führend bleibt die Aufgabe in
+STEER.E. Was in Planner abgehakt wird, kommt zurück; alles andere geht von hier nach
+dort. Zwei Systeme, die beide führen wollen, enden in widersprüchlichen Listen — genau
+dem Zustand, den diese Plattform ablösen soll.
+
+**Meldungen gehen genau einmal hinaus.** Derselbe Anlass zum selben Vorgang wird nicht
+wiederholt, auch nicht nach einem Neustart. Welche Anlässe gemeldet werden, ist
+einzeln schaltbar; die Vorgabe ist sparsam. Ein Kanal, der alles meldet, wird nach zwei
+Wochen nicht mehr gelesen.
+
+> **Diese beiden Bereiche brauchen mehr Rechte.** Zusätzlich zu Kalender und Mail:
+> `Tasks.ReadWrite`, `Group.Read.All`, `Team.ReadBasic.All`, `ChannelMessage.Send`.
+> **Group.Read.All stuft Microsoft in den meisten Mandanten als zustimmungspflichtig
+> ein** — ohne Administrator geht es dort nicht. Bekommen Sie die Zustimmung nicht,
+> setzen Sie die Variable `M365_PLANNER=aus`: Dann verbindet sich STEER.E nur mit dem
+> kleinen Rechtesatz, und Kalender und Mail laufen unverändert weiter. Ein einziger
+> großer Rechteblock würde bei einer verweigerten Zustimmung auch das Funktionierende
+> mitreißen.
+
+
 Einrichtung unter *Verwaltung → Microsoft 365*; die Klickanleitung steht dort auf
 der Seite. Nötig sind drei Variablen:
 
@@ -493,6 +550,19 @@ rückwirkend schließen — vergebene Nummern sind vergeben. Für eine Prüfung 
 sie zu erklären: Datum, Nummer und Grund („technisch fehlgeschlagener Stornoversuch")
 gehören in die Verfahrensdokumentation. Welche Nummern betroffen sind, steht unter
 *Verwaltung → Protokoll* und ergibt sich aus dem Sprung in der Rechnungsliste.
+
+### Rechnungen löschen (3.5)
+
+Es gab überhaupt keine Löschfunktion — ein versehentlich angelegter Entwurf blieb für
+immer in der Liste stehen. Gleichzeitig fehlte der Datenbank ein DELETE-Schutz: Die
+Trigger deckten UPDATE ab, nicht DELETE. Eine festgeschriebene Rechnung ließ sich per
+direktem SQL also löschen — genau das, was die Festschreibung verhindern soll.
+
+Seit 3.5 gilt beides:
+
+* **Entwürfe lassen sich löschen**, mit Rückfrage und Eintrag im Änderungsprotokoll.
+* **Festgeschriebene Rechnungen nicht** — weder über die Oberfläche noch über SQL.
+  Der Trigger `rechnung_nicht_loeschbar` weist es ab. Der Weg zurück heißt Storno.
 
 ---
 

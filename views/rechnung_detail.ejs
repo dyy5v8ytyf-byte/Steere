@@ -5,6 +5,9 @@
   <div class="reihe">
     <a class="knopf leer" href="/rechnungen/<%= rechnung.id %>/druck" target="_blank">Druckansicht</a>
     <% if (!rechnung.festgeschrieben) { %>
+      <form method="post" action="/rechnungen/<%= rechnung.id %>/loeschen"
+            onsubmit="return confirm('Diesen Entwurf endgültig löschen? Er ist danach weg — der Vorgang bleibt im Änderungsprotokoll vermerkt.')">
+        <button class="knopf gefahr leer" type="submit">Entwurf löschen</button></form>
       <form method="post" action="/rechnungen/<%= rechnung.id %>/festschreiben"
             onsubmit="return confirm('Festschreiben? Danach ist die Rechnung unveränderlich und erhält ihre endgültige Nummer.')">
         <button class="knopf" type="submit">Festschreiben</button></form>
@@ -20,8 +23,9 @@
 </div>
 
 <% if (rechnung.festgeschrieben) { %>
-  <div class="melde"><b>Festgeschrieben.</b> Inhalt und Nummer sind unveränderlich — das erzwingt die Datenbank, nicht nur diese Oberfläche.
-    Korrekturen laufen über Storno und eine neue Rechnung. Prüfsumme: <code style="font-size:11px"><%= (rechnung.pruefsumme||'').slice(0,32) %>…</code></div>
+  <div class="melde"><b>Festgeschrieben.</b> Inhalt und Nummer sind unveränderlich, und die Rechnung lässt sich auch nicht mehr löschen —
+    das erzwingt die Datenbank, nicht nur diese Oberfläche. Korrekturen laufen über Storno und eine neue Rechnung.
+    Prüfsumme: <code style="font-size:11px"><%= (rechnung.pruefsumme||'').slice(0,32) %>…</code></div>
 <% } %>
 <% if (rechnung.storno_nummer) { %><div class="melde warn">Diese Rechnung wurde storniert durch <b><%= rechnung.storno_nummer %></b>.</div><% } %>
 <% if (rechnung.original_nummer) { %><div class="melde warn">Storno zur Rechnung <b><%= rechnung.original_nummer %></b>.</div><% } %>

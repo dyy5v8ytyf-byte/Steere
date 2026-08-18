@@ -301,6 +301,39 @@ r.post('/:id/festschreiben', intern, async (req, res, next) => {
 });
 
 // ===================== STORNIEREN =====================
+// ===================== ENTWURF LÖSCHEN =====================
+/*
+ * Nur Entwürfe. Eine festgeschriebene Rechnung zu löschen ist kein Sonderfall,
+ * den man mit genug Rechten doch erlauben könnte — sie ist ein Beleg, und der
+ * Weg zurück heißt Storno. Die Datenbank setzt das seit Migration 011 selbst
+ * durch; diese Prüfung hier ist die freundliche Variante davor, damit der
+ * Anwender eine Erklärung sieht statt einer Fehlerseite.
+ */
+r.post('/:id/loeschen', intern, async (req, res, next) => {
+  try {
+    const id = Number(req.params.id);
+    const rg = await db.one('SELECT * FROM rechnungen WHERE id=$1', [id]);
+    if (!rg) return res.redirect('/rechnungen');
+
+    if (rg.festgeschrieben) {
+      res.melde(`Rechnung ${rg.nummer} ist festgeschrieben und lässt sich nicht löschen. `
+        + 'Für eine Korrektur stornieren Sie sie und stellen neu aus.', 'warn');
+      return res.redirect(`/rechnungen/${id}`);
+    }
+
+    await db.tx(async (c) => {
+      await c.query('DELETE FROM rechnung_positionen WHERE rechnung_id=$1', [id]);
+      await c.query('DELETE FROM rechnungen WHERE id=$1', [id]);
+    });
+    await auth.protokoll(req, 'rechnung_entwurf_geloescht', 'rechnung', id,
+      { nummer: rg.nummer, betreff: rg.betreff, netto: rg.netto });
+
+    res.melde(`Entwurf ${rg.nummer} gelöscht. Der Vorgang steht im Änderungsprotokoll.`);
+    res.redirect('/rechnungen');
+  } catch (e) { next(e); }
+});
+
+
 r.post('/:id/stornieren', intern, async (req, res, next) => {
   try {
     const id = Number(req.params.id);

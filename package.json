@@ -1,6 +1,6 @@
 {
   "name": "steere-plattform",
-  "version": "3.4.0",
+  "version": "3.5.0",
   "description": "STEER.E — Sales-, Kunden- und Angebotsplattform der Westphal Wavetec GmbH",
   "main": "server.js",
   "engines": { "node": ">=22" },

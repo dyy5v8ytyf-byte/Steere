@@ -35,6 +35,16 @@ r.get('/', intern, async (req, res, next) => {
       name: `Q${q + 1}`, ist: d.istQuartal[q], soll: d.sollQuartal[q],
     }));
 
+    /*
+     * Ein Quartal, das noch nicht angefangen hat, ist kein Rueckstand.
+     * Bei den Monaten war das schon berücksichtigt, bei den Quartalen nicht
+     * — im August stand deshalb bei Q4 eine Abweichung von −135.000 €, als
+     * hätte jemand etwas versäumt. Angebrochen zählt, künftig nicht.
+     */
+    const ersterMonat = (q) => q * 3 + 1;
+    const quartalKuenftig = (q) => d.laufend && ersterMonat(q) > d.bisMonat;
+    const erstesKuenftigesQuartal = [0, 1, 2, 3].findIndex(quartalKuenftig);
+
     res.render('forecast', {
       titel: 'Forecast', d, art, ARTEN, jahr, anteile, praemien,
       nach: req.query.nach === 'gewerk' ? 'gewerk' : 'kunde',
@@ -55,13 +65,27 @@ r.get('/', intern, async (req, res, next) => {
           wert: d.laufend && i >= d.bisMonat ? 0 : d.abweichung[i],
         })), id: 'abwm',
       }),
-      svgQuartal: dia.sollIst({ titel: 'Quartale, Ist gegen Ziel', punkte: quartalPunkte, hoehe: 190, id: 'q' }),
+      quartalKuenftig: [0, 1, 2, 3].map(quartalKuenftig),
+      svgQuartal: dia.sollIst({
+        titel: 'Quartale, Ist gegen Ziel', punkte: quartalPunkte, hoehe: 190, id: 'q',
+        bisIndex: erstesKuenftigesQuartal >= 0 ? erstesKuenftigesQuartal : null,
+      }),
       svgAbwQuartal: dia.abweichung({
         titel: 'Abweichung je Quartal',
-        punkte: [0, 1, 2, 3].map((q) => ({ name: `Q${q + 1}`, wert: d.abweichungQuartal[q] })),
+        punkte: [0, 1, 2, 3].map((q) => ({
+          name: `Q${q + 1}`,
+          leer: quartalKuenftig(q),
+          wert: quartalKuenftig(q) ? 0 : d.abweichungQuartal[q],
+        })),
         hoehe: 170, id: 'abwq',
       }),
       svgRing: dia.ring({ titel: 'Umsatzanteile', punkte: anteile, id: 'ring' }),
+      // Der Verlauf in der Kachel endet am laufenden Monat. Liefe er bis
+      // Dezember weiter, zeigte er einen Absturz auf null — die restlichen
+      // Monate sind aber nicht eingebrochen, sie sind nur noch nicht da.
+      svgSpark: dia.spark({
+        werte: d.ist, bis: d.laufend ? d.bisMonat : null, id: 'spark-ist',
+      }),
       messlatte: (ist, ziel, schwelle) => dia.messlatte({ ist, ziel, schwelle }),
     });
   } catch (e) { next(e); }

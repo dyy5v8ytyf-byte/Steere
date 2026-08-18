@@ -9,28 +9,68 @@
   </div>
 </div>
 
-<div class="karte nicht-drucken">
-  <form method="get" action="/forecast" class="felder3">
-    <div class="feld"><label>Jahr</label><select name="jahr" onchange="this.form.submit()">
-      <% jahre.forEach(function(j){ %><option value="<%= j.j %>" <%= jahr === j.j ? 'selected' : '' %>><%= j.j %></option><% }) %></select></div>
-    <div class="feld"><label>Kennzahl</label><select name="art" onchange="this.form.submit()">
-      <% ARTEN.forEach(function(a){ %><option value="<%= a[0] %>" <%= art === a[0] ? 'selected' : '' %>><%= a[1] %></option><% }) %></select></div>
-    <div class="feld"><label>Anteile nach</label><select name="nach" onchange="this.form.submit()">
-      <option value="kunde" <%= nach === 'kunde' ? 'selected' : '' %>>Kunde</option>
-      <option value="gewerk" <%= nach === 'gewerk' ? 'selected' : '' %>>Gewerk</option></select></div>
-  </form>
-</div>
-
-<!-- ============ KOPFZAHLEN ============ -->
-<div class="spalten s4">
-  <div class="kz"><div class="n"><%= eur(d.istSumme) %></div><div class="t">Ist <%= jahr %></div></div>
-  <div class="kz"><div class="n"><%= d.sollSumme ? eur(d.sollSumme) : '—' %></div><div class="t">Jahresziel</div></div>
-  <div class="kz">
-    <div class="n <%= d.abweichungBisher >= 0 ? '' : 'akz' %>"><%= d.abweichungBisher >= 0 ? '+' : '−' %><%= eur(Math.abs(d.abweichungBisher)) %></div>
-    <div class="t">gegen Ziel bis heute<%= d.erfuellungBisher != null ? ' · ' + Math.round(d.erfuellungBisher * 100) + ' %' : '' %></div>
+<!-- ============ FILTERLEISTE ============ -->
+<form method="get" action="/forecast" class="filterleiste nicht-drucken">
+  <div class="feld"><label>Jahr</label><select name="jahr" onchange="this.form.submit()">
+    <% jahre.forEach(function(j){ %><option value="<%= j.j %>" <%= jahr === j.j ? 'selected' : '' %>><%= j.j %></option><% }) %></select></div>
+  <div class="feld"><label>Kennzahl</label><select name="art" onchange="this.form.submit()">
+    <% ARTEN.forEach(function(a){ %><option value="<%= a[0] %>" <%= art === a[0] ? 'selected' : '' %>><%= a[1] %></option><% }) %></select></div>
+  <div class="feld"><label>Anteile nach</label><select name="nach" onchange="this.form.submit()">
+    <option value="kunde" <%= nach === 'kunde' ? 'selected' : '' %>>Kunde</option>
+    <option value="gewerk" <%= nach === 'gewerk' ? 'selected' : '' %>>Gewerk</option></select></div>
+  <div class="rand">
+    <%= d.laufend ? 'Stand ' + d.monate[d.bisMonat - 1] + ' ' + jahr : 'abgeschlossenes Jahr' %>
   </div>
-  <div class="kz"><div class="n"><%= d.laufend ? eur(d.hochrechnung) : '—' %></div>
-    <div class="t">Hochrechnung Jahresende<%= d.hochrechnungErfuellung != null && d.laufend ? ' · ' + Math.round(d.hochrechnungErfuellung * 100) + ' %' : '' %></div></div>
+</form>
+
+<!-- ============ KENNZAHLEN ============
+     Vier Kacheln, immer dieselbe Ordnung: was ist, was sollte, wie weit
+     auseinander, wo endet es. Die Abweichung trägt Pfeil und Vorzeichen —
+     nicht nur Farbe. -->
+<div class="spalten s4">
+  <div class="kachel">
+    <div class="kopf"><span>Ist <%= jahr %></span></div>
+    <div class="wert"><%= eur(d.istSumme) %></div>
+    <div class="zusatz"><%= art === 'umsatz' ? 'festgeschriebene Rechnungen' : 'beauftragte Angebote' %></div>
+    <div class="verlauf"><%- svgSpark %></div>
+  </div>
+
+  <div class="kachel">
+    <div class="kopf"><span>Jahresziel</span></div>
+    <div class="wert"><%= d.sollSumme ? eur(d.sollSumme) : '—' %></div>
+    <div class="zusatz">
+      <% if (d.sollSumme) { %>
+        davon bis <%= d.laufend ? d.monate[d.bisMonat - 1] : 'Dezember' %>: <%= eur(d.sollBisher) %>
+      <% } else { %>kein Ziel hinterlegt<% } %>
+    </div>
+  </div>
+
+  <div class="kachel">
+    <div class="kopf"><span>gegen Ziel bis heute</span>
+      <% if (d.sollBisher) { %>
+        <span class="chip <%= d.abweichungBisher >= 0 ? 'hoch' : 'tief' %>">
+          <%= d.abweichungBisher >= 0 ? '▲' : '▼' %>
+          <%= d.erfuellungBisher != null ? Math.round(d.erfuellungBisher * 100) + ' %' : '' %></span>
+      <% } %>
+    </div>
+    <div class="wert"><%= d.sollBisher ? (d.abweichungBisher >= 0 ? '+' : '−') + eur(Math.abs(d.abweichungBisher)) : '—' %></div>
+    <div class="zusatz">
+      <% if (d.sollBisher) { %>
+        <%= d.abweichungBisher >= 0 ? 'über' : 'unter' %> dem anteiligen Ziel von <%= eur(d.sollBisher) %>
+      <% } else { %>ohne Ziel keine Abweichung<% } %>
+    </div>
+  </div>
+
+  <div class="kachel">
+    <div class="kopf"><span>Hochrechnung Jahresende</span>
+      <% if (d.laufend && d.hochrechnungErfuellung != null) { %>
+        <span class="chip <%= d.hochrechnungErfuellung >= 1 ? 'hoch' : 'tief' %>">
+          <%= d.hochrechnungErfuellung >= 1 ? '▲' : '▼' %> <%= Math.round(d.hochrechnungErfuellung * 100) %> %</span>
+      <% } %>
+    </div>
+    <div class="wert"><%= d.laufend ? eur(d.hochrechnung) : eur(d.istSumme) %></div>
+    <div class="zusatz"><%= d.laufend ? 'Ist plus gewichtete Pipeline — eine Annahme' : 'Jahr abgeschlossen' %></div>
+  </div>
 </div>
 
 <% if (!d.sollSumme) { %>
@@ -42,8 +82,10 @@
 <% } %>
 
 <!-- ============ MONATE ============ -->
-<div class="karte" style="margin-top:18px">
-  <h2>Monate — Ist gegen Ziel</h2><div class="marke-strich"></div>
+<div class="tafel" style="margin-top:18px">
+  <div class="tkopf"><h2>Monate — Ist gegen Ziel</h2>
+    <div class="neben"><%= art === 'umsatz' ? 'Umsatz' : 'Auftragseingang' %>, netto</div></div>
+  <div class="marke-strich"></div>
   <%- svgMonat %>
   <div class="dia-legende">
     <span><i style="background:var(--dia-ist)"></i> Ist</span>
@@ -58,8 +100,10 @@
 </div>
 
 <!-- ============ ABWEICHUNG ============ -->
-<div class="karte">
-  <h2>Abweichung zum Monatsziel</h2><div class="marke-strich"></div>
+<div class="tafel" style="margin-top:18px">
+  <div class="tkopf"><h2>Abweichung zum Monatsziel</h2>
+    <div class="neben">Ist minus Ziel, je Monat</div></div>
+  <div class="marke-strich"></div>
   <%- svgAbwMonat %>
   <div class="dia-legende">
     <span><i style="background:var(--dia-ueber)"></i> über Ziel</span>
@@ -72,21 +116,23 @@
 </div>
 
 <!-- ============ QUARTALE UND ANTEILE ============ -->
-<div class="spalten s21">
-  <div class="karte">
-    <h2>Quartale</h2><div class="marke-strich"></div>
+<div class="spalten s21" style="margin-top:18px">
+  <div class="tafel">
+    <div class="tkopf"><h2>Quartale</h2><div class="neben">Ist gegen Ziel und Abweichung</div></div>
+    <div class="marke-strich"></div>
     <%- svgQuartal %>
     <div style="margin-top:14px"><%- svgAbwQuartal %></div>
     <div class="tab-scroll" style="margin-top:12px"><table>
       <thead><tr><th>Quartal</th><th class="z">Ist</th><th class="z">Ziel</th><th class="z">Abweichung</th><th class="z">Erfüllung</th></tr></thead>
       <tbody><% [0,1,2,3].forEach(function(q){
-        var ist = d.istQuartal[q], soll = d.sollQuartal[q], ab = d.abweichungQuartal[q]; %>
-        <tr>
-          <td>Q<%= q+1 %></td>
+        var ist = d.istQuartal[q], soll = d.sollQuartal[q], ab = d.abweichungQuartal[q];
+        var kuenftig = quartalKuenftig[q]; %>
+        <tr<%= kuenftig ? ' style="opacity:.5"' : '' %>>
+          <td>Q<%= q+1 %><% if (kuenftig) { %> <span style="font-size:11px;color:var(--ink3)">(offen)</span><% } %></td>
           <td class="z"><%= eur(ist) %></td>
           <td class="z"><%= soll ? eur(soll) : '—' %></td>
-          <td class="z"><%= soll ? (ab >= 0 ? '+' : '−') + eur(Math.abs(ab)) : '—' %></td>
-          <td class="z"><%= soll ? Math.round(ist/soll*100) + ' %' : '—' %></td>
+          <td class="z"><%= soll && !kuenftig ? (ab >= 0 ? '+' : '−') + eur(Math.abs(ab)) : '—' %></td>
+          <td class="z"><%= soll && !kuenftig ? Math.round(ist/soll*100) + ' %' : '—' %></td>
         </tr>
       <% }) %></tbody>
       <tfoot><tr>
@@ -98,8 +144,10 @@
     </table></div>
   </div>
 
-  <div class="karte">
-    <h2>Umsatzanteile nach <%= nach === 'gewerk' ? 'Gewerk' : 'Kunde' %></h2><div class="marke-strich"></div>
+  <div class="tafel">
+    <div class="tkopf"><h2>Anteile nach <%= nach === 'gewerk' ? 'Gewerk' : 'Kunde' %></h2>
+      <div class="neben">Top 5, <%= jahr %></div></div>
+    <div class="marke-strich"></div>
     <%- svgRing %>
     <div class="dia-legende" style="flex-direction:column;gap:7px">
       <% var summe = anteile.reduce(function(s,a){return s+a.wert},0); %>

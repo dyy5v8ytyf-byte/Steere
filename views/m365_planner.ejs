@@ -1,0 +1,159 @@
+<%- include('partials/kopf') %>
+<div class="seitenkopf">
+  <div><h1>Planner und Teams</h1>
+    <div class="unter">Aufgaben spiegeln, Ereignisse in einen Kanal melden</div></div>
+  <div class="reihe">
+    <a class="knopf leer" href="/m365/kalender">Kalenderabgleich</a>
+    <% if (konto) { %>
+      <form method="post" action="/m365/planner/jetzt"><button class="knopf" type="submit">Jetzt abgleichen</button></form>
+    <% } %>
+  </div>
+</div>
+
+<% if (!eingerichtet) { %>
+  <div class="melde warn"><b>Microsoft 365 ist nicht eingerichtet.</b>
+    Es fehlen <code>M365_CLIENT_ID</code> und <code>M365_CLIENT_SECRET</code>.</div>
+<% } else if (!konto) { %>
+  <div class="melde warn"><b>Ihr Konto ist noch nicht verbunden.</b>
+    <a href="/m365/verbinden?zurueck=/m365/planner">Jetzt verbinden</a>.</div>
+<% } %>
+
+<div class="kasten" style="margin-bottom:18px">
+  <b>Diese beiden Bereiche brauchen mehr Rechte als der Rest.</b>
+  Zusätzlich zu Kalender und Mail werden verlangt:
+  <code><%= erweiterte.join('</code>, <code>') %></code>.
+  <b>Group.Read.All</b> stuft Microsoft in den meisten Mandanten als zustimmungspflichtig ein —
+  ohne einen Administrator geht es dort nicht.
+  <br><br>
+  <% if (!plannerGewuenscht) { %>
+    <b>Zurzeit abgeschaltet</b> über die Variable <code>M365_PLANNER=aus</code>. Kalender und Mail laufen
+    unverändert weiter. Zum Einschalten die Variable entfernen und sich danach einmal neu verbinden.
+  <% } else { %>
+    Bekommen Sie die Zustimmung nicht, setzen Sie <code>M365_PLANNER=aus</code>. Dann verbindet sich
+    STEER.E nur mit dem kleinen Rechtesatz — Kalender und Mail funktionieren weiter. Ein einziger
+    großer Rechteblock würde sonst bei einer verweigerten Zustimmung auch das Funktionierende mitreißen.
+  <% } %>
+  <br><br>
+  <b>Planner ist ein Spiegel, kein zweiter Speicher.</b> Führend bleibt die Aufgabe in STEER.E.
+  Was in Planner abgehakt wird, kommt hierher zurück — alles andere geht von hier nach dort.
+</div>
+
+<% if (gruppen.fehler || teams.fehler) { %>
+  <div class="melde fehler"><b>Microsoft hat eine Abfrage abgelehnt.</b>
+    <% if (gruppen.fehler) { %><br>Gruppen: <%= gruppen.fehler %><% } %>
+    <% if (teams.fehler) { %><br>Teams: <%= teams.fehler %><% } %>
+    <br><br>Typischerweise fehlt die Administratorzustimmung. Nach dem Erteilen einmal
+    <a href="/m365/verbinden?zurueck=/m365/planner">neu verbinden</a>.</div>
+<% } %>
+
+<form method="post" action="/m365/planner/ziele">
+  <input type="hidden" name="gruppen_json" value="<%= JSON.stringify(gruppen.liste) %>">
+  <input type="hidden" name="plaene_json" value="<%= JSON.stringify(plaene.liste) %>">
+  <input type="hidden" name="eimer_json" value="<%= JSON.stringify(eimer.liste) %>">
+  <input type="hidden" name="teams_json" value="<%= JSON.stringify(teams.liste) %>">
+  <input type="hidden" name="kanaele_json" value="<%= JSON.stringify(kanaele.liste) %>">
+
+  <div class="spalten s2">
+    <div class="karte">
+      <h2>Planner</h2><div class="marke-strich"></div>
+      <div class="hinweis-klein">Nach dem Wählen einer Gruppe einmal speichern — danach stehen ihre Pläne zur Auswahl.</div>
+
+      <div class="feld"><label>Gruppe</label>
+        <select name="gruppe_id">
+          <option value="">— keine —</option>
+          <% gruppen.liste.forEach(function(g){ %>
+            <option value="<%= g.id %>" <%= ziele && ziele.gruppe_id === g.id ? 'selected' : '' %>><%= g.name %></option>
+          <% }) %>
+        </select></div>
+
+      <div class="feld"><label>Plan</label>
+        <select name="plan_id">
+          <option value="">— keiner —</option>
+          <% plaene.liste.forEach(function(p){ %>
+            <option value="<%= p.id %>" <%= ziele && ziele.plan_id === p.id ? 'selected' : '' %>><%= p.name %></option>
+          <% }) %>
+        </select>
+        <% if (plaene.fehler) { %><div class="hinweis-klein" style="color:var(--rot)"><%= plaene.fehler %></div><% } %>
+      </div>
+
+      <div class="feld"><label>Eimer (optional)</label>
+        <select name="eimer_id">
+          <option value="">— Vorgabe des Plans —</option>
+          <% eimer.liste.forEach(function(b){ %>
+            <option value="<%= b.id %>" <%= ziele && ziele.eimer_id === b.id ? 'selected' : '' %>><%= b.name %></option>
+          <% }) %>
+        </select></div>
+
+      <div class="feld"><label>
+        <input type="checkbox" name="aufgaben_spiegeln" <%= ziele && ziele.aufgaben_spiegeln ? 'checked' : '' %>>
+        Aufgaben automatisch spiegeln</label></div>
+
+      <div class="hinweis-klein">Zurzeit gespiegelt: <b><%= gespiegelt ? gespiegelt.n : 0 %></b> Aufgabe(n).</div>
+    </div>
+
+    <div class="karte">
+      <h2>Teams</h2><div class="marke-strich"></div>
+
+      <div class="feld"><label>Team</label>
+        <select name="team_id">
+          <option value="">— keins —</option>
+          <% teams.liste.forEach(function(t){ %>
+            <option value="<%= t.id %>" <%= ziele && ziele.team_id === t.id ? 'selected' : '' %>><%= t.name %></option>
+          <% }) %>
+        </select></div>
+
+      <div class="feld"><label>Kanal</label>
+        <select name="kanal_id">
+          <option value="">— keiner —</option>
+          <% kanaele.liste.forEach(function(k){ %>
+            <option value="<%= k.id %>" <%= ziele && ziele.kanal_id === k.id ? 'selected' : '' %>><%= k.name %></option>
+          <% }) %>
+        </select>
+        <% if (kanaele.fehler) { %><div class="hinweis-klein" style="color:var(--rot)"><%= kanaele.fehler %></div><% } %>
+      </div>
+
+      <div class="feld"><label>Was gemeldet wird</label>
+        <div style="display:flex;flex-direction:column;gap:6px;margin-top:4px">
+          <label><input type="checkbox" name="melde_angebot" <%= !ziele || ziele.melde_angebot ? 'checked' : '' %>> Angebot versendet</label>
+          <label><input type="checkbox" name="melde_auftrag" <%= !ziele || ziele.melde_auftrag ? 'checked' : '' %>> Auftrag erhalten</label>
+          <label><input type="checkbox" name="melde_begehung" <%= ziele && ziele.melde_begehung ? 'checked' : '' %>> Begehung freigegeben</label>
+          <label><input type="checkbox" name="melde_rechnung" <%= ziele && ziele.melde_rechnung ? 'checked' : '' %>> Rechnung festgeschrieben</label>
+        </div>
+        <div class="hinweis-klein" style="margin-top:8px">
+          Sparsam wählen. Ein Kanal, der alles meldet, wird nach zwei Wochen nicht mehr gelesen.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="reihe" style="margin:14px 0 22px">
+    <button class="knopf" type="submit">Auswahl speichern</button>
+  </div>
+</form>
+
+<% if (ziele && ziele.kanal_id) { %>
+  <form method="post" action="/m365/planner/probe" style="margin-bottom:22px">
+    <button class="knopf leer mini" type="submit">Probemeldung in „<%= ziele.kanal_name || 'den Kanal' %>" senden</button>
+  </form>
+<% } %>
+
+<div class="karte">
+  <h2>Zuletzt gemeldet</h2><div class="marke-strich"></div>
+  <% if (!meldungen.length) { %>
+    <div class="leer-hinweis">Noch keine Meldungen.</div>
+  <% } else { %>
+  <div class="tab-scroll"><table>
+    <thead><tr><th>Zeitpunkt</th><th>Anlass</th><th>Text</th><th>Ergebnis</th></tr></thead>
+    <tbody><% meldungen.forEach(function(m){ %>
+      <tr>
+        <td style="white-space:nowrap"><%= datumZeit(m.gesendet_am) %></td>
+        <td><span class="pille"><%= m.anlass %></span></td>
+        <td style="font-size:12.5px"><%= (m.text || '').slice(0,120) %></td>
+        <td><% if (m.fehler) { %><span style="color:var(--rot);font-size:12px"><%= m.fehler %></span>
+            <% } else { %><span class="pille ok">gesendet</span><% } %></td>
+      </tr>
+    <% }) %></tbody>
+  </table></div>
+  <% } %>
+</div>
+<%- include('partials/fuss') %>

@@ -11,6 +11,8 @@ const db = require('../lib/db');
 const auth = require('../lib/auth');
 const h = require('../lib/helfer');
 const m365 = require('../lib/m365');
+const kalender = require('../lib/kalenderabgleich');
+const planner = require('../lib/planner');
 const { schuetze } = require('../lib/kennungen');
 
 const r = schuetze(express.Router(), ['id']);
@@ -208,6 +210,163 @@ r.post('/mail', intern, express.json({ limit: '8mb' }), async (req, res, next) =
   } catch (e) {
     res.status(e.nichtVerbunden ? 409 : 400).json({ ok: false, fehler: e.message });
   }
+});
+
+// ===================== KALENDERABGLEICH =====================
+r.get('/kalender', intern, async (req, res, next) => {
+  try {
+    const zustand = await kalender.zustand(req.benutzer.id);
+    res.render('m365_kalender', {
+      titel: 'Kalenderabgleich',
+      eingerichtet: m365.eingerichtet(),
+      konto: await m365.konto(req.benutzer.id),
+      zustand,
+      vorgaenge: zustand ? await kalender.letzteVorgaenge(req.benutzer.id, 25) : [],
+      offen: await db.one(
+        `SELECT COUNT(*)::int AS n FROM termine t
+          WHERE t.datum >= CURRENT_DATE - 30 AND NOT t.kalender_aus`),
+      abgekoppelt: await db.all(
+        `SELECT t.id, t.datum, t.thema, t.typ, k.firma FROM termine t
+           JOIN kunden k ON k.id = t.kunde_id
+          WHERE t.kalender_aus ORDER BY t.datum DESC LIMIT 25`),
+    });
+  } catch (e) { next(e); }
+});
+
+r.post('/kalender/jetzt', intern, async (req, res, next) => {
+  try {
+    if (!m365.eingerichtet()) {
+      res.melde('Microsoft 365 ist nicht eingerichtet.', 'warn');
+      return res.redirect('/m365/kalender');
+    }
+    const e = await kalender.fuerBenutzer(req.benutzer.id);
+    if (e.aus) res.melde('Der Abgleich ist für Ihr Konto ausgeschaltet.', 'warn');
+    else if (e.fehler) res.melde(`Abgleich mit Fehler beendet: ${e.fehler}`, 'fehler');
+    else res.melde(`Abgeglichen — ${e.rein} Änderung(en) aus Outlook übernommen, ${e.raus} nach Outlook geschrieben.`);
+    await auth.protokoll(req, 'm365_kalender_abgeglichen', 'kalender', null, e);
+    res.redirect('/m365/kalender');
+  } catch (e) { next(e); }
+});
+
+r.post('/kalender/einstellung', intern, async (req, res, next) => {
+  try {
+    const richtung = ['beide', 'raus', 'rein'].includes(req.body.richtung) ? req.body.richtung : 'beide';
+    await db.query(
+      `INSERT INTO m365_abgleich (benutzer_id, aktiv, richtung) VALUES ($1,$2,$3)
+       ON CONFLICT (benutzer_id) DO UPDATE SET aktiv = EXCLUDED.aktiv, richtung = EXCLUDED.richtung`,
+      [req.benutzer.id, req.body.aktiv === 'on', richtung]
+    );
+    res.melde('Einstellung gespeichert.');
+    res.redirect('/m365/kalender');
+  } catch (e) { next(e); }
+});
+
+/** Einen abgekoppelten Termin wieder in den Abgleich nehmen. */
+r.post('/kalender/:id/wieder', intern, async (req, res, next) => {
+  try {
+    await db.query('UPDATE termine SET kalender_aus=FALSE WHERE id=$1', [Number(req.params.id)]);
+    res.melde('Der Termin wird beim nächsten Lauf wieder abgeglichen.');
+    res.redirect('/m365/kalender');
+  } catch (e) { next(e); }
+});
+
+// ===================== PLANNER UND TEAMS =====================
+/**
+ * Die Auswahllisten werden nur geladen, wenn ein Konto verbunden ist — und
+ * einzeln abgesichert. Fehlt die Zustimmung fuer Group.Read.All, soll die
+ * Seite trotzdem aufgehen und erklaeren, was fehlt, statt in einer
+ * Fehlerseite zu enden.
+ */
+r.get('/planner', intern, async (req, res, next) => {
+  try {
+    const konto = await m365.konto(req.benutzer.id);
+    const z = konto ? await planner.ziele(req.benutzer.id) : null;
+
+    const holen = async (fn) => {
+      try { return { liste: await fn(), fehler: null }; } catch (e) { return { liste: [], fehler: e.message }; }
+    };
+    const g = konto ? await holen(() => planner.gruppen(req.benutzer.id)) : { liste: [], fehler: null };
+    const t = konto ? await holen(() => planner.teams(req.benutzer.id)) : { liste: [], fehler: null };
+    const p = konto && z && z.gruppe_id ? await holen(() => planner.plaene(req.benutzer.id, z.gruppe_id)) : { liste: [], fehler: null };
+    const b = konto && z && z.plan_id ? await holen(() => planner.eimer(req.benutzer.id, z.plan_id)) : { liste: [], fehler: null };
+    const k = konto && z && z.team_id ? await holen(() => planner.kanaele(req.benutzer.id, z.team_id)) : { liste: [], fehler: null };
+
+    res.render('m365_planner', {
+      titel: 'Planner und Teams',
+      eingerichtet: m365.eingerichtet(),
+      plannerGewuenscht: m365.plannerGewuenscht(),
+      erweiterte: m365.ERWEITERTE_BEREICHE,
+      konto, ziele: z,
+      gruppen: g, plaene: p, eimer: b, teams: t, kanaele: k,
+      meldungen: await db.all(
+        `SELECT * FROM m365_meldungen ORDER BY gesendet_am DESC LIMIT 20`),
+      gespiegelt: await db.one(
+        'SELECT COUNT(*)::int AS n FROM m365_aufgabe_planner WHERE benutzer_id=$1', [req.benutzer.id]),
+    });
+  } catch (e) { next(e); }
+});
+
+r.post('/planner/ziele', intern, async (req, res, next) => {
+  try {
+    const b = req.body;
+    const namen = (liste, id) => {
+      try { return (JSON.parse(liste || '[]').find((x) => x.id === id) || {}).name || null; } catch (x) { return null; }
+    };
+    await db.query(
+      `INSERT INTO m365_ziele (benutzer_id, gruppe_id, gruppe_name, plan_id, plan_name, eimer_id, eimer_name,
+                               team_id, team_name, kanal_id, kanal_name,
+                               melde_angebot, melde_auftrag, melde_begehung, melde_rechnung,
+                               aufgaben_spiegeln, geaendert_am)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16, now())
+       ON CONFLICT (benutzer_id) DO UPDATE SET
+         gruppe_id=EXCLUDED.gruppe_id, gruppe_name=EXCLUDED.gruppe_name,
+         plan_id=EXCLUDED.plan_id, plan_name=EXCLUDED.plan_name,
+         eimer_id=EXCLUDED.eimer_id, eimer_name=EXCLUDED.eimer_name,
+         team_id=EXCLUDED.team_id, team_name=EXCLUDED.team_name,
+         kanal_id=EXCLUDED.kanal_id, kanal_name=EXCLUDED.kanal_name,
+         melde_angebot=EXCLUDED.melde_angebot, melde_auftrag=EXCLUDED.melde_auftrag,
+         melde_begehung=EXCLUDED.melde_begehung, melde_rechnung=EXCLUDED.melde_rechnung,
+         aufgaben_spiegeln=EXCLUDED.aufgaben_spiegeln, geaendert_am=now()`,
+      [req.benutzer.id,
+       h.txt(b.gruppe_id), namen(b.gruppen_json, h.txt(b.gruppe_id)),
+       h.txt(b.plan_id), namen(b.plaene_json, h.txt(b.plan_id)),
+       h.txt(b.eimer_id), namen(b.eimer_json, h.txt(b.eimer_id)),
+       h.txt(b.team_id), namen(b.teams_json, h.txt(b.team_id)),
+       h.txt(b.kanal_id), namen(b.kanaele_json, h.txt(b.kanal_id)),
+       b.melde_angebot === 'on', b.melde_auftrag === 'on',
+       b.melde_begehung === 'on', b.melde_rechnung === 'on',
+       b.aufgaben_spiegeln === 'on']
+    );
+    res.melde('Auswahl gespeichert.');
+    res.redirect('/m365/planner');
+  } catch (e) { next(e); }
+});
+
+r.post('/planner/jetzt', intern, async (req, res, next) => {
+  try {
+    const s = await planner.aufgabenSpiegeln(req.benutzer.id);
+    const m = await planner.meldungenPruefen(req.benutzer.id);
+    if (s.aus) res.melde('Das Spiegeln der Aufgaben ist ausgeschaltet oder es fehlt der Plan.', 'warn');
+    else res.melde(`Planner: ${s.raus} hinaus, ${s.rein} als erledigt übernommen. Teams: ${m} Meldung(en).`);
+    res.redirect('/m365/planner');
+  } catch (e) {
+    res.melde('Der Abgleich ist gescheitert: ' + e.message, 'fehler');
+    res.redirect('/m365/planner');
+  }
+});
+
+/** Probemeldung — damit sich der Kanal einmal ohne echten Vorgang prüfen lässt. */
+r.post('/planner/probe', intern, async (req, res, next) => {
+  try {
+    const e = await planner.melden(req.benutzer.id, {
+      anlass: `probe_${Date.now()}`, bezugArt: 'probe', bezugId: 0,
+      text: 'Probemeldung aus STEER.E. Wenn Sie das hier lesen, funktioniert die Verbindung in diesen Kanal.',
+    });
+    if (e.aus) res.melde('Es ist noch kein Teams-Kanal ausgewählt.', 'warn');
+    else if (e.fehler) res.melde('Die Meldung ging nicht hinaus: ' + e.fehler, 'fehler');
+    else res.melde('Probemeldung gesendet. Schauen Sie in den Kanal.');
+    res.redirect('/m365/planner');
+  } catch (e) { next(e); }
 });
 
 module.exports = r;

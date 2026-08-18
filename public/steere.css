@@ -90,6 +90,65 @@ main{max-width:1600px;margin:0 auto;padding:26px var(--seite) 70px}
 .kz .n.akz{color:var(--akzent)}
 .kz .t{font-size:12.5px;color:var(--ink3);margin-top:8px}
 
+/* ---------- Kennzahlkachel mit Verlauf und Abweichung ----------
+   Aufbau von oben nach unten: Bezeichnung klein, Zahl gross, darunter die
+   Abweichung als Chip und ganz unten ein flacher Verlauf. Die Zahl steht
+   allein auf ihrer Zeile — sie ist das, wofuer die Kachel da ist.
+   Der Chip traegt Pfeil UND Vorzeichen, nicht nur Farbe: Rot allein ist
+   fuer etwa jeden zwoelften Mann keine Information.                       */
+.kachel{
+  background:var(--karte);border:1px solid var(--linie);border-radius:var(--radius);
+  padding:16px 16px 12px;display:flex;flex-direction:column;gap:9px;min-width:0;
+}
+.kachel .kopf{
+  font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink3);
+  font-weight:600;display:flex;justify-content:space-between;align-items:center;gap:8px;
+  /* Ohne feste Hoehe sitzt die grosse Zahl in den Kacheln mit Chip tiefer
+     als in denen ohne — vier Kacheln nebeneinander, vier Grundlinien. */
+  min-height:22px;
+}
+.kachel .wert{
+  font-family:Georgia,serif;font-size:29px;font-weight:700;line-height:1;
+  letter-spacing:-.02em;color:var(--ink);font-variant-numeric:tabular-nums;
+  overflow-wrap:anywhere;
+}
+.kachel .zusatz{font-size:12px;color:var(--ink3);line-height:1.45}
+.kachel .verlauf{margin-top:2px;height:34px}
+.kachel .verlauf svg{display:block;width:100%;height:34px}
+
+.chip{
+  display:inline-flex;align-items:center;gap:4px;font-size:11.5px;font-weight:600;
+  padding:3px 8px;border-radius:999px;border:1px solid var(--linie);
+  color:var(--ink2);font-variant-numeric:tabular-nums;white-space:nowrap;
+}
+.chip.hoch{border-color:var(--dia-ueber);color:var(--dia-ueber)}
+.chip.tief{border-color:var(--dia-unter);color:var(--dia-unter)}
+.chip.neutral{color:var(--ink3)}
+
+/* ---------- Filterleiste ----------
+   Eine Zeile, ueber allen Diagrammen, immer an derselben Stelle. Wer einen
+   Filter sucht, soll nicht erst scrollen muessen.                         */
+.filterleiste{
+  display:flex;flex-wrap:wrap;gap:12px 16px;align-items:flex-end;
+  background:var(--karte);border:1px solid var(--linie);border-radius:var(--radius);
+  padding:14px 16px;margin-bottom:18px;
+}
+.filterleiste .feld{margin:0;min-width:160px;flex:1 1 160px}
+.filterleiste .feld label{font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink3)}
+.filterleiste .rand{margin-left:auto;font-size:12px;color:var(--ink3);align-self:center}
+
+/* ---------- Diagrammtafel ----------
+   Kopf mit Titel und Nebenangabe, darunter die Flaeche. Das ist der
+   Rahmen, der aus einzelnen Bildern eine Tafel macht.                     */
+.tafel{background:var(--karte);border:1px solid var(--linie);border-radius:var(--radius);padding:18px;min-width:0}
+.tafel > .tkopf{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:4px}
+.tafel > .tkopf h2{margin:0;font-size:15px}
+.tafel > .tkopf .neben{font-size:11.5px;color:var(--ink3);text-align:right}
+.spark-linie{fill:none;stroke:var(--dia-ist);stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+.spark-flaeche{fill:var(--dia-ist);opacity:.13}
+.spark-punkt{fill:var(--dia-ist)}
+.spark-null{stroke:var(--linie2);stroke-width:1}
+
 /* ---------- Tabellen ---------- */
 table{width:100%;border-collapse:collapse;font-size:13.5px}
 th{
@@ -285,7 +344,7 @@ details.block .inhalt{padding:0 16px 16px}
 }
 :root[data-modus="hell"]{
   --dia-ist:#8A5E15; --dia-ueber:#2a78d6; --dia-unter:#eb6834;
-  --dia-s1:#8A5E15; --dia-s2:#2a78d6; --dia-s3:#1baf7a; --dia-s4:#4a3aa7; --dia-s5:#e34948;
+  --dia-s1:#8A5E15; --dia-s2:#2a78d6; --dia-s3:#12946a; --dia-s4:#4a3aa7; --dia-s5:#e34948;
   --dia-flaeche:#FFFDF8;
 }
 .dia{width:100%;height:auto;display:block;overflow:visible}
@@ -301,6 +360,10 @@ details.block .inhalt{padding:0 16px 16px}
 .dia-ziel{stroke:var(--ink);stroke-width:2.5;stroke-linecap:round}
 .dia-schwelle{stroke:var(--ink3);stroke-width:2;stroke-dasharray:2 2}
 .dia-bahn{fill:var(--bg3)}
+/* Die Messlatte steht in einer schmalen Tabellenspalte. Ohne diese Zeile
+   ragt die Beschriftung „Ziel" ueber den Zellenrand in die Nachbarspalte —
+   .dia erlaubt bewusst Ueberlauf, hier ist er falsch. */
+.dia-latte{overflow:hidden}
 .dia-latte .dia-ist{fill:var(--dia-ist)}
 .dia-leer{fill:none;stroke:var(--linie);stroke-width:2}
 .dia-mitte{font-family:Georgia,serif;font-size:19px;font-weight:700;fill:var(--ink)}
